@@ -427,6 +427,36 @@ would reverse it.
 - **Reverse if:** a reranker trained on educational or scientific text beats
   hybrid on this gold set within a CPU budget of ~200 ms per query.
 
+### D25 — The exam blueprint gives each question's weight to its best-matching section
+
+- **How it is measured:** real past papers have no ground truth, so
+  `evals/blueprint_eval.py` builds them from the 1,770 labelled physics
+  questions. Each seed draws an examiner who favours 6 of 17 chapters and 20
+  papers of 12 questions, with marks and years, rendered in real paper formats
+  (`1. … (5 marks)`, `Q3. (a) … [2 marks]`, page footers) and read back by
+  Margin's own parser. The true weight of every section is known.
+- **Parsing:** 100% of questions recovered, with correct marks and year, in all
+  five seeds. The first run reported 97.5%: six textbook questions begin with
+  "(a)", the parser correctly read them as part (a), and the *eval's* matching
+  key still contained the marker. The eval was fixed, not the parser.
+- **Weighting, five seeds:**
+
+  | Arm | Top-10 section overlap | True weight in top 10 | Chapter distance (0 = perfect) | Favourite chapters found |
+  |---|---|---|---|---|
+  | **Best match only** | 0.40 (0.30–0.60) | 0.334 | **0.298** | 93% |
+  | Split 60/25/15 over top 3 | 0.36 (0.30–0.40) | 0.310 | 0.373 | 93% |
+
+  Best match only had the smaller chapter distance in 5 of 5 seeds and captured
+  more weight in 4 of 5.
+- **Chosen:** best match only. **Why the intuition was wrong:** splitting was
+  meant to hedge against search missing the right section at rank 1, but it
+  moves 40% of every question's weight onto neighbouring sections whether or
+  not rank 1 was right, and that error accumulates over hundreds of questions.
+- **What the blueprint can and cannot claim:** at chapter level it is
+  dependable — it found 93% of the examiner's favourite chapters. At section
+  level it is rough: about 4 of the true top 10 sections. The interface
+  therefore leads with chapters and shows sections as supporting detail.
+
 ## 5. Evaluation suite
 
 `evals/` is a regression suite in the same discipline as the previous project:
@@ -707,7 +737,7 @@ Generated from every result file by `write_report()`.
 |---|---|---|---|
 | 0 | Scaffold, runtime manager, CLI, install scripts, eval suite (agentic, grounded, structured, speed, vision), model benchmark | benchmark report written, default model chosen | in progress: suite built and validated, benchmark running |
 | 1 | Ingestion: PDF, DOCX, PPTX, JPEG/PNG with OCR; TOC tree; page anchors | a textbook PDF round-trips with every section and page | done: 53 unit tests incl. OCR end to end; two OpenStax textbooks (2,306 pages) round-trip with 99–100% of bookmarks anchored and 100% of text kept (D18) |
-| 2 | Retrieval on textbooks: hybrid search, parent/child chunks | hit@5 recorded as baseline | in progress: SQLite workspace, chunking, hybrid search with reranking, `margin add` / `margin search`, 1,770-question gold set (D21–D23); baseline run under way |
+| 2 | Retrieval on textbooks: hybrid search, parent/child chunks | hit@5 recorded as baseline | done: SQLite workspace, chunking, hybrid search, `margin add` / `margin search`, 1,770-question gold set; hybrid hit@5 0.596, reranker opt-in (D21–D24) |
 | 3 | Exam blueprint: past-paper parser, question→section mapping, weights | top-3 mapping accuracy measured | |
 | 4 | Visual tools: schemas, renderers | generated diagrams render with zero failures | |
 | 5 | Orchestrator and notes: loop, verifier, checkpoints, export | a chapter survives a mid-run kill and resumes | |
