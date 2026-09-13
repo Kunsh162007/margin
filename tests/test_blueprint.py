@@ -95,6 +95,62 @@ def test_best_match_only_gives_everything_to_the_first_section():
     assert [(r.sid, r.weight) for r in default.sections] == [("5.3", 10.0)]  # D25: best match is the default
 
 
+def test_chapter_shares_roll_sections_up():
+    from margin.blueprint.weights import chapter_shares
+
+    bp = build_blueprint(FakeSearcher(), [PaperQuestion("1", "Newton", 6, None), PaperQuestion("2", "inertia", 4, None)], split=RANK_SPLIT)
+    shares = dict(chapter_shares(bp))
+    # Newton (6 marks): 85% to chapter 5 (5.3 + 5.4), 15% to chapter 6; inertia (4 marks): all to chapter 10
+    assert shares["5"] == pytest.approx(0.51, abs=1e-3) and shares["6"] == pytest.approx(0.09, abs=1e-3) and shares["10"] == pytest.approx(0.4, abs=1e-3)
+    assert [chapter for chapter, _ in chapter_shares(bp)] == ["5", "10", "6"]
+
+
+class _BagEmbedder:
+    name = "bag"
+    VOCAB = ["newton", "force", "acceleration", "inertia", "rotation", "torque", "friction", "surface"]
+
+    def _vec(self, text):
+        import numpy as np
+
+        v = np.array([text.lower().count(w) for w in self.VOCAB], dtype=np.float32) + 1e-3
+        return v / np.linalg.norm(v)
+
+    def passages(self, texts):
+        import numpy as np
+
+        return np.vstack([self._vec(t) for t in texts])
+
+    def query(self, text):
+        return self._vec(text)
+
+
+def test_cli_blueprint_ranks_chapters_from_a_paper(tmp_path, monkeypatch, capsys):
+    docx = pytest.importorskip("docx")
+    import margin.retrieve.embed as embed
+    from margin.cli import main
+
+    monkeypatch.setenv("MARGIN_HOME", str(tmp_path / "home"))
+    monkeypatch.setattr(embed, "Embedder", _BagEmbedder)
+    book = docx.Document()
+    book.add_heading("5.3 Newton's second law", level=2)
+    book.add_paragraph("Newton's second law: force equals mass times acceleration.")
+    book.add_heading("10.6 Torque", level=2)
+    book.add_paragraph("Torque causes rotation; inertia resists changes in rotation.")
+    book_path = tmp_path / "physics.docx"
+    book.save(book_path)
+    paper = tmp_path / "paper2024.txt"
+    paper.write_text("EXAMINATION 2024\n1. State Newton's law relating force and acceleration. [10 marks]\n2. Explain torque and rotation. [2 marks]\n", encoding="utf-8")
+
+    assert main(["add", str(book_path)]) == 0
+    capsys.readouterr()
+    assert main(["blueprint", str(paper), "--top", "5"]) == 0
+    out = capsys.readouterr().out
+    assert "2 questions, 2024" in out  # table titles wrap at pytest's capture width, so check rows, not titles
+    rows = [line.split() for line in out.splitlines()]
+    assert ["5", "83%"] in rows and ["10", "17%"] in rows  # chapter 5 (10 marks) outweighs chapter 10 (2 marks)
+    assert rows.index(["5", "83%"]) < rows.index(["10", "17%"])
+
+
 def test_synthetic_papers_round_trip_through_the_parser():
     from evals.blueprint_eval import make_papers, render_paper, score_parsing
 

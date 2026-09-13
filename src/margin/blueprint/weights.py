@@ -53,6 +53,21 @@ class Blueprint:
         return self.sections[:n]
 
 
+def chapter_of(sid: str) -> str:
+    """'4.2' -> '4'. Sections without a numbered id stand alone."""
+    head = sid.split(".")[0]
+    return head if head.isdigit() else sid
+
+
+def chapter_shares(blueprint: Blueprint) -> list[tuple[str, float]]:
+    """Share of exam weight per chapter, largest first. The blueprint is most reliable at this level (D25)."""
+    shares: dict[str, float] = {}
+    for row in blueprint.sections:
+        key = chapter_of(row.sid)
+        shares[key] = shares.get(key, 0.0) + row.share
+    return sorted(((k, round(v, 4)) for k, v in shares.items()), key=lambda kv: -kv[1])
+
+
 def question_weight(question: PaperQuestion, years: tuple[int, int] | None) -> float:
     weight = float(question.marks or DEFAULT_MARKS)
     if years and question.year is not None and years[1] > years[0]:

@@ -37,6 +37,7 @@ what was detected; `margin models` lists the models you can switch to.
 margin add biology-textbook.pdf lecture-slides.pptx whiteboard.jpg
 margin search "how does the nephron filter blood" --scope ch25
 margin inspect biology-textbook.pdf      # see how a file is split into sections
+margin blueprint paper-2023.pdf paper-2024.jpg   # which chapters past papers weigh most
 ```
 
 Books, Word files, slides and JPEG/PNG photos are supported; scanned pages and

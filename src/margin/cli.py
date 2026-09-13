@@ -116,6 +116,53 @@ def cmd_add(args: argparse.Namespace) -> int:
     return 1 if failures else 0
 
 
+def cmd_blueprint(args: argparse.Namespace) -> int:
+    """Read past papers and show which chapters and sections of the library they weigh most."""
+    from pathlib import Path
+
+    from margin.blueprint.paper import paper_text, parse_paper
+    from margin.blueprint.weights import build_blueprint, chapter_shares
+    from margin.ingest.detect import UnsupportedFile
+    from margin.retrieve import embed
+    from margin.retrieve.search import Searcher
+    from margin.store.db import Workspace
+
+    questions = []
+    for name in args.files:
+        path = Path(name)
+        try:
+            found = parse_paper(paper_text(path), source=path.stem)
+        except (FileNotFoundError, UnsupportedFile) as exc:
+            console.print(f"[red]skipped[/] {name}: {exc}")
+            continue
+        console.print(f"{path.name}: {len(found)} questions" + (f", {found[0].year}" if found and found[0].year else ""))
+        questions.extend(found)
+    if not questions:
+        console.print("No questions found in those papers.")
+        return 1
+    with Workspace.open(_workspace_path()) as ws:
+        if ws.chunk_count() == 0:
+            console.print("Add your books first with: margin add <file> ...")
+            return 1
+        blueprint = build_blueprint(Searcher(ws, embed.Embedder()), questions)
+
+    chapters = Table(title="Chapters by exam weight", box=None)
+    chapters.add_column("chapter")
+    chapters.add_column("share", justify="right")
+    for chapter, share in chapter_shares(blueprint)[: args.top]:
+        chapters.add_row(chapter, f"{share:.0%}")
+    console.print(chapters)
+    sections = Table(title="Sections (less certain than chapters)", box=None)
+    for col in ("section", "title", "share", "questions"):
+        sections.add_column(col)
+    for row in blueprint.top(args.top):
+        sections.add_row(row.sid, row.title[:45], f"{row.share:.0%}", ", ".join(row.questions[:4]))
+    console.print(sections)
+    if blueprint.unmatched:
+        console.print(f"{blueprint.unmatched} question(s) matched nothing in your library.")
+    return 0
+
+
 def cmd_search(args: argparse.Namespace) -> int:
     """Search the default workspace."""
     from margin.retrieve import embed
@@ -203,6 +250,10 @@ def build_parser() -> argparse.ArgumentParser:
     search.add_argument("--scope", help="chapter or section, e.g. ch4 or 4.2")
     search.add_argument("--rerank", action="store_true", help="add a cross-encoder second pass (slower; did not help on the textbook benchmark)")
     search.set_defaults(func=cmd_search)
+    blueprint = sub.add_parser("blueprint", help="read past papers and rank chapters by exam weight")
+    blueprint.add_argument("files", nargs="+", help="past papers: PDF, Word, photos or text")
+    blueprint.add_argument("--top", type=int, default=10, help="how many chapters and sections to show")
+    blueprint.set_defaults(func=cmd_blueprint)
     parser.set_defaults(func=cmd_start)
     return parser
 
