@@ -60,7 +60,7 @@
 | gemma4-e4b | 0.005 | 0.024 | 20.7 | 6.07 | 0.071 | 0.076 | 1.02 |
 | qwen3.5-9b | 0.000 | 0.000 | 56.0 | 9.40 | 0.071 | 0.076 | 1.14 |
 
-### Defaults by the selection rule (D3)
+### Defaults by the selection rule
 
 - CPU default (quality from cuda; CPU tool decision <= 10 s, memory <= 8 GB): **gemma4-e4b**
 - GPU default (fits 8 GB VRAM): **granite4.1-3b**

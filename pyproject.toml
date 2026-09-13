@@ -41,7 +41,6 @@ dependencies = [
 [project.urls]
 Homepage = "https://github.com/Kunsh162007/margin"
 Issues = "https://github.com/Kunsh162007/margin/issues"
-Changelog = "https://github.com/Kunsh162007/margin/blob/main/CHANGELOG.md"
 
 [project.scripts]
 margin = "margin.cli:main"
