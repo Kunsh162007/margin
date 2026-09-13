@@ -1,0 +1,118 @@
+{
+  "book": "uphys1",
+  "questions": 1770,
+  "chunks_searchable": 1432,
+  "chunks_total": 1959,
+  "index_seconds": 166.7,
+  "arms": {
+    "keyword": {
+      "hit@1": 0.3192,
+      "hit@5": 0.5508,
+      "mrr@10": 0.4218,
+      "chapter_hit@5": 0.8169,
+      "n": 1770,
+      "by_kind": {
+        "conceptual": {
+          "hit@1": 0.369,
+          "hit@5": 0.6684,
+          "mrr@10": 0.5023,
+          "chapter_hit@5": 0.8235,
+          "n": 374
+        },
+        "problem": {
+          "hit@1": 0.3059,
+          "hit@5": 0.5193,
+          "mrr@10": 0.4003,
+          "chapter_hit@5": 0.8152,
+          "n": 1396
+        }
+      },
+      "top1_title": "Chapter Review",
+      "top1_share": 0.0446,
+      "leak_warning": false,
+      "ms_per_query": 26.2
+    },
+    "vector": {
+      "hit@1": 0.3537,
+      "hit@5": 0.5672,
+      "mrr@10": 0.4455,
+      "chapter_hit@5": 0.8373,
+      "n": 1770,
+      "by_kind": {
+        "conceptual": {
+          "hit@1": 0.4733,
+          "hit@5": 0.7433,
+          "mrr@10": 0.591,
+          "chapter_hit@5": 0.8663,
+          "n": 374
+        },
+        "problem": {
+          "hit@1": 0.3216,
+          "hit@5": 0.5201,
+          "mrr@10": 0.4065,
+          "chapter_hit@5": 0.8295,
+          "n": 1396
+        }
+      },
+      "top1_title": "3.4 Motion with Constant Acceleration",
+      "top1_share": 0.0407,
+      "leak_warning": false,
+      "ms_per_query": 12.5
+    },
+    "hybrid": {
+      "hit@1": 0.3712,
+      "hit@5": 0.5955,
+      "mrr@10": 0.4673,
+      "chapter_hit@5": 0.8571,
+      "n": 1770,
+      "by_kind": {
+        "conceptual": {
+          "hit@1": 0.4706,
+          "hit@5": 0.7781,
+          "mrr@10": 0.5971,
+          "chapter_hit@5": 0.8877,
+          "n": 374
+        },
+        "problem": {
+          "hit@1": 0.3446,
+          "hit@5": 0.5466,
+          "mrr@10": 0.4325,
+          "chapter_hit@5": 0.8489,
+          "n": 1396
+        }
+      },
+      "top1_title": "6.2 Friction",
+      "top1_share": 0.0294,
+      "leak_warning": false,
+      "ms_per_query": 43.6
+    },
+    "hybrid+rerank": {
+      "hit@1": 0.3243,
+      "hit@5": 0.5593,
+      "mrr@10": 0.4256,
+      "chapter_hit@5": 0.8356,
+      "n": 1770,
+      "by_kind": {
+        "conceptual": {
+          "hit@1": 0.4198,
+          "hit@5": 0.7246,
+          "mrr@10": 0.5509,
+          "chapter_hit@5": 0.861,
+          "n": 374
+        },
+        "problem": {
+          "hit@1": 0.2987,
+          "hit@5": 0.515,
+          "mrr@10": 0.3921,
+          "chapter_hit@5": 0.8288,
+          "n": 1396
+        }
+      },
+      "top1_title": "6.2 Friction",
+      "top1_share": 0.0429,
+      "leak_warning": false,
+      "ms_per_query": 852.7
+    }
+  },
+  "run_at": "20260913_160131"
+}

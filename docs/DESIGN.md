@@ -399,6 +399,34 @@ would reverse it.
   numbers. A skewed or corrupted gold set is worse than none, because it looks
   like evidence.
 
+### D24 — Hybrid search is the default; the reranker is opt-in
+
+- **Evidence** (`evals/retrieval_eval.py`, 1,770 University Physics questions,
+  1,432 searchable chunks, leak guard clear — no title first for more than 4.5%
+  of questions):
+
+  | Method | hit@1 | hit@5 | MRR@10 | Right chapter in top 5 | ms / query (CPU) |
+  |---|---|---|---|---|---|
+  | Keyword (BM25) | 0.319 | 0.551 | 0.422 | 0.817 | 26 |
+  | Vector (bge-small) | 0.354 | 0.567 | 0.446 | 0.837 | 13 |
+  | **Hybrid (RRF)** | **0.371** | **0.596** | **0.467** | **0.857** | 44 |
+  | Hybrid + MiniLM rerank | 0.324 | 0.559 | 0.426 | 0.836 | 853 |
+
+  By question kind, hybrid hit@5 is 0.778 on conceptual questions (n=374) and
+  0.547 on numerical problems (n=1,396). Problems describe a situation ("a scuba
+  diver descends…") rather than naming the concept, which is harder for any
+  retriever.
+- **Chosen:** hybrid search by default; reranking behind `--rerank`.
+- **Why:** hybrid is best on all four quality measures. The reranker lowered
+  every one of them and cost ~20× the time, so dropping it from the default path
+  needs no significance test — it is slower *and* not better. The MiniLM model
+  was trained on web search queries, not textbook questions.
+- **Not yet shown:** hybrid's lead over vector-only (+2.9 points hit@5) has not
+  been tested pairwise on the per-question disagreements, so it is reported as a
+  lead, not as a proven improvement.
+- **Reverse if:** a reranker trained on educational or scientific text beats
+  hybrid on this gold set within a CPU budget of ~200 ms per query.
+
 ## 5. Evaluation suite
 
 `evals/` is a regression suite in the same discipline as the previous project:

@@ -126,8 +126,8 @@ def cmd_search(args: argparse.Namespace) -> int:
         if ws.chunk_count() == 0:
             console.print("Nothing to search yet. Add files with: margin add <file> ...")
             return 1
-        searcher = Searcher(ws, embed.Embedder(), None if args.no_rerank else embed.Reranker())
-        hits = searcher.search(args.query, top_k=args.top_k, scope=args.scope)
+        searcher = Searcher(ws, embed.Embedder(), embed.Reranker() if args.rerank else None)
+        hits = searcher.search(args.query, top_k=args.top_k, scope=args.scope, rerank=args.rerank)
     if not hits:
         console.print("No matches.")
         return 0
@@ -201,7 +201,7 @@ def build_parser() -> argparse.ArgumentParser:
     search.add_argument("query")
     search.add_argument("--top-k", type=int, default=5)
     search.add_argument("--scope", help="chapter or section, e.g. ch4 or 4.2")
-    search.add_argument("--no-rerank", action="store_true", help="skip the reranker (faster, less precise)")
+    search.add_argument("--rerank", action="store_true", help="add a cross-encoder second pass (slower; did not help on the textbook benchmark)")
     search.set_defaults(func=cmd_search)
     parser.set_defaults(func=cmd_start)
     return parser

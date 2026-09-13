@@ -105,7 +105,9 @@ class Searcher:
         top = np.argsort(-sims)[:limit]
         return [(int(ids[i]), float(sims[i])) for i in top]
 
-    def search(self, query: str, top_k: int = 5, scope: str | None = None, rerank: bool = True) -> list[Hit]:
+    def search(self, query: str, top_k: int = 5, scope: str | None = None, rerank: bool = False) -> list[Hit]:
+        """Hybrid search. Reranking is opt-in: on the textbook gold set it lowered hit@5 from
+        0.596 to 0.559 and cost ~850 ms per query on CPU against ~44 ms (DESIGN.md D24)."""
         lexical = [cid for cid, _ in self._ws.fts(query, CANDIDATE_POOL)]
         semantic = [cid for cid, _ in self.dense(query)]
         fused = rrf(lexical, semantic)

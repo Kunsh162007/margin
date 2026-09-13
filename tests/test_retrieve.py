@@ -147,7 +147,7 @@ def test_cli_add_then_search_uses_the_default_workspace(tmp_path, monkeypatch, c
     assert main(["search", "voltage"]) == 1  # empty workspace says how to add files
     assert main(["add", str(path), str(tmp_path / "missing.pdf")]) == 1  # one bad file reported, the good one added
     assert main(["add", str(path)]) == 0 and "already added" in capsys.readouterr().out
-    assert main(["search", "voltage around a loop", "--no-rerank", "--top-k", "1"]) == 0
+    assert main(["search", "voltage around a loop", "--top-k", "1"]) == 0
     assert "Kirchhoff" in capsys.readouterr().out
 
 

@@ -40,7 +40,9 @@ margin inspect biology-textbook.pdf      # see how a file is split into sections
 ```
 
 Books, Word files, slides and JPEG/PNG photos are supported; scanned pages and
-photos are read with OCR.
+photos are read with OCR. Search combines keyword and meaning-based matching;
+`--rerank` adds a slower second pass that did not improve results on the
+textbook benchmark, so it is off by default.
 
 Set `MARGIN_HOME` to keep models on a different drive.
 
