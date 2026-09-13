@@ -457,6 +457,39 @@ would reverse it.
   level it is rough: about 4 of the true top 10 sections. The interface
   therefore leads with chapters and shows sections as supporting detail.
 
+### D26 — Diagrams are repaired, then rendered from escaped structured data
+
+- **Chosen:** flowcharts go through a repair step before drawing. An arrow end
+  that is a step id is kept; one matching exactly one step label (or contained
+  in exactly one) is re-linked to that id; anything else, self-loops and
+  duplicates are dropped; if nothing usable remains, the steps are chained in
+  the order the model listed them. Every label is escaped and node ids are
+  generated, so model text cannot break Mermaid or Markdown syntax.
+- **Evidence** (`evals/visuals_eval.py`, re-using the flowcharts, tables, mind
+  maps, timelines, formula sheets and glossaries all nine benchmarked models
+  already produced — no extra model time):
+
+  | | Count |
+  |---|---|
+  | Outputs usable (12 more were stored truncated and excluded) | 105 |
+  | Pass the structural render check | 105 (100%) |
+  | Flowcharts whose arrows all resolved before repair | 19 of 26 (73%) |
+  | Flowcharts with usable arrows after repair | 26 of 26 |
+  | Arrows re-linked from a label to an id | 4 |
+  | Arrows dropped | 24 |
+  | Charts needing the listed-order fallback | 5 |
+
+  Gemma 4 E4B, the default model, needed one re-link in 3 flowcharts.
+- **Why this over constraining the model harder:** a JSON schema guarantees
+  shape, not that references resolve, and a grammar cannot express "this string
+  must equal an id defined earlier". Fixing references in code is exact and
+  costs nothing at generation time.
+- **Limits, stated plainly:** 26 flowcharts is a small sample; the render
+  check is structural (diagram type, declared nodes, balanced brackets, table
+  widths), not the Mermaid parser, which needs Node.js — the exported HTML is
+  where Mermaid really parses; and the listed-order fallback assumes the model
+  wrote steps in process order, which is usual but not guaranteed.
+
 ## 5. Evaluation suite
 
 `evals/` is a regression suite in the same discipline as the previous project:
