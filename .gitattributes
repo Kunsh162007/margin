@@ -1,0 +1,5 @@
+# Normalise line endings so diffs are clean on every OS; the shell script must keep LF.
+* text=auto eol=lf
+*.ps1 text eol=crlf
+*.png binary
+*.jpg binary
