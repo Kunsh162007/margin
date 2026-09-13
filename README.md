@@ -29,9 +29,18 @@ Already have [uv](https://docs.astral.sh/uv/)? `uv tool install git+https://gith
 margin
 ```
 
-The first run detects your hardware, downloads the matching llama.cpp runtime
-and a model sized for your machine, then starts. `margin doctor` shows what was
-detected; `margin models` lists the models you can switch to.
+The first run detects your hardware, downloads the matching llama.cpp runtime,
+the Gemma 4 E4B model and the search models, then starts. `margin doctor` shows
+what was detected; `margin models` lists the models you can switch to.
+
+```sh
+margin add biology-textbook.pdf lecture-slides.pptx whiteboard.jpg
+margin search "how does the nephron filter blood" --scope ch25
+margin inspect biology-textbook.pdf      # see how a file is split into sections
+```
+
+Books, Word files, slides and JPEG/PNG photos are supported; scanned pages and
+photos are read with OCR.
 
 Set `MARGIN_HOME` to keep models on a different drive.
 

@@ -668,7 +668,7 @@ Generated from every result file by `write_report()`.
 |---|---|---|---|
 | 0 | Scaffold, runtime manager, CLI, install scripts, eval suite (agentic, grounded, structured, speed, vision), model benchmark | benchmark report written, default model chosen | in progress: suite built and validated, benchmark running |
 | 1 | Ingestion: PDF, DOCX, PPTX, JPEG/PNG with OCR; TOC tree; page anchors | a textbook PDF round-trips with every section and page | done: 53 unit tests incl. OCR end to end; two OpenStax textbooks (2,306 pages) round-trip with 99–100% of bookmarks anchored and 100% of text kept (D18) |
-| 2 | Retrieval on textbooks: hybrid search, parent/child chunks | hit@5 recorded as baseline | |
+| 2 | Retrieval on textbooks: hybrid search, parent/child chunks | hit@5 recorded as baseline | in progress: SQLite workspace, chunking, hybrid search with reranking, `margin add` / `margin search`, 1,770-question gold set (D21–D23); baseline run under way |
 | 3 | Exam blueprint: past-paper parser, question→section mapping, weights | top-3 mapping accuracy measured | |
 | 4 | Visual tools: schemas, renderers | generated diagrams render with zero failures | |
 | 5 | Orchestrator and notes: loop, verifier, checkpoints, export | a chapter survives a mid-run kill and resumes | |
