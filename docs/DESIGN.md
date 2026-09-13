@@ -808,7 +808,7 @@ Generated from every result file by `write_report()`.
 | 2 | Retrieval on textbooks: hybrid search, parent/child chunks | hit@5 recorded as baseline | done: SQLite workspace, chunking, hybrid search, `margin add` / `margin search`, 1,770-question gold set; hybrid hit@5 0.596, reranker opt-in (D21–D24) |
 | 3 | Exam blueprint: past-paper parser, question→section mapping, weights | top-3 mapping accuracy measured | done: parser 100% on synthetic papers; best-match weighting; favourite chapters found 93%, section top-10 overlap 0.40 (D25); `margin blueprint` |
 | 4 | Visual tools: schemas, renderers | generated diagrams render with zero failures | done: flowchart repair and escaped renderers; 105 of 105 saved model outputs pass the structural check, 26 of 26 flowcharts usable after repair (D26) |
-| 5 | Orchestrator and notes: loop, verifier, checkpoints, export | a chapter survives a mid-run kill and resumes | |
+| 5 | Orchestrator and notes: loop, verifier, checkpoints, export | a chapter survives a mid-run kill and resumes | done: tool loop with 2,048-token turns and one retry; `margin notes` with pick-then-fill visuals; 6 of 6 sections with a rendering visual, 99.3% of sentences supported, resume verified (D27) |
 | 6 | Questions and practice: generation checks, grading, FSRS, Anki | answerable rate and marker agreement measured | |
 | 7 | Terminal UI | the whole flow runs from the UI | |
 | 8 | Packaging: README, demo recording, release | a stranger installs and runs the demo in 15 minutes plus download | |

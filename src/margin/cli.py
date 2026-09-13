@@ -146,7 +146,7 @@ def cmd_notes(args: argparse.Namespace) -> int:
             with LlamaServer(cfg, paths.logs_dir / "notes.log") as server:
                 client = LlamaClient(server.base_url, tools_template_kwarg=spec.tools_template_kwarg)
                 progress = lambda sid, n, resumed: console.print(f"  {sid} {n.title[:50]}: " + ("already written" if resumed else f"{n.seconds:.0f} s, {len(n.visuals)} diagram(s), {n.dropped} unsupported sentence(s) removed"))
-                notes = write_notes(client, ws, scope=args.scope, executor=ToolExecutor(ws, Searcher(ws, embed.Embedder())), on_progress=progress)
+                notes = write_notes(client, ws, scope=args.scope, executor=ToolExecutor(ws, Searcher(ws, embed.Embedder())), on_progress=progress, visuals=not args.no_visuals)
                 client.close()
         except (ServerError, ClientError) as exc:
             console.print(f"[red]Stopped:[/] {exc}. Run the same command again to continue.")
@@ -298,6 +298,7 @@ def build_parser() -> argparse.ArgumentParser:
     notes = sub.add_parser("notes", help="write verified notes for a chapter or section (resumes if stopped)")
     notes.add_argument("scope", help="chapter or section, e.g. ch4 or 4.2")
     notes.add_argument("--out", default="notes.md", help="Markdown file to write")
+    notes.add_argument("--no-visuals", action="store_true", help="skip diagrams and tables (about 2.3x faster; useful on a CPU)")
     notes.add_argument("--model", choices=list(models.BY_ID))
     notes.add_argument("--backend", choices=hardware.BACKENDS)
     notes.set_defaults(func=cmd_notes)

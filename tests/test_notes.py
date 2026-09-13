@@ -61,6 +61,13 @@ def test_notes_are_written_verified_checkpointed_and_resumed(tmp_path):
         assert exported.startswith("# 4.1 Kirchhoff's laws") and "```mermaid\nflowchart TD" in exported
 
 
+def test_no_visuals_asks_the_model_only_for_notes(tmp_path):
+    client = ScriptedClient([reply("# 5.1 Magnetism\n- Magnets have north and south poles that attract opposite poles.")])
+    with _workspace(tmp_path) as ws:
+        notes = write_notes(client, ws, sids=["5.1"], visuals=False)
+    assert len(client.calls) == 1 and notes[0].visuals == () and notes[0].kept == 1
+
+
 def test_clearing_notes_forces_a_rewrite(tmp_path):
     with _workspace(tmp_path) as ws:
         ws.save_notes("d1", "4.1", "# old", "[]", 1, 0, 1.0)
