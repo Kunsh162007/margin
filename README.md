@@ -1,5 +1,9 @@
 # Margin
 
+[![tests](https://github.com/Kunsh162007/margin/actions/workflows/tests.yml/badge.svg)](https://github.com/Kunsh162007/margin/actions/workflows/tests.yml)
+
+![Margin running the whole study flow: adding a file, reading a past paper, writing notes, exporting, practice questions and the assistant](docs/images/demo.svg)
+
 An offline study assistant. Give it your reference books, notes, slides and
 photos, plus past exam papers. It works out which parts of the book the exam
 actually asks about, writes notes on those parts with flowcharts, tables and
@@ -70,6 +74,27 @@ photos are read with OCR. Search combines keyword and meaning-based matching;
 textbook benchmark, so it is off by default.
 
 Set `MARGIN_HOME` to keep models on a different drive.
+
+## Screenshots
+
+These come from a real run with Gemma 4 E4B on the OpenStax *University Physics*
+textbook, with the network switched off.
+
+**Blueprint** — a paper made from the textbook's own exercises, ranked by the chapters it weighs most.
+
+![Blueprint tab](docs/images/blueprint.svg)
+
+**Notes** — checked against the book, with a table the model chose to draw.
+
+![Notes tab](docs/images/notes.svg)
+
+**Practice** — a question that passed the checks, marked point by point.
+
+![Practice tab](docs/images/practice.svg)
+
+**Ask** — the assistant answering with a comparison table built by its table tool.
+
+![Ask tab](docs/images/ask.svg)
 
 ## Evaluation
 
