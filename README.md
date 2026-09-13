@@ -38,7 +38,13 @@ margin add biology-textbook.pdf lecture-slides.pptx whiteboard.jpg
 margin search "how does the nephron filter blood" --scope ch25
 margin inspect biology-textbook.pdf      # see how a file is split into sections
 margin blueprint paper-2023.pdf paper-2024.jpg   # which chapters past papers weigh most
+margin notes ch25 --out kidney-notes.md          # verified notes with a diagram per section
+margin notes ch25 --no-visuals                   # faster on a CPU: notes only
 ```
+
+Notes are checked sentence by sentence against the book, and every finished
+section is saved as it is written — stop at any time and run the same command
+again to carry on.
 
 Books, Word files, slides and JPEG/PNG photos are supported; scanned pages and
 photos are read with OCR. Search combines keyword and meaning-based matching;
