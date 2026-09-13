@@ -83,6 +83,18 @@ def test_prose_mentioning_problems_does_not_start_an_exercise_tail():
     assert split_exercise_tail(text) == (text, "")
 
 
+def test_leak_guard_flags_one_title_dominating_first_place():
+    from collections import Counter
+
+    from evals.retrieval_eval import leak_check
+
+    leaked = leak_check(Counter({"Chapter Review": 291, "1.2 Units and Standards": 4}), 295)
+    assert leaked["leak_warning"] and leaked["top1_title"] == "Chapter Review"
+    spread = leak_check(Counter({f"{i}.1 Section": 10 for i in range(1, 18)}), 170)
+    assert not spread["leak_warning"] and spread["top1_share"] < 0.2
+    assert leak_check(Counter(), 0)["leak_warning"] is False
+
+
 def test_fts_query_survives_punctuation():
     assert fts_query("Kirchhoff's law?") == '"Kirchhoff" OR "s" OR "law"'
     assert fts_query("??") is None
