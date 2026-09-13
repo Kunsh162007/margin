@@ -337,6 +337,57 @@ would reverse it.
 - **Why it matters:** a benchmark that silently scores a configuration error as
   model quality will pick the wrong model and cannot be defended when asked why.
 
+### D21 — Retrieval: one SQLite workspace, paragraph chunks, hybrid search with a reranker
+
+- **Chosen:** documents, sections, chunks, an FTS5 keyword index kept in step by
+  triggers, and float32 vectors all live in one SQLite file per workspace.
+  Sections are cut into chunks of whole paragraphs up to ~1,200 characters,
+  never across a section boundary. A query runs BM25 and exact cosine search
+  (bge-small, 384 dimensions) side by side, fuses the two rankings by reciprocal
+  rank, and reranks the top 20 with a MiniLM cross-encoder.
+- **Why:** one file cannot drift out of step with its own index, and backup is a
+  copy. Keyword search catches the exact terms textbooks are built on; vectors
+  catch paraphrase; fusing by *rank* needs no calibration between two
+  incomparable score scales. Chunks that stay inside a section mean every hit
+  names exactly one section, which the exam blueprint needs.
+- **Measured on this CPU:** bge-small embeds ~236 passages/s (a 1,300-page book
+  in ~20 s); the reranker scores ~340 pairs/s; both models together are 152 MB.
+- **Rejected:** a vector database (a server for a scale this project lacks);
+  vector-only search (loses terminology); overlapping chunks (not needed until a
+  measurement says so).
+
+### D22 — Exercise sections are indexed but excluded from default search
+
+- **Chosen:** sections titled Review Questions, Conceptual Questions, Problems
+  and similar are flagged at indexing time; default search skips them.
+- **Why:** a student searching the book wants the explanation, not the list of
+  questions about it. It also keeps the evaluation honest: the gold questions
+  come from those sections, and an index that contained them would let every
+  question retrieve itself.
+
+### D23 — The retrieval gold set comes from the textbook's own questions, and was audited before use
+
+- **Chosen:** OpenStax *University Physics Volume 1* lists each chapter's
+  Conceptual Questions and Problems under the heading of the section they test.
+  `build_retrieval_gold.py` turns that layout into 1,700+ questions labelled with
+  their section — no hand labelling, and no labels chosen by the person
+  building the retriever.
+- **Two defects found before any result was computed:**
+  1. The first build covered 4 of 17 chapters. In most chapters the PDF glues
+     "Conceptual Questions" onto the end of the previous block, so the marker
+     was never seen. Markers are now matched at the end of a block too, but only
+     after a sentence end and with exact capitals, so prose such as "strategies
+     for solving problems" cannot trigger them.
+  2. The second build read the Answer Key at the back of the book, which repeats
+     every question number with the *answer* in its place. Keeping the last copy
+     of each id silently replaced questions with answers — "If two different
+     theories describe observations equally well…" became "No, neither of these
+     two theories is more valid…". Extraction now stops at the Answer Key
+     bookmark and keeps the first copy of any repeated number.
+- **Why it matters:** both defects would have produced plausible retrieval
+  numbers. A skewed or corrupted gold set is worse than none, because it looks
+  like evidence.
+
 ## 5. Evaluation suite
 
 `evals/` is a regression suite in the same discipline as the previous project:
