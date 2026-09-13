@@ -13,7 +13,7 @@ and turns those parts into checked notes, diagrams and practice questions — on
 ![runs offline](https://img.shields.io/badge/runs-offline-d4a72c)
 ![CPU or GPU](https://img.shields.io/badge/CPU%20or%20GPU-supported-d4a72c)
 
-[Quick start](#quick-start) · [What it does](#what-it-does) · [How it works](#how-it-works) · [Screenshots](#screenshots) · [Speed](#how-fast-is-it) · [Measured results](#measured-not-promised)
+[Quick start](#quick-start) · [What it does](#what-it-does) · [How it works](#how-it-works) · [Screenshots](#screenshots) · [Requirements](#requirements) · [Measured results](#measured-not-promised)
 
 <br>
 
@@ -29,8 +29,8 @@ not much time. Margin reads your past papers first, maps every question onto the
 book, and spends its effort on the chapters that carry the marks.
 
 Everything runs locally. Your books, notes and answers never leave your machine,
-and there is no account, API key or subscription. A GPU makes it faster; a CPU is
-enough.
+and there is no account, API key or subscription. It works with or without a
+graphics card.
 
 ## Quick start
 
@@ -124,20 +124,25 @@ with the network switched off.
   </tr>
 </table>
 
-## How fast is it
+## Requirements
 
-Measured with Gemma 4 E4B on one laptop: an 8-core CPU, and an RTX 4060 Laptop GPU
-with 8 GB of memory.
+| | Minimum |
+|---|---|
+| Operating system | Windows (64-bit), macOS, or Linux (64-bit) |
+| Memory | 8 GB of RAM |
+| Disk space | about 5 GB free, or up to 7 GB with an NVIDIA graphics card |
+| Graphics card | not required |
+| Internet | only for the first setup |
+| Python | not required — the installer brings its own |
 
-| | CPU only | With the GPU |
-|---|---|---|
-| Writing speed | 12 tokens a second | 58 tokens a second |
-| Deciding which tool to use | 6.4 s | 0.9 s |
-| Memory used | 5.3 GB of RAM | 3.2 GB of GPU memory |
-| One section of notes with a diagram | — | about 25 s |
+**Graphics cards.** Margin uses an NVIDIA graphics card automatically when it
+finds one, and the built-in graphics on Apple Silicon Macs. With 6 GB of video
+memory or more, the default model runs on the graphics card. Other graphics cards
+are not used, and Margin runs on the CPU instead.
 
-On a CPU, `margin notes ch4 --no-visuals` skips the diagrams and is about 2.3×
-faster.
+**Less memory.** With less than 8 GB of RAM, or less than 6 GB of video memory,
+Margin switches to a much smaller model so it still runs, with lower-quality
+results.
 
 ## Measured, not promised
 
@@ -185,7 +190,7 @@ margin search "how does the nephron filter blood" --scope ch25
 
 margin blueprint paper-2023.pdf paper-2024.jpg   # which chapters past papers weigh most
 margin notes ch25 --out kidney-notes.md          # checked notes with a diagram per section
-margin notes ch25 --no-visuals                   # faster on a CPU: notes only
+margin notes ch25 --no-visuals                   # notes only, without diagrams
 margin questions ch25 --count 10 --marks 3       # exam questions with marking schemes
 margin questions 25.2 --quiz                     # answer them now and get marked
 margin cards ch25 --out kidney.apkg              # key terms as an Anki deck
