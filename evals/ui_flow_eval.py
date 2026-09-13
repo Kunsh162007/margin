@@ -78,7 +78,8 @@ async def _open(app: MarginApp, pilot, tab: str) -> None:
 
 
 async def _flow(app: MarginApp, study: Study, work_dir: Path, record) -> None:
-    async with app.run_test(size=(160, 50)) as pilot:
+    shots = work_dir / "screenshots"  # one SVG per step, for the README and the demo
+    async with app.run_test(size=(140, 42)) as pilot:
 
         async def press(selector: str) -> bool:
             target = app.query_one(selector)
@@ -99,6 +100,8 @@ async def _flow(app: MarginApp, study: Study, work_dir: Path, record) -> None:
             ok, detail = outcome if isinstance(outcome, tuple) else (bool(outcome), "")
             status = str(app.query_one("#status", Static).render()) if clicked else "click missed: the control was not on screen"
             record(name, bool(clicked) and ok, time.perf_counter() - started, status, detail)
+            shots.mkdir(exist_ok=True)
+            app.save_screenshot(filename=f"{len(list(shots.glob('*.svg'))) + 1:02d}-{name.replace(' ', '-')}.svg", path=str(shots))
 
         documents = app.query_one("#documents", DataTable)
         before = documents.row_count

@@ -63,7 +63,8 @@ def cmd_models(args: argparse.Namespace) -> int:
 def cmd_setup(args: argparse.Namespace) -> int:
     hw, backend, spec = _selection(args)
     paths = config.paths().ensure()
-    console.print(f"[{GOLD}]Setting up Margin[/] for {backend.upper()} with {spec.id} ({spec.size_gb} GB download)")
+    size = "already downloaded" if spec.path(paths.models_dir).exists() else f"{spec.size_gb} GB download"
+    console.print(f"[{GOLD}]Setting up Margin[/] for {backend.upper()} with {spec.id} ({size})")
     try:
         exe = ensure_llama_server(paths.bin_dir, hw.os, hw.arch, backend)
         download(spec.url, spec.path(paths.models_dir), label=spec.id)

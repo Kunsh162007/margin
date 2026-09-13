@@ -12,14 +12,14 @@
     {
       "step": "read a past paper",
       "ok": true,
-      "seconds": 0.4,
+      "seconds": 0.3,
       "status": "Ready.",
       "detail": ""
     },
     {
       "step": "write notes with a diagram",
       "ok": true,
-      "seconds": 17.5,
+      "seconds": 18.2,
       "status": "Ready.",
       "detail": "visuals saved: [('table', 'markdown')]"
     },
@@ -33,14 +33,14 @@
     {
       "step": "export an Anki deck",
       "ok": true,
-      "seconds": 0.2,
+      "seconds": 0.3,
       "status": "Ready.",
       "detail": ""
     },
     {
       "step": "write questions",
       "ok": true,
-      "seconds": 20.3,
+      "seconds": 21.7,
       "status": "Ready.",
       "detail": ""
     },
@@ -54,7 +54,7 @@
     {
       "step": "ask for a comparison table",
       "ok": true,
-      "seconds": 8.0,
+      "seconds": 9.2,
       "status": "Ready.",
       "detail": "c\n                   when they are                            friction.\n                   moving relative to\n                   one another.\n\n\n\n Feature     Static Friction                  Kinetic Friction\n \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n Definition  Friction between two systems in  Friction between two systems in\n             contact that are stationary      contact that are moving relative\n             relative to one another.         to one another.\n\n\nLet me know if you have any other questions about friction or need help with\nanother topic!"
     }
@@ -62,9 +62,9 @@
   "all_ok": true,
   "steps_ok": 8,
   "steps_run": 8,
-  "total_seconds": 50.8,
+  "total_seconds": 54.6,
   "network_attempts_refused": 0,
   "refused_targets": [],
   "questions_accepted": 3,
-  "run_at": "20260913_182522"
+  "run_at": "20260913_183805"
 }
