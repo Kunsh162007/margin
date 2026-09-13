@@ -1,7 +1,7 @@
 """Run the tools the model calls.
 
 Arguments are validated against the same pydantic models that produced the
-schema the model saw (D7). An invalid call is not an exception: the model gets
+schema the model saw. An invalid call is not an exception: the model gets
 a message naming what to fix, which small models act on.
 """
 

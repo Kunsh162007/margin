@@ -92,7 +92,7 @@ def test_best_match_only_gives_everything_to_the_first_section():
     bp = build_blueprint(FakeSearcher(), [PaperQuestion("1", "Newton", 10, None)], split=(1.0,))
     assert [(r.sid, r.weight) for r in bp.sections] == [("5.3", 10.0)]
     default = build_blueprint(FakeSearcher(), [PaperQuestion("1", "Newton", 10, None)])
-    assert [(r.sid, r.weight) for r in default.sections] == [("5.3", 10.0)]  # D25: best match is the default
+    assert [(r.sid, r.weight) for r in default.sections] == [("5.3", 10.0)]  # best match is the default
 
 
 def test_chapter_shares_roll_sections_up():

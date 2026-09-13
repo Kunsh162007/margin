@@ -1,7 +1,7 @@
 """Exam-style questions from one section, each checked before a student sees it.
 
 Questions are generated under a JSON schema, so every one arrives with a model
-answer, its marks and a marking scheme. Three checks then run in code (D12):
+answer, its marks and a marking scheme. Three checks then run in code:
 
 1. **answerable** — at least 60% of the model answer's content words occur in
    the section, so the answer comes from the book rather than the model's memory;

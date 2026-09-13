@@ -1,4 +1,4 @@
-"""D15: "offline" is something these tests can fail on.
+"""The offline promise is something these tests can fail on.
 
 The ``no_network`` fixture refuses every connection and DNS lookup that is not
 to this machine. The first test proves the guard bites; the rest run the study

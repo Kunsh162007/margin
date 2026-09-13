@@ -1,6 +1,6 @@
 """Shared fixtures.
 
-``no_network`` makes "offline" something a test can fail on (D15): any socket
+``no_network`` makes "offline" something a test can fail on: any socket
 connection or DNS lookup to a host other than this machine raises.
 """
 

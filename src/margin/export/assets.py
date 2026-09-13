@@ -1,6 +1,6 @@
 """Browser code embedded in exported HTML, downloaded once by ``margin setup``.
 
-An exported page must draw its diagrams with no network (D15), so Mermaid is
+An exported page must draw its diagrams with no network, so Mermaid is
 written into the file instead of loaded from a CDN. The download is pinned by
 version and SHA-256: a file that does not match is deleted, never embedded.
 """

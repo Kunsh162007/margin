@@ -7,7 +7,7 @@ one best, and that weight goes to the question's best-matching section.
 Spreading it over the top three matches (60/25/15) looked safer, because
 search ranks the right section first only 37% of the time but has it in the top
 five 60% of the time. Measured on synthetic papers over five seeds
-(``evals/blueprint_eval.py``, DESIGN.md D25), it was worse: chapter shares were
+(``evals/blueprint_eval.py``), it was worse: chapter shares were
 further from the truth in 5 of 5 seeds and less true weight was captured in 4
 of 5. Spreading weight smears every question across neighbouring sections. The
 split is kept as an option, not the default.
@@ -60,7 +60,7 @@ def chapter_of(sid: str) -> str:
 
 
 def chapter_shares(blueprint: Blueprint) -> list[tuple[str, float]]:
-    """Share of exam weight per chapter, largest first. The blueprint is most reliable at this level (D25)."""
+    """Share of exam weight per chapter, largest first. The blueprint is most reliable at this level."""
     shares: dict[str, float] = {}
     for row in blueprint.sections:
         key = chapter_of(row.sid)

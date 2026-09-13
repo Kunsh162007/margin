@@ -73,8 +73,12 @@ Set `MARGIN_HOME` to keep models on a different drive.
 
 ## Evaluation
 
-The evaluation suite is optional and lives in `evals/`. See
-[`docs/DESIGN.md`](docs/DESIGN.md) for what it measures and why.
+The evaluation suite is optional and lives in `evals/`. It measures the model
+benchmark (quality, speed and tool-calling accuracy on CPU and GPU), reading
+real textbooks, search quality, the exam blueprint, diagrams, verified notes,
+question checks and marking, and the whole flow through the interface with the
+network blocked. Each script documents its method at the top, and results are
+saved under `evals/results/`.
 
 ```sh
 uv run python -m evals.run --model qwen3.5-4b          # smoke tier

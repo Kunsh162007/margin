@@ -68,7 +68,7 @@ VRAM_LIMIT_GB = 8.0
 
 
 def select_defaults(docs: dict[tuple[str, str], dict[str, Any]], quality_backend: str) -> dict[str, str | None]:
-    """Apply the selection rule fixed in DESIGN.md D3 before any result was seen.
+    """Apply the selection rule, which was fixed before any result was seen.
 
     Quality comes from the quality backend's full-tier run. CPU default: best quality
     whose CPU tool decision takes <= 10 s and whose server memory (text or vision) fits
@@ -185,7 +185,7 @@ def write_report() -> Path:
     quality_backend = next((b for b in backends if b != "cpu"), "cpu")
     defaults = select_defaults(all_docs, quality_backend)
     rule = (
-        f"\n### Defaults by the selection rule (D3)\n\n"
+        f"\n### Defaults by the selection rule\n\n"
         f"- CPU default (quality from {quality_backend}; CPU tool decision <= {CPU_TOOL_CALL_LIMIT_S:.0f} s, memory <= {RAM_LIMIT_GB:.0f} GB): **{defaults['cpu'] or 'none eligible yet'}**\n"
         f"- GPU default (fits {VRAM_LIMIT_GB:.0f} GB VRAM): **{defaults['gpu'] or 'none eligible yet'}**\n"
     )

@@ -67,7 +67,7 @@ CANDIDATES: tuple[ModelSpec, ...] = (
 
 BY_ID = {m.id: m for m in CANDIDATES}
 
-# CPU: chosen by the selection rule in docs/DESIGN.md (D3). GPU: the rule picked granite4.1-3b
+# CPU: chosen by the selection rule in ``evals/bench_models.py``. GPU: the rule picked granite4.1-3b
 # by 0.001, a tie; the owner chose gemma4-e4b for both (one download, vision, parallel calls).
 DEFAULT_CPU_MODEL = "gemma4-e4b"
 DEFAULT_GPU_MODEL = "gemma4-e4b"

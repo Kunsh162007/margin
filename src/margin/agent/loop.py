@@ -1,18 +1,18 @@
 """The bounded tool loop: model turn, tool calls, results, repeat, stop.
 
-Two fixes from the model benchmark live here (DESIGN.md §6):
+Two fixes from the model benchmark (``evals/bench_models.py``) live here:
 
 * tool turns get a 2,048-token output budget — Qwen3.5 9B's 3,652-character
   table argument was cut off at 1,024 tokens;
 * when llama-server rejects a tool call as unparseable JSON, the model is told
   why and gets one retry instead of the whole task failing.
 
-One fix from the notes writer is shared here (D27, D30): when a call names the
+One fix from the notes writer is shared here: when a call names the
 right tool but its arguments fail validation — Gemma 4 E4B sends table rows as
 strings instead of lists — the tool choice is kept and the arguments are
 generated once more with the tool's JSON schema enforced by llama.cpp's grammar.
 
-The loop's shape is code, not the model's choice (D6): at most ``max_steps``
+The loop's shape is code, not the model's choice: at most ``max_steps``
 turns, then it stops and says so.
 """
 

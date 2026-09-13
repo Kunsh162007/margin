@@ -26,7 +26,7 @@ MAX_SECTION_CHARS = 6000
 VISUAL_TOOLS = ["make_flowchart", "make_table", "make_mindmap", "make_timeline", "make_formula_sheet", "make_glossary"]
 # Two passes per section, not one prompt with optional tools. Asked to "write notes and call a
 # visual tool if it helps", Gemma 4 E4B made no diagram for 6 of 6 sections, yet it called
-# make_table natively when that was the only job (DESIGN.md D27). The loop's shape is code (D6).
+# make_table natively when that was the only job (evals/notes_eval.py). The loop's shape is fixed in code.
 VISUAL_PROMPT = (
     "You choose one visual aid for revising a textbook section. For a process or sequence of stages call make_flowchart; "
     "for a comparison or classification call make_table; for equations call make_formula_sheet; for dated events call make_timeline; "
@@ -67,7 +67,7 @@ def _visual_for(client: ClientLike, executor: ToolExecutor, section: dict[str, s
     Gemma 4 E4B chose sensible visuals but filled nested schemas from memory: tables
     without a title, rows as strings, mind maps with invented field names — every call
     failed validation, and a retry repeated the mistake. Generating the arguments
-    with the schema enforced by llama.cpp's grammar makes them valid by construction (D8, D27).
+    with the schema enforced by llama.cpp's grammar makes them valid by construction.
     """
     pick = client.chat([{"role": "system", "content": VISUAL_PROMPT}, section], tools=openai_tools(VISUAL_TOOLS), max_tokens=NOTES_MAX_TOKENS)
     name = next((c.name for c in pick.tool_calls if c.name in VISUAL_TOOLS), None)

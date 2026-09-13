@@ -1,4 +1,4 @@
-"""Refuse every network connection that leaves this machine (D15).
+"""Refuse every network connection that leaves this machine.
 
 Used by the pytest ``no_network`` fixture and by ``ui_flow_eval``. Connections
 and DNS lookups to loopback still work, because the model server lives there.
