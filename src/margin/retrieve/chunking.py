@@ -22,8 +22,27 @@ _EXERCISE_TITLE = re.compile(
 )
 
 
+# Question lists inside a section ("Chapter Review" in OpenStax physics holds Key Terms,
+# Summary, then Conceptual Questions and Problems with no bookmarks of their own). A marker
+# counts only after a sentence or paragraph end and when a section number or question number
+# follows, so prose like "strategies for solving Problems" cannot start an exercise tail.
+_EXERCISE_MARKER = re.compile(
+    r"(?:^|(?<=[.?!)\]”\"'])\s+|\n\n)"
+    r"(Conceptual Questions|Review Questions|Critical Thinking Questions|Interactive Link Questions|Problems|Additional Problems|Challenge Problems)"
+    r"(?=\s*(?:$|\d{1,2}\.\d{1,2}\s|\d{1,3} \. ))"
+)
+
+
 def is_exercise_section(title: str) -> bool:
     return bool(_EXERCISE_TITLE.match(title.strip()))
+
+
+def split_exercise_tail(text: str) -> tuple[str, str]:
+    """(teaching text, question lists) — the second is empty when the section has no question list."""
+    match = _EXERCISE_MARKER.search(text)
+    if match is None:
+        return text, ""
+    return text[: match.start()].rstrip(), text[match.start() :].lstrip()
 
 
 def _pieces(text: str) -> list[str]:
@@ -43,11 +62,11 @@ def _pieces(text: str) -> list[str]:
     return pieces
 
 
-def chunk_section(section: Section) -> list[ChunkRecord]:
+def _pack(text: str) -> list[str]:
     texts: list[str] = []
     buffer: list[str] = []
     size = 0
-    for piece in _pieces(section.text):
+    for piece in _pieces(text):
         if buffer and size + len(piece) > TARGET_CHARS:
             texts.append("\n\n".join(buffer))
             buffer, size = [], 0
@@ -55,5 +74,14 @@ def chunk_section(section: Section) -> list[ChunkRecord]:
         size += len(piece) + 2
     if buffer:
         texts.append("\n\n".join(buffer))
-    exercise = is_exercise_section(section.title)
-    return [ChunkRecord(section.id, i, t, section.page_start, section.page_end, exercise) for i, t in enumerate(texts)]
+    return texts
+
+
+def chunk_section(section: Section) -> list[ChunkRecord]:
+    """Teaching text and any trailing question list are packed separately, so no chunk mixes them."""
+    if is_exercise_section(section.title):
+        parts = [(t, True) for t in _pack(section.text)]
+    else:
+        teaching, questions = split_exercise_tail(section.text)
+        parts = [(t, False) for t in _pack(teaching)] + [(t, True) for t in _pack(questions)]
+    return [ChunkRecord(section.id, i, text, section.page_start, section.page_end, flag) for i, (text, flag) in enumerate(parts)]

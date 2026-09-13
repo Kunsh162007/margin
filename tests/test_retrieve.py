@@ -62,6 +62,27 @@ def test_exercise_sections_are_recognised(title, expected):
     assert is_exercise_section(title) is expected
 
 
+def test_question_lists_inside_a_review_section_are_flagged_but_summary_is_not():
+    text = (
+        "Key Terms\n\nvector: a quantity with magnitude and direction.\n\n"
+        "Summary\n\n2.1 Scalars and Vectors • A vector has magnitude and direction. Conceptual Questions\n\n"
+        "2.1 Scalars and Vectors\n\n1 . Is a temperature forecast a vector or a scalar quantity? Explain.\n\n"
+        "Problems\n\n2.1 Scalars and Vectors\n\n12 . A scuba diver makes a slow descent into the ocean."
+    )
+    chunks = chunk_section(_section("s9", "Chapter Review", text))
+    teaching = " ".join(c.text for c in chunks if not c.is_exercise)
+    questions = " ".join(c.text for c in chunks if c.is_exercise)
+    assert "magnitude and direction" in teaching and "temperature forecast" not in teaching
+    assert "temperature forecast" in questions and "scuba diver" in questions
+
+
+def test_prose_mentioning_problems_does_not_start_an_exercise_tail():
+    from margin.retrieve.chunking import split_exercise_tail
+
+    text = "This chapter teaches strategies for solving Problems in physics. Problems are solved in three stages."
+    assert split_exercise_tail(text) == (text, "")
+
+
 def test_fts_query_survives_punctuation():
     assert fts_query("Kirchhoff's law?") == '"Kirchhoff" OR "s" OR "law"'
     assert fts_query("??") is None

@@ -364,6 +364,17 @@ would reverse it.
   questions about it. It also keeps the evaluation honest: the gold questions
   come from those sections, and an index that contained them would let every
   question retrieve itself.
+- **It leaked, and the first retrieval numbers were discarded.** The first run
+  looked strange rather than wrong: hit@5 near 0.4 on every arm but hit@1 at
+  0.7% for keyword search. Counting rank-1 results showed one section title,
+  "Chapter Review", first for 291 of 295 sampled questions with keyword search
+  and 240 of 295 with vectors. In University Physics the Key Terms, Summary,
+  Conceptual Questions and Problems all sit inside a single "Chapter Review"
+  bookmark, so a title-based flag never fired and every question could find its
+  own copy. Chunking now detects where question lists begin *inside* a section —
+  a list heading after a sentence or paragraph end, followed by a section or
+  question number — and flags only the chunks after it. Key Terms and the
+  Summary stay searchable.
 
 ### D23 — The retrieval gold set comes from the textbook's own questions, and was audited before use
 
