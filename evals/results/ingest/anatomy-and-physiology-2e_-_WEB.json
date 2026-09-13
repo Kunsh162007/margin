@@ -1,0 +1,124 @@
+{
+  "file": "anatomy-and-physiology-2e_-_WEB.pdf",
+  "pages": 1347,
+  "toc_entries": 409,
+  "sections": 410,
+  "anchored_rate": 1.0,
+  "empty_section_rate": 0.17073170731707318,
+  "char_coverage": 1.0,
+  "text_page_rate": 0.9985152190051967,
+  "ocr_pages": 0,
+  "seconds": 4.19,
+  "pages_per_s": 327.7,
+  "sample_sections": [
+    {
+      "id": "front",
+      "title": "Front matter",
+      "pages": [
+        3,
+        6
+      ],
+      "chars": 5265
+    },
+    {
+      "id": "s1",
+      "title": "Contents",
+      "pages": [
+        7,
+        16
+      ],
+      "chars": 12343
+    },
+    {
+      "id": "s2",
+      "title": "Preface",
+      "pages": [
+        17,
+        17
+      ],
+      "chars": 0
+    },
+    {
+      "id": "s3",
+      "title": "About OpenStax",
+      "pages": [
+        17,
+        22
+      ],
+      "chars": 19391
+    },
+    {
+      "id": "1",
+      "title": "Chapter 1 An Introduction to the Human Body",
+      "pages": [
+        23,
+        23
+      ],
+      "chars": 0
+    },
+    {
+      "id": "s5",
+      "title": "Chapter Objectives",
+      "pages": [
+        23,
+        23
+      ],
+      "chars": 0
+    },
+    {
+      "id": "s6",
+      "title": "Introduction",
+      "pages": [
+        23,
+        23
+      ],
+      "chars": 2194
+    },
+    {
+      "id": "1.1",
+      "title": "1.1 Overview of Anatomy and Physiology",
+      "pages": [
+        24,
+        25
+      ],
+      "chars": 5871
+    },
+    {
+      "id": "1.2",
+      "title": "1.2 Structural Organization of the Human Body",
+      "pages": [
+        25,
+        30
+      ],
+      "chars": 4564
+    },
+    {
+      "id": "1.3",
+      "title": "1.3 Functions of Human Life",
+      "pages": [
+        30,
+        32
+      ],
+      "chars": 6799
+    },
+    {
+      "id": "1.4",
+      "title": "1.4 Requirements for Human Life",
+      "pages": [
+        32,
+        36
+      ],
+      "chars": 12296
+    },
+    {
+      "id": "1.5",
+      "title": "1.5 Homeostasis",
+      "pages": [
+        36,
+        39
+      ],
+      "chars": 8229
+    }
+  ],
+  "run_at": "20260913_121909"
+}

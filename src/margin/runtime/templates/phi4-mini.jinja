@@ -1,0 +1,36 @@
+{#- Phi-4-mini chat template with tool support for llama-server.
+
+    The template shipped inside the GGUF reads tools only from a `tools` field on the
+    system message, and llama-server drops unknown message fields before rendering,
+    so the model never sees a tool. This version renders the standard `tools` variable
+    into Phi-4-mini's own format and also renders earlier tool calls and tool results,
+    which multi-step tasks need. -#}
+{%- set ns = namespace(fns=[]) -%}
+{%- if tools -%}
+{%- for t in tools -%}
+{%- if 'function' in t -%}{%- set ns.fns = ns.fns + [t['function']] -%}{%- else -%}{%- set ns.fns = ns.fns + [t] -%}{%- endif -%}
+{%- endfor -%}
+{%- endif -%}
+{%- set tool_block = ('<|tool|>' + (ns.fns | tojson) + '<|/tool|>') if ns.fns else '' -%}
+{%- if tool_block and (messages | length == 0 or messages[0]['role'] != 'system') -%}
+{{- '<|system|>' + tool_block + '<|end|>' -}}
+{%- endif -%}
+{%- for message in messages -%}
+{%- set content = message['content'] if message['content'] else '' -%}
+{%- if message['role'] == 'system' -%}
+{{- '<|system|>' + content + tool_block + '<|end|>' -}}
+{%- elif message['role'] == 'assistant' and 'tool_calls' in message and message['tool_calls'] -%}
+{{- '<|assistant|>' + content + '<|tool_call|>[' -}}
+{%- for call in message['tool_calls'] -%}
+{%- if not loop.first -%}{{- ', ' -}}{%- endif -%}
+{%- set args = call['function']['arguments'] -%}
+{{- '{"name": "' + call['function']['name'] + '", "arguments": ' + (args if args is string else (args | tojson)) + '}' -}}
+{%- endfor -%}
+{{- ']<|/tool_call|><|end|>' -}}
+{%- elif message['role'] == 'tool' -%}
+{{- '<|tool_response|>' + content + '<|end|>' -}}
+{%- else -%}
+{{- '<|' + message['role'] + '|>' + content + '<|end|>' -}}
+{%- endif -%}
+{%- endfor -%}
+{%- if add_generation_prompt -%}{{- '<|assistant|>' -}}{%- endif -%}

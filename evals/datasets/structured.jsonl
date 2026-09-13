@@ -1,0 +1,17 @@
+{"id": "st-01", "task": "flowchart", "passage": "eng-tcp", "instruction": "Draw a flowchart of the TCP three-way handshake.", "key_terms": ["SYN", "SYN-ACK", "ACK", "established"]}
+{"id": "st-02", "task": "flowchart", "passage": "med-wound", "instruction": "Draw a flowchart of the stages of wound healing in order.", "key_terms": ["haemostasis", "inflammation", "proliferation", "remodelling"]}
+{"id": "st-03", "task": "flowchart", "passage": "med-cardiac", "instruction": "Draw a flowchart of the events of the cardiac cycle.", "key_terms": ["atrial systole", "ventricular systole", "diastole", "semilunar"]}
+{"id": "st-04", "task": "flowchart", "passage": "med-glucose", "instruction": "Draw a flowchart of how blood glucose is brought back to normal after it rises and after it falls.", "key_terms": ["insulin", "glucagon", "glycogen", "beta cells", "alpha cells"]}
+{"id": "st-05", "task": "table", "passage": "arch-orders", "instruction": "Make a table comparing the Doric, Ionic and Corinthian orders by capital, base and proportion.", "key_terms": ["Doric", "Ionic", "Corinthian", "acanthus", "volute"]}
+{"id": "st-06", "task": "table", "passage": "arch-passive", "instruction": "Make a table of passive solar design strategies and what each one does.", "key_terms": ["glazing", "overhang", "thermal mass", "ventilation", "insulation"]}
+{"id": "st-07", "task": "table", "passage": "med-glucose", "instruction": "Make a table comparing type 1 and type 2 diabetes.", "key_terms": ["type 1", "type 2", "autoimmune", "resistant"]}
+{"id": "st-08", "task": "mindmap", "passage": "med-pk", "instruction": "Make a mind map of pharmacokinetics.", "key_terms": ["absorption", "distribution", "metabolism", "excretion", "half-life"]}
+{"id": "st-09", "task": "mindmap", "passage": "bio-photosynthesis", "instruction": "Make a mind map of photosynthesis.", "key_terms": ["light-dependent", "Calvin cycle", "thylakoid", "stroma", "RuBisCO"]}
+{"id": "st-10", "task": "formula", "passage": "eng-beam", "instruction": "Make a formula sheet of every formula in the passage.", "key_terms": ["My/I", "I/c", "M/Z", "wL²/8"]}
+{"id": "st-11", "task": "formula", "passage": "eng-carnot", "instruction": "Make a formula sheet for this passage.", "key_terms": ["Tc/Th", "kelvin"]}
+{"id": "st-12", "task": "timeline", "passage": "hist-penicillin", "instruction": "Make a timeline of the discovery of penicillin.", "key_terms": ["1928", "1940", "1941", "1944", "1945"]}
+{"id": "st-13", "task": "glossary", "passage": "arch-gothic", "instruction": "Make a glossary of the structural elements named in the passage.", "key_terms": ["pointed arch", "ribbed vault", "flying buttress", "pinnacle"]}
+{"id": "st-14", "task": "questions", "passage": "med-pk", "instruction": "Write exactly 3 short-answer exam questions, 2 marks each, with model answers.", "key_terms": []}
+{"id": "st-15", "task": "questions", "passage": "eng-kirchhoff", "instruction": "Write exactly 3 short-answer exam questions, 2 marks each, with model answers.", "key_terms": []}
+{"id": "st-16", "task": "notes", "passage": "eng-kirchhoff", "instruction": "Write concise revision notes in Markdown with headings and bullet points.", "key_terms": ["voltage law", "current law", "conservation of energy", "conservation of charge", "mesh", "nodal"]}
+{"id": "st-17", "task": "notes", "passage": "arch-gothic", "instruction": "Write concise revision notes in Markdown with headings and bullet points.", "key_terms": ["pointed arch", "ribbed vault", "flying buttress", "pinnacle", "stained glass"]}

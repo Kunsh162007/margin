@@ -1,0 +1,20 @@
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.coverage
+dist/
+build/
+*.egg-info/
+
+# local-only
+CLAUDE.md
+.claude/
+.serena/
+.vscode/
+scratchpad/
+
+# large or machine-specific evaluation output
+evals/results/raw/
+*.gguf
+*.log

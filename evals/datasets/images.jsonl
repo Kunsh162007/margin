@@ -1,0 +1,13 @@
+{"id": "img-01", "file": "img-01.png", "passage": "eng-kirchhoff", "style": "typed", "font": "arial.ttf", "degradation": "clean"}
+{"id": "img-02", "file": "img-02.jpg", "passage": "eng-beam", "style": "handwriting", "font": "Inkfree.ttf", "degradation": "rotate"}
+{"id": "img-03", "file": "img-03.png", "passage": "eng-tcp", "style": "typed", "font": "times.ttf", "degradation": "blur"}
+{"id": "img-04", "file": "img-04.jpg", "passage": "eng-carnot", "style": "handwriting", "font": "segoepr.ttf", "degradation": "shadow"}
+{"id": "img-05", "file": "img-05.png", "passage": "arch-orders", "style": "typed", "font": "georgia.ttf", "degradation": "noise"}
+{"id": "img-06", "file": "img-06.jpg", "passage": "arch-passive", "style": "handwriting", "font": "comic.ttf", "degradation": "jpeg"}
+{"id": "img-07", "file": "img-07.png", "passage": "arch-gothic", "style": "typed", "font": "calibri.ttf", "degradation": "clean"}
+{"id": "img-08", "file": "img-08.jpg", "passage": "med-cardiac", "style": "typed", "font": "arial.ttf", "degradation": "rotate"}
+{"id": "img-09", "file": "img-09.png", "passage": "med-glucose", "style": "handwriting", "font": "Inkfree.ttf", "degradation": "blur"}
+{"id": "img-10", "file": "img-10.jpg", "passage": "med-pk", "style": "typed", "font": "times.ttf", "degradation": "shadow"}
+{"id": "img-11", "file": "img-11.png", "passage": "med-wound", "style": "handwriting", "font": "segoepr.ttf", "degradation": "noise"}
+{"id": "img-12", "file": "img-12.jpg", "passage": "bio-photosynthesis", "style": "typed", "font": "georgia.ttf", "degradation": "jpeg"}
+{"id": "img-13", "file": "img-13.png", "passage": "hist-penicillin", "style": "handwriting", "font": "comic.ttf", "degradation": "clean"}

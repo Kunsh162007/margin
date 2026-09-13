@@ -1,0 +1,1883 @@
+{
+  "speed": [
+    {
+      "kind": "long_prompt",
+      "prompt_tokens": 1724,
+      "prompt_tps": 2682.203950183196,
+      "prompt_ms": 642.755
+    },
+    {
+      "kind": "long_prompt",
+      "prompt_tokens": 1724,
+      "prompt_tps": 2883.7243534201575,
+      "prompt_ms": 597.838
+    },
+    {
+      "kind": "long_prompt",
+      "prompt_tokens": 1724,
+      "prompt_tps": 3123.856186648595,
+      "prompt_ms": 551.882
+    },
+    {
+      "kind": "generation",
+      "completion_tokens": 198,
+      "gen_tps": 92.24426093944724
+    },
+    {
+      "kind": "generation",
+      "completion_tokens": 198,
+      "gen_tps": 93.50198951455468
+    },
+    {
+      "kind": "generation",
+      "completion_tokens": 198,
+      "gen_tps": 94.17158729064063
+    }
+  ],
+  "agentic": [
+    {
+      "id": "simple-01",
+      "category": "simple",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 1,
+      "valid_calls": 1,
+      "hallucinated_calls": 0,
+      "latency_s": 1.2919485000020359,
+      "emitted": [
+        {
+          "name": "search_book",
+          "args": {
+            "query": "Kirchhoff's voltage law"
+          }
+        }
+      ],
+      "content": "I'll search for passages about Kirchhoff's voltage law in your circuits book."
+    },
+    {
+      "id": "simple-02",
+      "category": "simple",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 1,
+      "valid_calls": 1,
+      "hallucinated_calls": 0,
+      "latency_s": 0.3539259000099264,
+      "emitted": [
+        {
+          "name": "read_section",
+          "args": {
+            "section_id": "4.2"
+          }
+        }
+      ],
+      "content": ""
+    },
+    {
+      "id": "simple-03",
+      "category": "simple",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 1,
+      "valid_calls": 1,
+      "hallucinated_calls": 0,
+      "latency_s": 0.7094939999951748,
+      "emitted": [
+        {
+          "name": "get_exam_blueprint",
+          "args": {
+            "subject": "anatomy",
+            "top_n": 5
+          }
+        }
+      ],
+      "content": "I'll help you find the topics that carry the most marks in your anatomy papers. Let me get the exam blueprint for you."
+    },
+    {
+      "id": "simple-04",
+      "category": "simple",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 1,
+      "valid_calls": 1,
+      "hallucinated_calls": 0,
+      "latency_s": 0.6977181000111159,
+      "emitted": [
+        {
+          "name": "generate_questions",
+          "args": {
+            "topic": "cardiac cycle",
+            "count": 5,
+            "marks": 1,
+            "question_type": "mcq"
+          }
+        }
+      ],
+      "content": ""
+    },
+    {
+      "id": "simple-05",
+      "category": "simple",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 1,
+      "valid_calls": 1,
+      "hallucinated_calls": 0,
+      "latency_s": 0.46484529999725055,
+      "emitted": [
+        {
+          "name": "calculate",
+          "args": {
+            "expression": "0.5 * 1200 * 3.5**2"
+          }
+        }
+      ],
+      "content": ""
+    },
+    {
+      "id": "simple-06",
+      "category": "simple",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 1,
+      "valid_calls": 1,
+      "hallucinated_calls": 0,
+      "latency_s": 0.45908329999656416,
+      "emitted": [
+        {
+          "name": "create_flashcards",
+          "args": {
+            "topic": "cranial nerves",
+            "count": 20
+          }
+        }
+      ],
+      "content": ""
+    },
+    {
+      "id": "simple-07",
+      "category": "simple",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 1,
+      "valid_calls": 1,
+      "hallucinated_calls": 0,
+      "latency_s": 0.4650933999946574,
+      "emitted": [
+        {
+          "name": "export_notes",
+          "args": {
+            "format": "anki"
+          }
+        }
+      ],
+      "content": "I'll export all the notes to an Anki deck for you."
+    },
+    {
+      "id": "simple-08",
+      "category": "simple",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 1,
+      "valid_calls": 1,
+      "hallucinated_calls": 0,
+      "latency_s": 0.8128572999994503,
+      "emitted": [
+        {
+          "name": "grade_answer",
+          "args": {
+            "question": "What is the function of the mitral valve?",
+            "student_answer": "It stops blood flowing back from the left ventricle into the left atrium.",
+            "max_marks": 4
+          }
+        }
+      ],
+      "content": ""
+    },
+    {
+      "id": "simple-09",
+      "category": "simple",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 1,
+      "valid_calls": 1,
+      "hallucinated_calls": 0,
+      "latency_s": 0.5844209999922896,
+      "emitted": [
+        {
+          "name": "search_book",
+          "args": {
+            "query": "load paths in timber frames",
+            "scope": "ch7",
+            "top_k": 3
+          }
+        }
+      ],
+      "content": ""
+    },
+    {
+      "id": "simple-10",
+      "category": "simple",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 1,
+      "valid_calls": 1,
+      "hallucinated_calls": 0,
+      "latency_s": 0.7283358999993652,
+      "emitted": [
+        {
+          "name": "generate_questions",
+          "args": {
+            "topic": "reinforced concrete beam design",
+            "count": 2,
+            "marks": 10,
+            "question_type": "long"
+          }
+        }
+      ],
+      "content": ""
+    },
+    {
+      "id": "simple-11",
+      "category": "simple",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 1,
+      "valid_calls": 1,
+      "hallucinated_calls": 0,
+      "latency_s": 0.5778038999997079,
+      "emitted": [
+        {
+          "name": "export_notes",
+          "args": {
+            "format": "pdf",
+            "topic": "thermodynamics"
+          }
+        }
+      ],
+      "content": "I'll export your thermodynamics notes as a PDF."
+    },
+    {
+      "id": "simple-12",
+      "category": "simple",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 1,
+      "valid_calls": 1,
+      "hallucinated_calls": 0,
+      "latency_s": 0.99319110000215,
+      "emitted": [
+        {
+          "name": "generate_questions",
+          "args": {
+            "topic": "Ohm's Law",
+            "count": 3,
+            "marks": 5,
+            "question_type": "numerical"
+          }
+        }
+      ],
+      "content": "I'll create 3 numerical problems worth 5 marks each on Ohm's law."
+    },
+    {
+      "id": "simple-13",
+      "category": "simple",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 1,
+      "valid_calls": 1,
+      "hallucinated_calls": 0,
+      "latency_s": 0.790460999996867,
+      "emitted": [
+        {
+          "name": "make_glossary",
+          "args": {
+            "terms": [
+              {
+                "term": "systole",
+                "definition": "the contraction phase of the heart"
+              },
+              {
+                "term": "diastole",
+                "definition": "the relaxation phase of the heart"
+              }
+            ]
+          }
+        }
+      ],
+      "content": ""
+    },
+    {
+      "id": "simple-14",
+      "category": "simple",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 1,
+      "valid_calls": 1,
+      "hallucinated_calls": 0,
+      "latency_s": 1.125120100012282,
+      "emitted": [
+        {
+          "name": "make_timeline",
+          "args": {
+            "title": "Penicillin Discovery Timeline",
+            "events": [
+              {
+                "when": "1928",
+                "what": "Fleming notices penicillin"
+              },
+              {
+                "when": "1940",
+                "what": "Florey and Chain purify it"
+              },
+              {
+                "when": "1945",
+                "what": "Nobel Prize awarded"
+              }
+            ]
+          }
+        }
+      ],
+      "content": ""
+    },
+    {
+      "id": "multiple-01",
+      "category": "multiple",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 1,
+      "valid_calls": 1,
+      "hallucinated_calls": 0,
+      "latency_s": 1.6286535000108415,
+      "emitted": [
+        {
+          "name": "make_table",
+          "args": {
+            "title": "Arteries, Veins and Capillaries Comparison",
+            "columns": [
+              "Wall Thickness",
+              "Valves",
+              "Blood Pressure"
+            ],
+            "rows": [
+              [
+                "Arteries",
+                "No",
+                "High"
+              ],
+              [
+                "Veins",
+                "Yes",
+                "Low"
+              ],
+              [
+                "Capillaries",
+                "Thick",
+                "Low"
+              ]
+            ]
+          }
+        }
+      ],
+      "content": "I'll create a comparison table for arteries, veins, and capillaries as requested."
+    },
+    {
+      "id": "multiple-02",
+      "category": "multiple",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 1,
+      "valid_calls": 1,
+      "hallucinated_calls": 0,
+      "latency_s": 2.1910616000095615,
+      "emitted": [
+        {
+          "name": "make_flowchart",
+          "args": {
+            "title": "Building Project Stages",
+            "steps": [
+              {
+                "id": "brief",
+                "label": "Brief"
+              },
+              {
+                "id": "concept_design",
+                "label": "Concept Design"
+              },
+              {
+                "id": "planning_approval",
+                "label": "Planning Approval"
+              },
+              {
+                "id": "detailed_design",
+                "label": "Detailed Design"
+              },
+              {
+                "id": "construction",
+                "label": "Construction"
+              },
+              {
+                "id": "handover",
+                "label": "Handover"
+              }
+            ],
+            "edges": [
+              {
+                "source": "brief",
+                "target": "concept_design"
+              },
+              {
+                "source": "concept_design",
+                "target": "planning_approval"
+              },
+              {
+                "source": "planning_approval",
+                "target": "detailed_design"
+              },
+              {
+                "source": "detailed_design",
+                "target": "construction"
+              },
+              {
+                "source": "construction",
+                "target": "handover"
+              }
+            ]
+          }
+        }
+      ],
+      "content": ""
+    },
+    {
+      "id": "multiple-03",
+      "category": "multiple",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 1,
+      "valid_calls": 1,
+      "hallucinated_calls": 0,
+      "latency_s": 1.3070392999943579,
+      "emitted": [
+        {
+          "name": "make_mindmap",
+          "args": {
+            "root": "Structural Systems",
+            "branches": [
+              {
+                "label": "Frame",
+                "children": [
+                  "Steel",
+                  "Concrete"
+                ]
+              },
+              {
+                "label": "Shell",
+                "children": [
+                  "Dome",
+                  "Vault"
+                ]
+              },
+              {
+                "label": "Mass",
+                "children": [
+                  "Masonry"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "content": "I'll create a mind map to break down 'structural systems' into its main branches: frame, shell, and mass."
+    },
+    {
+      "id": "multiple-04",
+      "category": "multiple",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 1,
+      "valid_calls": 1,
+      "hallucinated_calls": 0,
+      "latency_s": 1.4109387999924365,
+      "emitted": [
+        {
+          "name": "make_formula_sheet",
+          "args": {
+            "title": "Ohm's Law and Electrical Power",
+            "formulas": [
+              {
+                "name": "Ohm's Law",
+                "expression": "V = IR",
+                "variables": "V: Voltage (Volts), I: Current (Amperes), R: Resistance (Ohms)"
+              },
+              {
+                "name": "Electrical Power",
+                "expression": "P = VI",
+                "variables": "P: Power (Watts), V: Voltage (Volts), I: Current (Amperes)"
+              }
+            ]
+          }
+        }
+      ],
+      "content": ""
+    },
+    {
+      "id": "multiple-05",
+      "category": "multiple",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 1,
+      "valid_calls": 1,
+      "hallucinated_calls": 0,
+      "latency_s": 0.6400552999984939,
+      "emitted": [
+        {
+          "name": "create_flashcards",
+          "args": {
+            "topic": "drug half-lives",
+            "count": 10
+          }
+        }
+      ],
+      "content": "I'll create 10 flashcards on drug half-lives for you."
+    },
+    {
+      "id": "multiple-06",
+      "category": "multiple",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 1,
+      "valid_calls": 1,
+      "hallucinated_calls": 0,
+      "latency_s": 0.6760555999935605,
+      "emitted": [
+        {
+          "name": "generate_questions",
+          "args": {
+            "topic": "renal system",
+            "count": 4,
+            "marks": 3,
+            "question_type": "short"
+          }
+        }
+      ],
+      "content": ""
+    },
+    {
+      "id": "multiple-07",
+      "category": "multiple",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 1,
+      "valid_calls": 1,
+      "hallucinated_calls": 0,
+      "latency_s": 0.7524547000066377,
+      "emitted": [
+        {
+          "name": "get_exam_blueprint",
+          "args": {
+            "subject": "structural engineering",
+            "top_n": 10
+          }
+        }
+      ],
+      "content": "I'll help you identify the most important chapters for the structural engineering exam. Let me get the exam blueprint to see which topics carry the most marks."
+    },
+    {
+      "id": "multiple-08",
+      "category": "multiple",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 1,
+      "valid_calls": 1,
+      "hallucinated_calls": 0,
+      "latency_s": 0.6538320999970892,
+      "emitted": [
+        {
+          "name": "grade_answer",
+          "args": {
+            "question": "define stress (2 marks).",
+            "student_answer": "force per unit area.",
+            "max_marks": 2
+          }
+        }
+      ],
+      "content": ""
+    },
+    {
+      "id": "multiple-09",
+      "category": "multiple",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 1,
+      "valid_calls": 1,
+      "hallucinated_calls": 0,
+      "latency_s": 0.4287017999886302,
+      "emitted": [
+        {
+          "name": "calculate",
+          "args": {
+            "expression": "9.81 * 75 * 12"
+          }
+        }
+      ],
+      "content": ""
+    },
+    {
+      "id": "multiple-10",
+      "category": "multiple",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 1,
+      "valid_calls": 1,
+      "hallucinated_calls": 0,
+      "latency_s": 0.47266909999598283,
+      "emitted": [
+        {
+          "name": "search_book",
+          "args": {
+            "query": "Carnot cycle"
+          }
+        }
+      ],
+      "content": "I'll search your notes for information about the Carnot cycle."
+    },
+    {
+      "id": "parallel-01",
+      "category": "parallel",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 2,
+      "valid_calls": 2,
+      "hallucinated_calls": 0,
+      "latency_s": 1.1079563999956008,
+      "emitted": [
+        {
+          "name": "create_flashcards",
+          "args": {
+            "topic": "respiratory system",
+            "count": 10
+          }
+        },
+        {
+          "name": "export_notes",
+          "args": {
+            "format": "html"
+          }
+        }
+      ],
+      "content": "I'll help you create flashcards on the respiratory system and export your notes as HTML.\n\nLet me start by creating the flashcards and exporting your notes."
+    },
+    {
+      "id": "parallel-02",
+      "category": "parallel",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 2,
+      "valid_calls": 2,
+      "hallucinated_calls": 0,
+      "latency_s": 0.8312188999989303,
+      "emitted": [
+        {
+          "name": "search_book",
+          "args": {
+            "query": "Bernoulli's principle"
+          }
+        },
+        {
+          "name": "search_book",
+          "args": {
+            "query": "continuity equation"
+          }
+        }
+      ],
+      "content": "I'll search the book for passages about Bernoulli's principle and the continuity equation."
+    },
+    {
+      "id": "parallel-03",
+      "category": "parallel",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 2,
+      "valid_calls": 2,
+      "hallucinated_calls": 0,
+      "latency_s": 0.7503515999997035,
+      "emitted": [
+        {
+          "name": "calculate",
+          "args": {
+            "expression": "2**10"
+          }
+        },
+        {
+          "name": "calculate",
+          "args": {
+            "expression": "3**7"
+          }
+        }
+      ],
+      "content": "I'll calculate both of those values for you."
+    },
+    {
+      "id": "parallel-04",
+      "category": "parallel",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 2,
+      "valid_calls": 2,
+      "hallucinated_calls": 0,
+      "latency_s": 1.1365934000059497,
+      "emitted": [
+        {
+          "name": "get_exam_blueprint",
+          "args": {
+            "subject": "",
+            "top_n": 3
+          }
+        },
+        {
+          "name": "generate_questions",
+          "args": {
+            "topic": "enzyme kinetics",
+            "count": 2,
+            "marks": 1,
+            "question_type": "mcq"
+          }
+        }
+      ],
+      "content": ""
+    },
+    {
+      "id": "parallel-05",
+      "category": "parallel",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 2,
+      "valid_calls": 2,
+      "hallucinated_calls": 0,
+      "latency_s": 0.8662506000109715,
+      "emitted": [
+        {
+          "name": "read_section",
+          "args": {
+            "section_id": "3.1"
+          }
+        },
+        {
+          "name": "read_section",
+          "args": {
+            "section_id": "3.2"
+          }
+        }
+      ],
+      "content": "I'll read sections 3.1 and 3.2 for you."
+    },
+    {
+      "id": "parallel-06",
+      "category": "parallel",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 2,
+      "valid_calls": 2,
+      "hallucinated_calls": 0,
+      "latency_s": 0.7868394999968586,
+      "emitted": [
+        {
+          "name": "export_notes",
+          "args": {
+            "format": "markdown"
+          }
+        },
+        {
+          "name": "export_notes",
+          "args": {
+            "format": "pdf"
+          }
+        }
+      ],
+      "content": "I'll export your notes in both Markdown and PDF formats."
+    },
+    {
+      "id": "irrelevant-01",
+      "category": "irrelevance",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 0,
+      "valid_calls": 0,
+      "hallucinated_calls": 0,
+      "latency_s": 0.3385637999890605,
+      "emitted": [],
+      "content": "No problem! I'm here if you need any more help with your studies. What's next on your mind?"
+    },
+    {
+      "id": "irrelevant-02",
+      "category": "irrelevance",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 0,
+      "valid_calls": 0,
+      "hallucinated_calls": 0,
+      "latency_s": 0.2383315000042785,
+      "emitted": [],
+      "content": "Understood. I'll keep my replies shorter from now on."
+    },
+    {
+      "id": "irrelevant-03",
+      "category": "irrelevance",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 0,
+      "valid_calls": 0,
+      "hallucinated_calls": 0,
+      "latency_s": 0.3979876000084914,
+      "emitted": [],
+      "content": "I'm here to help you study. What's the topic you're struggling with, and what specific question or concept are you having trouble with?"
+    },
+    {
+      "id": "irrelevant-04",
+      "category": "irrelevance",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 0,
+      "valid_calls": 0,
+      "hallucinated_calls": 0,
+      "latency_s": 1.4556468000082532,
+      "emitted": [],
+      "content": "I don't have access to real-time weather information or access to the student's books, notes, or papers. I can only help with study-related tasks like searching for study materials, creating flashcards, generating questions, or creating study tools like flowcharts, mind maps, and glossaries.\n\nIf you"
+    },
+    {
+      "id": "irrelevant-05",
+      "category": "irrelevance",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 0,
+      "valid_calls": 0,
+      "hallucinated_calls": 0,
+      "latency_s": 1.1110917999903904,
+      "emitted": [],
+      "content": "I'm sorry, but I can't book a cab for you. I'm an AI assistant designed to help with studying and creating study materials, not for arranging transportation.\n\nHowever, I can help you with your exam preparation by:\n- Searching for relevant passages in your books\n- Creating flashcards\n- Generating pra"
+    },
+    {
+      "id": "irrelevant-06",
+      "category": "irrelevance",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 0,
+      "valid_calls": 0,
+      "hallucinated_calls": 0,
+      "latency_s": 0.3512168000015663,
+      "emitted": [],
+      "content": "I can't directly translate text for you, but I can help you with your studies. How can I assist you today?"
+    },
+    {
+      "id": "irrelevant-07",
+      "category": "irrelevance",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 0,
+      "valid_calls": 0,
+      "hallucinated_calls": 0,
+      "latency_s": 0.653840200000559,
+      "emitted": [],
+      "content": "I can't tell you a joke about engineers, but I can tell you a joke about the student's uploaded books, notes and papers! Here's one:\n\nWhy don't engineers ever tell jokes?\n\nBecause they always have to explain the physics behind it! 😄"
+    },
+    {
+      "id": "irrelevant-08",
+      "category": "irrelevance",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 0,
+      "valid_calls": 0,
+      "hallucinated_calls": 0,
+      "latency_s": 1.5079512999946019,
+      "emitted": [],
+      "content": "Hello! I'm Margin, your offline study assistant. I can help you with:\n\n*   **Search** your uploaded books, notes, and papers for passages about specific topics.\n*   **Read** full sections from your books.\n*   **Generate** practice exam questions on any topic.\n*   **Create** flashcards for spaced-rep"
+    },
+    {
+      "id": "multiturn-01",
+      "category": "multi_turn",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 1,
+      "valid_calls": 1,
+      "hallucinated_calls": 0,
+      "latency_s": 0.6661077000026125,
+      "emitted": [
+        {
+          "name": "create_flashcards",
+          "args": {
+            "topic": "cardiac cycle",
+            "count": 6
+          }
+        }
+      ],
+      "content": "I'll create 6 flashcards on the cardiac cycle for you."
+    },
+    {
+      "id": "multiturn-02",
+      "category": "multi_turn",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 1,
+      "valid_calls": 1,
+      "hallucinated_calls": 0,
+      "latency_s": 0.7637194999988424,
+      "emitted": [
+        {
+          "name": "generate_questions",
+          "args": {
+            "topic": "fluid mechanics",
+            "count": 3,
+            "marks": 5,
+            "question_type": "numerical"
+          }
+        }
+      ],
+      "content": ""
+    },
+    {
+      "id": "multiturn-03",
+      "category": "multi_turn",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 1,
+      "valid_calls": 1,
+      "hallucinated_calls": 0,
+      "latency_s": 0.3783661000052234,
+      "emitted": [
+        {
+          "name": "export_notes",
+          "args": {
+            "format": "anki"
+          }
+        }
+      ],
+      "content": ""
+    },
+    {
+      "id": "multiturn-04",
+      "category": "multi_turn",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 1,
+      "valid_calls": 1,
+      "hallucinated_calls": 0,
+      "latency_s": 0.42354899999918416,
+      "emitted": [
+        {
+          "name": "read_section",
+          "args": {
+            "section_id": "4.3"
+          }
+        }
+      ],
+      "content": ""
+    },
+    {
+      "id": "multiturn-05",
+      "category": "multi_turn",
+      "selection_ok": true,
+      "args_ok": true,
+      "calls": 1,
+      "valid_calls": 1,
+      "hallucinated_calls": 0,
+      "latency_s": 0.4399200000043493,
+      "emitted": [
+        {
+          "name": "calculate",
+          "args": {
+            "expression": "1440 / 12"
+          }
+        }
+      ],
+      "content": ""
+    },
+    {
+      "id": "task-01",
+      "category": "task",
+      "trajectory_ok": true,
+      "args_ok": true,
+      "answer_ok": true,
+      "terminated": true,
+      "success": true,
+      "steps": 3,
+      "calls": 2,
+      "valid_calls": 2,
+      "hallucinated_calls": 0,
+      "redundant_calls": 0,
+      "latency_s": 2.9165202000149293,
+      "emitted": [
+        {
+          "name": "search_book",
+          "args": {
+            "query": "Carnot efficiency"
+          }
+        },
+        {
+          "name": "make_formula_sheet",
+          "args": {
+            "title": "Carnot Efficiency Formula",
+            "formulas": [
+              {
+                "name": "Carnot Efficiency",
+                "expression": "η = 1 - Tc/Th",
+                "variables": "η = efficiency, Tc = absolute temperature of cold reservoir, Th = absolute temperature of hot reservoir (both in Kelvin)"
+              }
+            ]
+          }
+        }
+      ],
+      "final": "Perfect! I've created a formula sheet for the Carnot efficiency formula. The formula is:\n\n**η = 1 - Tc/Th**\n\nWhere:\n- η = efficiency\n- Tc = absolute temperature of the cold reservoir (in Kelvin)\n- Th = absolute temperature of the hot reservoir (in Kelvin)\n\nThe formula sheet has been created and is r"
+    },
+    {
+      "id": "task-02",
+      "category": "task",
+      "trajectory_ok": true,
+      "args_ok": true,
+      "answer_ok": true,
+      "terminated": true,
+      "success": true,
+      "steps": 3,
+      "calls": 2,
+      "valid_calls": 2,
+      "hallucinated_calls": 0,
+      "redundant_calls": 0,
+      "latency_s": 3.9044840000133263,
+      "emitted": [
+        {
+          "name": "search_book",
+          "args": {
+            "query": "stages of wound healing",
+            "top_k": 10
+          }
+        },
+        {
+          "name": "make_flowchart",
+          "args": {
+            "title": "Stages of Wound Healing",
+            "steps": [
+              {
+                "id": "1",
+                "label": "Haemostasis"
+              },
+              {
+                "id": "2",
+                "label": "Inflammation"
+              },
+              {
+                "id": "3",
+                "label": "Proliferation"
+              },
+              {
+                "id": "4",
+                "label": "Remodelling"
+              }
+            ],
+            "edges": [
+              {
+                "source": "1",
+                "target": "2"
+              },
+              {
+                "source": "2",
+                "target": "3"
+              },
+              {
+                "source": "3",
+                "target": "4"
+              }
+            ]
+          }
+        }
+      ],
+      "final": "Perfect! I've found that your book describes wound healing as proceeding through four overlapping stages:\n\n1. **Haemostasis** - A clot forms to stop bleeding\n2. **Inflammation** - Neutrophils and macrophages clear debris\n3. **Proliferation** - Granulation tissue and new vessels form\n4. **Remodelling"
+    },
+    {
+      "id": "task-03",
+      "category": "task",
+      "trajectory_ok": true,
+      "args_ok": true,
+      "answer_ok": true,
+      "terminated": true,
+      "success": true,
+      "steps": 3,
+      "calls": 2,
+      "valid_calls": 2,
+      "hallucinated_calls": 0,
+      "redundant_calls": 0,
+      "latency_s": 2.936695199998212,
+      "emitted": [
+        {
+          "name": "search_book",
+          "args": {
+            "query": "kinetic energy formula"
+          }
+        },
+        {
+          "name": "calculate",
+          "args": {
+            "expression": "0.5 * 1200 * 25**2"
+          }
+        }
+      ],
+      "final": "The kinetic energy of the car is **375,000 joules**.\n\nTo summarize:\n- **Formula found:** KE = ½mv²\n- **Given:** m = 1200 kg, v = 25 m/s\n- **Calculation:** 0.5 × 1200 × 25² = 375,000 J\n\nThe energy of the car is 375,000 joules."
+    },
+    {
+      "id": "task-04",
+      "category": "task",
+      "trajectory_ok": true,
+      "args_ok": true,
+      "answer_ok": true,
+      "terminated": true,
+      "success": true,
+      "steps": 3,
+      "calls": 2,
+      "valid_calls": 2,
+      "hallucinated_calls": 0,
+      "redundant_calls": 0,
+      "latency_s": 3.8999552999885054,
+      "emitted": [
+        {
+          "name": "get_exam_blueprint",
+          "args": {
+            "subject": "",
+            "top_n": 1
+          }
+        },
+        {
+          "name": "generate_questions",
+          "args": {
+            "topic": "Cardiac cycle",
+            "count": 3,
+            "marks": 1,
+            "question_type": "mcq"
+          }
+        }
+      ],
+      "final": "Here are 3 one-mark MCQs on Cardiac cycle:\n\n1. **Question:** What is the primary function of the atrioventricular (AV) valves?\n   - A. To regulate blood flow between the atria and ventricles\n   - B. To pump blood to the lungs\n   - C. To control heart rate\n   - D. To store oxygen\n\n2. **Question:** Du"
+    },
+    {
+      "id": "task-05",
+      "category": "task",
+      "trajectory_ok": true,
+      "args_ok": true,
+      "answer_ok": true,
+      "terminated": true,
+      "success": true,
+      "steps": 3,
+      "calls": 2,
+      "valid_calls": 2,
+      "hallucinated_calls": 0,
+      "redundant_calls": 0,
+      "latency_s": 3.799874300020747,
+      "emitted": [
+        {
+          "name": "search_book",
+          "args": {
+            "query": "Doric Ionic Corinthian orders differences"
+          }
+        },
+        {
+          "name": "make_table",
+          "args": {
+            "title": "Comparison of Doric, Ionic, and Corinthian Orders",
+            "columns": [
+              "Order",
+              "Capital",
+              "Base",
+              "Column Characteristics"
+            ],
+            "rows": [
+              [
+                "Doric",
+                "Plain cushion capital",
+                "No base",
+                "Stoutest columns"
+              ],
+              [
+                "Ionic",
+                "Volute capital",
+                "Base",
+                "Slender columns"
+              ],
+              [
+                "Corinthian",
+                "Ornate acanthus leaf capital",
+                "Base",
+                "Most slender columns"
+              ]
+            ]
+          }
+        }
+      ],
+      "final": "I've created a comparison table for you showing the differences between the Doric, Ionic, and Corinthian orders. Here's what I found:\n\n**Differences between the three orders:**\n\n| Order | Capital | Base | Column Characteristics |\n|-------|---------|------|----------------------|\n| Doric | Plain cush"
+    },
+    {
+      "id": "task-06",
+      "category": "task",
+      "trajectory_ok": true,
+      "args_ok": true,
+      "answer_ok": true,
+      "terminated": true,
+      "success": true,
+      "steps": 3,
+      "calls": 2,
+      "valid_calls": 2,
+      "hallucinated_calls": 0,
+      "redundant_calls": 0,
+      "latency_s": 3.3186229999846546,
+      "emitted": [
+        {
+          "name": "read_section",
+          "args": {
+            "section_id": "6.1"
+          }
+        },
+        {
+          "name": "make_glossary",
+          "args": {
+            "terms": [
+              {
+                "term": "Absorption",
+                "definition": "The movement of a drug into the bloodstream"
+              },
+              {
+                "term": "Distribution",
+                "definition": "The spread of a drug to tissues"
+              },
+              {
+                "term": "Metabolism",
+                "definition": "The chemical conversion of a drug, mostly in the liver"
+              },
+              {
+                "term": "Excretion",
+                "definition": "The removal of a drug, mostly by the kidneys"
+              },
+              {
+                "term": "Half-life",
+                "definition": "The time for plasma concentration to fall by half"
+              }
+            ]
+          }
+        }
+      ],
+      "final": "I've read section 6.1 (Pharmacokinetics) and created a glossary of the key terms:\n\n1. **Absorption** - The movement of a drug into the bloodstream\n2. **Distribution** - The spread of a drug to tissues\n3. **Metabolism** - The chemical conversion of a drug, mostly in the liver\n4. **Excretion** - The r"
+    }
+  ],
+  "grounded": [
+    {
+      "id": "qa-01",
+      "answerable": true,
+      "refused": false,
+      "mixed": false,
+      "correct": true,
+      "answer": "Conservation of energy.",
+      "latency_s": 0.20931089999794494
+    },
+    {
+      "id": "qa-02",
+      "answerable": true,
+      "refused": false,
+      "mixed": false,
+      "correct": true,
+      "answer": "Node voltages.",
+      "latency_s": 0.13977840000006836
+    },
+    {
+      "id": "qa-03",
+      "answerable": false,
+      "refused": true,
+      "mixed": false,
+      "correct": true,
+      "answer": "NOT_IN_SOURCE",
+      "latency_s": 0.1281952999997884
+    },
+    {
+      "id": "qa-04",
+      "answerable": true,
+      "refused": false,
+      "mixed": false,
+      "correct": true,
+      "answer": "wL²/8",
+      "latency_s": 0.16343549999874085
+    },
+    {
+      "id": "qa-05",
+      "answerable": true,
+      "refused": false,
+      "mixed": false,
+      "correct": true,
+      "answer": "span/360",
+      "latency_s": 0.14728920000197832
+    },
+    {
+      "id": "qa-06",
+      "answerable": true,
+      "refused": false,
+      "mixed": false,
+      "correct": true,
+      "answer": "SYN-ACK segment",
+      "latency_s": 0.1590703000110807
+    },
+    {
+      "id": "qa-07",
+      "answerable": true,
+      "refused": false,
+      "mixed": false,
+      "correct": true,
+      "answer": "twice the maximum segment lifetime.",
+      "latency_s": 0.16318079999473412
+    },
+    {
+      "id": "qa-08",
+      "answerable": false,
+      "refused": true,
+      "mixed": false,
+      "correct": true,
+      "answer": "NOT_IN_SOURCE",
+      "latency_s": 0.12443609999900218
+    },
+    {
+      "id": "qa-09",
+      "answerable": true,
+      "refused": false,
+      "mixed": false,
+      "correct": true,
+      "answer": "50%",
+      "latency_s": 0.14659010000468697
+    },
+    {
+      "id": "qa-10",
+      "answerable": true,
+      "refused": false,
+      "mixed": false,
+      "correct": true,
+      "answer": "Two isothermal and two adiabatic reversible processes.",
+      "latency_s": 0.20245250000152737
+    },
+    {
+      "id": "qa-11",
+      "answerable": false,
+      "refused": true,
+      "mixed": false,
+      "correct": true,
+      "answer": "NOT_IN_SOURCE",
+      "latency_s": 0.12317700000130571
+    },
+    {
+      "id": "qa-12",
+      "answerable": true,
+      "refused": false,
+      "mixed": false,
+      "correct": true,
+      "answer": "The Corinthian order.",
+      "latency_s": 0.16182150000531692
+    },
+    {
+      "id": "qa-13",
+      "answerable": true,
+      "refused": false,
+      "mixed": false,
+      "correct": true,
+      "answer": "The Doric order's columns stand without a base.",
+      "latency_s": 0.20141130000411067
+    },
+    {
+      "id": "qa-14",
+      "answerable": true,
+      "refused": false,
+      "mixed": false,
+      "correct": true,
+      "answer": "South",
+      "latency_s": 0.12165839999215677
+    },
+    {
+      "id": "qa-15",
+      "answerable": true,
+      "refused": false,
+      "mixed": false,
+      "correct": true,
+      "answer": "Cross-ventilation.",
+      "latency_s": 0.14631319999170955
+    },
+    {
+      "id": "qa-16",
+      "answerable": false,
+      "refused": true,
+      "mixed": false,
+      "correct": true,
+      "answer": "NOT_IN_SOURCE",
+      "latency_s": 0.12273580000328366
+    },
+    {
+      "id": "qa-17",
+      "answerable": true,
+      "refused": false,
+      "mixed": false,
+      "correct": true,
+      "answer": "Flying buttresses carry the remaining outward thrust from the upper walls across the side aisles to massive buttress piers.",
+      "latency_s": 0.35380710000754334
+    },
+    {
+      "id": "qa-18",
+      "answerable": true,
+      "refused": false,
+      "mixed": false,
+      "correct": true,
+      "answer": "Pinnacles added weight to help turn the outward thrust downward into the foundations.",
+      "latency_s": 0.2578400999918813
+    },
+    {
+      "id": "qa-19",
+      "answerable": true,
+      "refused": false,
+      "mixed": false,
+      "correct": true,
+      "answer": "The first heart sound is produced when the atrioventricular valves close during ventricular systole.",
+      "latency_s": 0.31618799999705516
+    },
+    {
+      "id": "qa-20",
+      "answerable": true,
+      "refused": false,
+      "mixed": false,
+      "correct": true,
+      "answer": "About 0.8 seconds.",
+      "latency_s": 0.17094740000902675
+    },
+    {
+      "id": "qa-21",
+      "answerable": false,
+      "refused": true,
+      "mixed": false,
+      "correct": true,
+      "answer": "NOT_IN_SOURCE",
+      "latency_s": 0.13026130000071134
+    },
+    {
+      "id": "qa-22",
+      "answerable": true,
+      "refused": false,
+      "mixed": false,
+      "correct": true,
+      "answer": "Alpha cells",
+      "latency_s": 0.12490160000743344
+    },
+    {
+      "id": "qa-23",
+      "answerable": true,
+      "refused": false,
+      "mixed": false,
+      "correct": true,
+      "answer": "In type 1 diabetes, the beta cells are destroyed by an autoimmune process.",
+      "latency_s": 0.2487494999950286
+    },
+    {
+      "id": "qa-24",
+      "answerable": false,
+      "refused": true,
+      "mixed": false,
+      "correct": true,
+      "answer": "NOT_IN_SOURCE",
+      "latency_s": 0.12361189999501221
+    },
+    {
+      "id": "qa-25",
+      "answerable": true,
+      "refused": false,
+      "mixed": false,
+      "correct": true,
+      "answer": "100 percent",
+      "latency_s": 0.14899520001199562
+    },
+    {
+      "id": "qa-26",
+      "answerable": true,
+      "refused": false,
+      "mixed": false,
+      "correct": true,
+      "answer": "About five half-lives.",
+      "latency_s": 0.15794169998844154
+    },
+    {
+      "id": "qa-27",
+      "answerable": false,
+      "refused": true,
+      "mixed": false,
+      "correct": true,
+      "answer": "NOT_IN_SOURCE",
+      "latency_s": 0.12776869999652263
+    },
+    {
+      "id": "qa-28",
+      "answerable": true,
+      "refused": false,
+      "mixed": false,
+      "correct": true,
+      "answer": "Proliferation",
+      "latency_s": 0.14593949999834877
+    },
+    {
+      "id": "qa-29",
+      "answerable": true,
+      "refused": false,
+      "mixed": false,
+      "correct": true,
+      "answer": "Neutrophils and then macrophages.",
+      "latency_s": 0.18469589999585878
+    },
+    {
+      "id": "qa-30",
+      "answerable": true,
+      "refused": false,
+      "mixed": false,
+      "correct": true,
+      "answer": "RuBisCO",
+      "latency_s": 0.14434650000475813
+    },
+    {
+      "id": "qa-31",
+      "answerable": true,
+      "refused": false,
+      "mixed": false,
+      "correct": true,
+      "answer": "On the thylakoid membranes.",
+      "latency_s": 0.17021010001190007
+    },
+    {
+      "id": "qa-32",
+      "answerable": false,
+      "refused": true,
+      "mixed": false,
+      "correct": true,
+      "answer": "NOT_IN_SOURCE",
+      "latency_s": 0.11901009999564849
+    },
+    {
+      "id": "qa-33",
+      "answerable": true,
+      "refused": false,
+      "mixed": false,
+      "correct": true,
+      "answer": "1940",
+      "latency_s": 0.14657969999825582
+    },
+    {
+      "id": "qa-34",
+      "answerable": true,
+      "refused": false,
+      "mixed": false,
+      "correct": true,
+      "answer": "1941",
+      "latency_s": 0.14404500000819098
+    }
+  ],
+  "structured": [
+    {
+      "id": "st-01",
+      "task": "flowchart",
+      "valid": true,
+      "coverage": 1.0,
+      "grounding": 0.28444444444444444,
+      "edges_valid": true,
+      "latency_s": 3.0989325999980792,
+      "gen_tps": 81.55504658533457,
+      "output": "{\n  \"title\": \"TCP Three-Way Handshake Flowchart\",\n  \"steps\": [\n    {\n      \"id\": \"Step 1\",\n      \"label\": \"Client Sends SYN Segment (Initial Sequence Number)\"\n    },\n    {\n      \"id\": \"Step 2\",\n      \"label\": \"Server Receives SYN, Replies with SYN-ACK Segment\"\n    },\n    {\n      \"id\": \"Step 3\",\n      \"label\": \"Client Receives SYN-ACK, Sends ACK Segment\"\n    },\n    {\n      \"id\": \"Step 4\",\n      \"label\": \"Connection Established\"\n    }\n  ],\n  \"edges\": [\n    {\n      \"source\": \"Step 1\",\n      \"target\": \"Step 2\"\n    },\n    {\n      \"source\": \"Step 2\",\n      \"target\": \"Step 3\"\n    },\n    {\n      \"source\": \"Step 3\",\n      \"target\": \"Step 4\"\n    }\n  ]\n}"
+    },
+    {
+      "id": "st-02",
+      "task": "flowchart",
+      "valid": true,
+      "coverage": 1.0,
+      "grounding": 0.29166666666666663,
+      "edges_valid": true,
+      "latency_s": 3.1613160999986576,
+      "gen_tps": 80.54024940962009,
+      "output": "{\n  \"title\": \"Stages of Wound Healing\",\n  \"steps\": [\n    {\n      \"id\": \"1\",\n      \"label\": \"Haemostasis (Immediate Phase)\"\n    },\n    {\n      \"id\": \"2\",\n      \"label\": \"Inflammation (Early Phase)\"\n    },\n    {\n      \"id\": \"3\",\n      \"label\": \"Proliferation (Growth Phase)\"\n    },\n    {\n      \"id\": \"4\",\n      \"label\": \"Remodelling (Maturation Phase)\"\n    }\n  ],\n  \"edges\": [\n    {\n      \"source\": \"1\",\n      \"target\": \"2\",\n      \"label\": \"Follows\"\n    },\n    {\n      \"source\": \"2\",\n      \"target\": \"3\",\n      \"label\": \"Follows\"\n    },\n    {\n      \"source\": \"3\",\n      \"target\": \"4\",\n      \"label\": \"Follows\"\n    }\n  ]\n}"
+    },
+    {
+      "id": "st-03",
+      "task": "flowchart",
+      "valid": false,
+      "coverage": 0.0,
+      "grounding": 0.0,
+      "latency_s": 13.23041390000435,
+      "gen_tps": 91.75743005789894,
+      "output": "{\n  \"title\": \"Cardiac Cycle Flowchart\",\n  \"steps\": [\n    {\n      \"id\": \"1\",\n      \"label\": \"Atrial Systole (Atria Contract & Push Blood to Ventricles)\"\n    },\n    {\n      \"id\": \"2\",\n      \"label\": \"Ventricular Systole Begins\"\n    },\n    {\n      \"id\": \"3\",\n      \"label\": \"Ventricles Relax (Diastole)\"\n    },\n    {\n      \"id\": \"4\",\n      \"label\": \"Semilunar Valves Close (Produces 1st Heart Sound)\"\n    },\n    {\n      \"id\": \"5\",\n      \"label\": \"Semilunar Valves Open (Blood Ejected)\"\n    },\n    {\n      \"id\": \"6\",\n      \"label\": \"Atrial Valves Open (Ventricles Refill)\"\n    },\n    {\n      \"id\": \"7\",\n      \"label\": \"Ventricles Relax (Diastole)\"\n    },\n    {\n      \"id\": \"8\",\n      \"label\": \"Semilunar Valves Close (Produces 2nd Heart Sound)\"\n    },\n    {\n      \"id\": \"9\",\n      \"label\": \"Atrial Valves Open (Ventricles Refill)\"\n    },\n    {\n      \"id\": \"10\",\n      \"label\": \"Ventricles Relax (Diastole)\"\n    },\n    {\n      \"id\": \"11\",\n      \"label\": \"Ventricles Relax (Diastole)\"\n    },\n    {\n      \"id\": \"12\",\n      \"label\": \"Semilunar Valves Close (Produces 2nd Heart Sound)\"\n    },\n    {\n      \"id\": \"13\",\n      \"label\": \"Atrial Valves Open (Ventricles Refill)\"\n    },\n    {\n      \"id\": \"14\",\n      \"label\": \"Ventricles Relax (Diastole)\"\n    },\n    {\n      \"id\": \"15\",\n      \"label\": \"Ventricles Relax (Diastole)\"\n    },\n    {\n      \"id\": \"16\",\n      \"label\": \"Semilunar Valves Close (Produces 2nd Heart Sound)\"\n    },\n    {\n      \"id\": \"17\",\n      \"label\": \"Atrial Valves Open (Ventricles Refill)\""
+    },
+    {
+      "id": "st-04",
+      "task": "flowchart",
+      "valid": true,
+      "coverage": 1.0,
+      "grounding": 0.41333333333333333,
+      "edges_valid": false,
+      "latency_s": 8.977767399992445,
+      "gen_tps": 85.40554249078856,
+      "output": "{\n  \"title\": \"Blood Glucose Regulation Flowchart\",\n  \"steps\": [\n    {\n      \"id\": \"Step 1: Glucose Rises\",\n      \"label\": \"Glucose rises after a meal (e.g., eating a large meal).\"\n    },\n    {\n      \"id\": \"Step 2: Insulin Release\",\n      \"label\": \"Beta cells in the islets of Langerhans release insulin.\"\n    },\n    {\n      \"id\": \"Step 3: Insulin Action (Rise Phase)\",\n      \"label\": \"Insulin increases glucose uptake by muscle and fat cells.\"\n    },\n    {\n      \"id\": \"Step 4: Insulin Action (Rise Phase)\",\n      \"label\": \"Insulin stimulates the liver to store glucose as glycogen.\"\n    },\n    {\n      \"id\": \"Step 5: Result (Rise Phase)\",\n      \"label\": \"Blood glucose is lowered back to normal.\"\n    },\n    {\n      \"id\": \"Step 6: Glucose Falls\",\n      \"label\": \"Glucose falls (e.g., between meals or during exercise).\"\n    },\n    {\n      \"id\": \"Step 7: Glucagon Release\",\n      \"label\": \"Alpha cells release glucagon.\"\n    },\n    {\n      \"id\": \"Step 8: Glucagon Action (Fall Phase)\",\n      \"label\": \"Glucagon stimulates the liver to break glycogen down.\"\n    },\n    {\n      \"id\": \"Step 9: Glucagon Action (Fall Phase)\",\n      \"label\": \"Glucagon stimulates the liver to make new glucose (gluconeogenesis).\"\n    },\n    {\n      \"id\": \"Step 10: Result (Fall Phase)\",\n      \"label\": \"Blood glucose is raised back to normal.\"\n    }\n  ],\n  \"edges\": [\n    {\n      \"source\": \"Step 1\",\n      \"target\": \"Step 2\",\n      \"label\": \"Beta cells release insulin\"\n    },\n    {\n      \"source\": \"Step 2\",\n      \"target"
+    },
+    {
+      "id": "st-05",
+      "task": "table",
+      "valid": true,
+      "coverage": 1.0,
+      "grounding": 0.9176470588235294,
+      "latency_s": 2.0142259999993257,
+      "gen_tps": 95.60583754204912,
+      "output": "{\n  \"title\": \"Comparison of Doric, Ionic, and Corinthian Orders\",\n  \"columns\": [\n    \"Order\",\n    \"Capital\",\n    \"Base\",\n    \"Proportion\"\n  ],\n  \"rows\": [\n    [\n      \"Doric\",\n      \"Plain cushion-shaped\",\n      \"No base\",\n      \"Height: ~7 times diameter\"\n    ],\n    [\n      \"Ionic\",\n      \"Pair of volutes (scrolls)\",\n      \"Has a base\",\n      \"Height: ~7 times diameter\"\n    ],\n    [\n      \"Corinthian\",\n      \"Ornate capital with acanthus leaves\",\n      \"Has a base\",\n      \"Height: ~7 times diameter\"\n    ]\n  ]\n}"
+    },
+    {
+      "id": "st-06",
+      "task": "table",
+      "valid": true,
+      "coverage": 1.0,
+      "grounding": 0.7355311355311356,
+      "latency_s": 2.382115200001863,
+      "gen_tps": 78.82673569977763,
+      "output": "{\"title\": \"Passive Solar Design Strategies\", \"columns\": [\"Strategy\", \"Function\"], \"rows\": [ [\"Main Glazing Orientation\", \"In the northern hemisphere, the main glazing faces south to allow low winter sun to enter the building.\"], [\"Roof Overhangs\", \"Size of overhangs are determined by latitude to shade the same windows from high summer sun.\"], [\"Thermal Mass\", \"Materials like concrete floors or masonry walls absorb heat during the day and release it at night to smooth temperature swings.\"], [\"Cross-Ventilation\", \"Openings on opposite sides of a room remove heat in the summer.\"], [\"Insulation and Airtightness\", \"These features prevent the heat collected from escaping the building.\"]]}"
+    },
+    {
+      "id": "st-07",
+      "task": "table",
+      "valid": true,
+      "coverage": 1.0,
+      "grounding": 0.6458333333333334,
+      "latency_s": 2.0047044999955688,
+      "gen_tps": 93.98130744202325,
+      "output": "{\n  \"title\": \"Comparison of Type 1 and Type 2 Diabetes\",\n  \"columns\": [\n    \"Condition\",\n    \"Cause\",\n    \"Effect on Beta Cells\",\n    \"Effect on Tissues\",\n    \"Treatment Requirement\"\n  ],\n  \"rows\": [\n    [\n      \"Type 1 Diabetes\",\n      \"Autoimmune process\",\n      \"Beta cells are destroyed\",\n      \"Tissues are not resistant to insulin\",\n      \"Insulin must be given\"\n    ],\n    [\n      \"Type 2 Diabetes\",\n      \"Unknown cause (often related to lifestyle)\",\n      \"Tissues become resistant to insulin\",\n      \"Beta cells are not destroyed\",\n      \"Insulin may not be required\"\n    ]\n  ]\n}"
+    },
+    {
+      "id": "st-08",
+      "task": "mindmap",
+      "valid": true,
+      "coverage": 1.0,
+      "grounding": 0.8163265306122449,
+      "latency_s": 5.474054300007992,
+      "gen_tps": 90.54001755836347,
+      "output": "{\n  \"root\": \"Pharmacokinetics\",\n  \"branches\": [\n    {\n      \"label\": \"Definition\",\n      \"children\": [\n        \"What the body does to a drug\"\n      ]\n    },\n    {\n      \"label\": \"The Four Processes\",\n      \"children\": [\n        \"Absorption\",\n        \"Distribution\",\n        \"Metabolism\",\n        \"Excretion\"\n      ]\n    },\n    {\n      \"label\": \"Absorption\",\n      \"children\": [\n        \"Movement of drug from site of administration into bloodstream\"\n      ]\n    },\n    {\n      \"label\": \"Distribution\",\n      \"children\": [\n        \"Spread of drug into tissues\"\n      ]\n    },\n    {\n      \"label\": \"Metabolism\",\n      \"children\": [\n        \"Location: Mostly in the liver\"\n      ]\n    },\n    {\n      \"label\": \"Metabolism Details\",\n      \"children\": [\n        \"Converts drug into metabolites\"\n      ]\n    },\n    {\n      \"label\": \"Metabolism Details\",\n      \"children\": [\n        \"Metabolites are usually more water-soluble\"\n      ]\n    },\n    {\n      \"label\": \"Excretion\",\n      \"children\": [\n        \"Location: Mostly by the kidneys\"\n      ]\n    },\n    {\n      \"label\": \"Excretion Details\",\n      \"children\": [\n        \"Removes drug from system\"\n      ]\n    },\n    {\n      \"label\": \"Elimination Half-Life\",\n      \"children\": [\n        \"Definition: Time taken for plasma concentration to fall by half\"\n      ]\n    },\n    {\n      \"label\": \"Elimination Timeline\",\n      \"children\": [\n        \"After ~5 half-lives: Drug is almost entirely eliminated\"\n      ]\n    },\n    {\n      \"label\": \"Repeated Dosing\",\n "
+    },
+    {
+      "id": "st-09",
+      "task": "mindmap",
+      "valid": true,
+      "coverage": 0.8,
+      "grounding": 0.7352941176470589,
+      "latency_s": 2.7864217999886023,
+      "gen_tps": 75.31882114632964,
+      "output": "{\n  \"root\": \"Photosynthesis\",\n  \"branches\": [\n    {\n      \"label\": \"Location\",\n      \"children\": [\n        \"Chloroplasts\",\n        \"Thylakoid membranes\",\n        \"Stroma\"\n      ]\n    },\n    {\n      \"label\": \"Stages\",\n      \"children\": [\n        \"Light-Dependent Reactions\",\n        \"Light-Independent Reactions (Calvin Cycle)\"\n      ]\n    },\n    {\n      \"label\": \"Light-Dependent Reactions\",\n      \"children\": [\n      \"Location\",\n      \"Thylakoid membranes\",\n      \"Input\",\n      \"Light energy\",\n      \"Output\",\n      \"Oxygen\",\n      \"Energy storage\",\n      \"ATP\",\n      \"NADPH\"\n    ]\n  }\n  ]\n}"
+    },
+    {
+      "id": "st-10",
+      "task": "formula",
+      "valid": true,
+      "coverage": 1.0,
+      "grounding": 0.9241071428571429,
+      "latency_s": 3.461470399997779,
+      "gen_tps": 89.41970852812432,
+      "output": "{\n  \"title\": \"Beam in Bending Formula Sheet\",\n  \"formulas\": [\n    {\n      \"name\": \"Normal Stress\",\n      \"expression\": \"σ = My/I\",\n      \"variables\": \"σ = normal stress; M = bending moment; y = distance from neutral axis; I = second moment of area about the neutral axis\"\n    },\n    {\n      \"name\": \"Section Modulus\",\n      \"expression\": \"Z = I/c\",\n      \"variables\": \"Z = section modulus; I = second moment of area; c = distance to the extreme fiber\"\n    },\n    {\n      \"name\": \"Maximum Bending Stress\",\n      \"expression\": \"σmax = M/Z\",\n      \"variables\": \"σmax = maximum stress; M = bending moment; Z = section modulus\"\n    },\n    {\n      \"name\": \"Maximum Bending Moment\",\n      \"expression\": \"M = wL²/8\",\n      \"variables\": \"M = maximum bending moment; w = uniformly distributed load; L = span\"\n    },\n    {\n      \"name\": \"Serviceability Limit\",\n      \"expression\": \"span/360\",\n      \"variables\": \"span = maximum allowable deflection; 360 = serviceability limit ratio\"\n    }\n  ]\n}"
+    },
+    {
+      "id": "st-11",
+      "task": "formula",
+      "valid": true,
+      "coverage": 1.0,
+      "grounding": 0.8363095238095238,
+      "latency_s": 2.8671688999893377,
+      "gen_tps": 81.79377431476529,
+      "output": "{\n  \"title\": \"Heat Engine Efficiency\",\n  \"formulas\": [\n    {\n      \"name\": \"Thermal Efficiency\",\n      \"expression\": \"η = Work Output / Heat Input\",\n      \"variables\": \"η = Thermal Efficiency; Work Output = Work; Heat Input = Heat Input\"\n    },\n    {\n      \"name\": \"Carnot Efficiency\",\n      \"expression\": \"η = 1 − Tc/Th\",\n      \"variables\": \"η = Carnot Efficiency; Tc = Temperature of Cold Reservoir; Th = Temperature of Hot Reservoir; Th and Tc must be in Kelvin\"\n    },\n    {\n      \"name\": \"Maximum Efficiency (Example)\",\n      \"expression\": \"η_max = 1 − 300/600 = 0.5\",\n      \"variables\": \"η_max = Maximum Efficiency; Tc = 300 K; Th = 600 K\"\n    }\n  ]\n}"
+    },
+    {
+      "id": "st-12",
+      "task": "timeline",
+      "valid": true,
+      "coverage": 1.0,
+      "grounding": 0.8888888888888888,
+      "latency_s": 2.6712885000015376,
+      "gen_tps": 79.15218857790167,
+      "output": "{\"title\": \"Timeline of Penicillin Discovery\", \"events\": [{\"when\": \"1928\", \"what\": \"Alexander Fleming noticed that a mould, *Penicillium notatum*, killed bacteria on a culture plate.\"}, {\"when\": \"1940\", \"what\": \"Howard Florey and Ernst Chain at Oxford purified penicillin and showed that it protected infected mice.\"}, {\"when\": \"1941\", \"what\": \"The first human patient was treated with penicillin.\"}, {\"when\": \"1944\", \"what\": \"Mass production in the United States made penicillin widely available.\"}, {\"when\": \"1945\", \"what\": \"Fleming, Florey, and Chain shared the Nobel Prize in Physiology or Medicine.\"}]}"
+    },
+    {
+      "id": "st-13",
+      "task": "glossary",
+      "valid": true,
+      "coverage": 1.0,
+      "grounding": 0.8481524427952999,
+      "latency_s": 3.3035182999883546,
+      "gen_tps": 98.08879711287727,
+      "output": "{\n  \"terms\": [\n    {\n      \"term\": \"Gothic cathedrals\",\n      \"definition\": \"Buildings characterized by tall, thin walls and large windows.\"\n    },\n    {\n      \"term\": \"Stone vault\",\n      \"definition\": \"A structure used to support the roof or ceiling of a building.\"\n    },\n    {\n      \"term\": \"Pointed arches\",\n      \"definition\": \"Arch shapes that direct the thrust of the structure more steeply downward than round arches.\"\n    },\n    {\n      \"term\": \"Ribbed vaults\",\n      \"definition\": \"A type of vault where the weight of the ceiling is channeled along ribs to piers.\"\n    },\n    {\n      \"term\": \"Flying buttresses\",\n      \"definition\": \"External half-arches that carry the remaining outward thrust from the upper walls across the side aisles to massive buttress piers.\"\n    },\n    {\n      \"term\": \"Pinnacles\",\n      \"definition\": \"Structures placed on top of buttress piers that add weight to help turn the outward thrust downward into the foundations.\"\n    },\n    {\n      \"term\": \"Stained glass\",\n      \"definition\": \"A type of window decoration that could be installed in the walls because they no longer carried the main structural loads.\"\n    }\n  ]\n}"
+    },
+    {
+      "id": "st-14",
+      "task": "questions",
+      "valid": true,
+      "coverage": null,
+      "grounding": 0.8055555555555556,
+      "answers_grounded": 1.0,
+      "latency_s": 2.2365405000018654,
+      "gen_tps": 75.37440787604582,
+      "output": "{\n\t\t\"questions\": [\n\t\t\t{\n\t\t\t\t\"question\": \"What is the definition of pharmacokinetics?\",\n\t\t\t\t\"answer\": \"Pharmacokinetics describes what the body does to a drug, summarised as absorption, distribution, metabolism and excretion.\",\"marks\": 2},{\"question\": \"What is the bioavailability of intravenous drugs?\",\n\t\t\t\t\"answer\": \"100 percent.\", \"marks\": 2},{\"question\": \"Where does metabolism primarily occur?\",\n\t\t\t\t\"answer\": \"In the liver.\", \"marks\": 2}\n\t\t]\n\t}"
+    },
+    {
+      "id": "st-15",
+      "task": "questions",
+      "valid": true,
+      "coverage": null,
+      "grounding": 0.736904761904762,
+      "answers_grounded": 0.6666666666666666,
+      "latency_s": 3.227339800010668,
+      "gen_tps": 85.28543113250264,
+      "output": "{\n\t\t\"questions\": [\n\t\t\t{\n\t\t\t\t\"question\": \"What fundamental physical principle does Kirchhoff's voltage law follow, and what is the specific condition that must be met for a charge to travel around a closed loop?\",\"answer\": \"It follows the conservation of energy. The specific condition is that a charge returning to its starting point must return to its original potential.\",\"marks\": 2\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"question\": \"How does Kirchhoff's current law relate to the conservation of charge, and what is the mathematical relationship between the currents entering and leaving a junction?\",\"answer\": \"It follows from the conservation of charge. The relationship is that the total current entering a junction equals the total current leaving it.\",\"marks\": 2\n\t\t\t},\n\t\t\t{\n\t\t\t\t\"question\": \"Which two laws, when combined with Ohm's law, are required to determine the current in every branch of a linear circuit?\",\"answer\": \"Kirchhoff's voltage law and Kirchhoff's current law.\",\"marks\": 2\n\t\t\t}\n\t\t]\n\t}"
+    },
+    {
+      "id": "st-16",
+      "task": "notes",
+      "valid": true,
+      "coverage": 1.0,
+      "sentence_support": 0.8181818181818182,
+      "latency_s": 2.4446254999929806,
+      "gen_tps": 105.74598871643207,
+      "output": "# Kirchhoff's Laws: Study Revision Notes\n\n## Kirchhoff's Voltage Law (KVL)\n*   **Definition**: The algebraic sum of all voltages around any closed loop in a circuit is zero.\n*   **Underlying Principle**: Follows the **conservation of energy**.\n*   **Mechanism**: A charge that travels around a loop returns to its starting potential.\n\n## Kirchhoff's Current Law (KCL)\n*   **Definition**: The total current entering a junction equals the total current leaving it.\n*   **Underlying Principle**: Follows the **conservation of charge**.\n\n## Application to Circuit Analysis\n*   **Combined with Ohm's Law**: Together with Ohm's Law ($V = IR$), these two laws allow the current in every branch of a linear circuit to be calculated.\n*   **Mesh Analysis**:\n    *   Assigns a **loop current** to each independent loop.\n    *   Applies KVL to write an equation for each loop.\n*   **Nodal Analysis**:\n    *   Uses **node voltages** as the unknowns.\n    *   Applies KCL at each node."
+    },
+    {
+      "id": "st-17",
+      "task": "notes",
+      "valid": true,
+      "coverage": 1.0,
+      "sentence_support": 0.6666666666666666,
+      "latency_s": 1.9754614000121364,
+      "gen_tps": 105.00112270431198,
+      "output": "# Gothic Cathedrals: Structural Design Notes\n\n## Core Design Principles\n*   **Wall Modification**: Walls were designed to be tall and thin by concentrating stone vault loads onto specific points.\n*   **Wall Function**: Because walls no longer carried the main structural loads, they were opened up to allow for stained glass.\n\n## Arch and Vault Mechanics\n*   **Pointed Arches**: Direct the thrust of the vault more steeply downward, reducing the outward push on the walls.\n*   **Ribbed Vaults**: Channel the weight of the ceiling along the ribs to transfer it to piers.\n*   **Flying Buttresses**: External half-arches carry the remaining outward thrust from the upper walls across the side aisles to massive buttress piers.\n\n## Reinforcement and Stability\n*   **Pinnacles**: Placed on top of buttress piers to add weight, helping turn the outward thrust downward into the foundations."
+    }
+  ],
+  "vision": [
+    {
+      "id": "img-01",
+      "style": "typed",
+      "degradation": "clean",
+      "cer": 0.0,
+      "latency_s": 2.008810100000119,
+      "output": "Kirchhoff's voltage law states that the algebraic sum of all voltages around any closed loop in a circuit is zero. It follows from conservation of energy: a charge that travels around a loop returns to its starting potential. Kirchhoff's current law states that the total current entering a junction equals the total current leaving it, which follows from conservation of charge. Together with Ohm's ",
+      "ocr_cer": 0.21190130624092887,
+      "ocr_latency_s": 1.1257359000010183
+    },
+    {
+      "id": "img-02",
+      "style": "handwriting",
+      "degradation": "rotate",
+      "cer": 0.0,
+      "latency_s": 1.9793804000073578,
+      "output": "For a beam in bending, the normal stress at a distance y from the neutral axis is σ = My/I, where M is the bending moment at the section and I is the second moment of area of the cross-section about the neutral axis. The stress is zero at the neutral axis and greatest at the outer fibres, where y equals the distance c to the extreme fibre. The section modulus Z = I/c therefore gives the maximum st",
+      "ocr_cer": 0.004601226993865031,
+      "ocr_latency_s": 1.0730916000029538
+    },
+    {
+      "id": "img-03",
+      "style": "typed",
+      "degradation": "blur",
+      "cer": 0.0,
+      "latency_s": 1.544538799993461,
+      "output": "TCP establishes a connection with a three-way handshake. The client sends a SYN segment carrying its initial sequence number. The server replies with a SYN-ACK segment that acknowledges the client's sequence number and carries the server's own initial sequence number. The client then sends an ACK acknowledging the server's sequence number, and the connection is established. Closing a connection no",
+      "ocr_cer": 0.0,
+      "ocr_latency_s": 1.0811227999947732
+    },
+    {
+      "id": "img-04",
+      "style": "handwriting",
+      "degradation": "shadow",
+      "cer": 0.030476190476190476,
+      "latency_s": 1.7326892999990378,
+      "output": "A heat engine takes heat from a hot reservoir, converts part of it to work, and rejects the rest to a cold reservoir. Its thermal efficiency is the work output divided by the heat input. The Carnot cycle, made of two isothermal and two adiabatic reversible processes, sets the upper limit: $\\eta = 1 - T_c/T_h$, with both temperatures in kelvin. An engine operating between $600 \\text{ K}$ and $300 \\",
+      "ocr_cer": 0.0038095238095238095,
+      "ocr_latency_s": 0.9226859999907902
+    },
+    {
+      "id": "img-05",
+      "style": "typed",
+      "degradation": "noise",
+      "cer": 0.0,
+      "latency_s": 1.5028547999972943,
+      "output": "The Doric order has a plain cushion-shaped capital and its columns stand directly on the floor without a base. The Ionic order has a capital with a pair of volutes, or scrolls, and its columns stand on a base. The Corinthian order has an ornate capital carved with acanthus leaves and also stands on a base. The Doric column is the stoutest of the three, with a height of about seven times its diamet",
+      "ocr_cer": 0.0,
+      "ocr_latency_s": 1.0832425999979023
+    },
+    {
+      "id": "img-06",
+      "style": "handwriting",
+      "degradation": "jpeg",
+      "cer": 0.0,
+      "latency_s": 1.5440986000030534,
+      "output": "Passive solar design heats and cools a building through its form and materials rather than mechanical systems. In the northern hemisphere, the main glazing faces south so that low winter sun enters the building, while roof overhangs sized for the latitude shade the same windows from the high summer sun. Thermal mass such as concrete floors or masonry walls absorbs heat during the day and releases ",
+      "ocr_cer": 0.0,
+      "ocr_latency_s": 1.0023854999890318
+    },
+    {
+      "id": "img-07",
+      "style": "typed",
+      "degradation": "clean",
+      "cer": 0.0,
+      "latency_s": 1.7171100999985356,
+      "output": "Gothic cathedrals achieved tall, thin walls and large windows by concentrating the loads of the stone vault onto a few points. Pointed arches direct thrust more steeply downward than round arches, reducing the outward push on the walls. Ribbed vaults channel the weight of the ceiling along ribs to piers. Flying buttresses, external half-arches, carry the remaining outward thrust from the upper wal",
+      "ocr_cer": 0.0,
+      "ocr_latency_s": 1.330553300009342
+    },
+    {
+      "id": "img-08",
+      "style": "typed",
+      "degradation": "rotate",
+      "cer": 0.0,
+      "latency_s": 1.7729230000113603,
+      "output": "The cardiac cycle is the sequence of events in one heartbeat. It begins with atrial systole, when the atria contract and push the last of the blood into the ventricles. Ventricular systole follows: pressure in the ventricles rises, the atrioventricular valves close, producing the first heart sound, and once ventricular pressure exceeds arterial pressure the semilunar valves open and blood is eject",
+      "ocr_cer": 0.0,
+      "ocr_latency_s": 0.9865357000089716
+    },
+    {
+      "id": "img-09",
+      "style": "handwriting",
+      "degradation": "blur",
+      "cer": 0.0,
+      "latency_s": 1.5018706000118982,
+      "output": "Blood glucose is kept within a narrow range by two pancreatic hormones. When glucose rises after a meal, beta cells in the islets of Langerhans release insulin. Insulin increases glucose uptake by muscle and fat cells and stimulates the liver to store glucose as glycogen, lowering blood glucose. When glucose falls, alpha cells release glucagon, which stimulates the liver to break glycogen down and",
+      "ocr_cer": 0.1478537360890302,
+      "ocr_latency_s": 0.8927105000038864
+    },
+    {
+      "id": "img-10",
+      "style": "typed",
+      "degradation": "shadow",
+      "cer": 0.0,
+      "latency_s": 1.6152574000007007,
+      "output": "Pharmacokinetics describes what the body does to a drug, summarised as absorption, distribution, metabolism and excretion. Absorption is the movement of a drug from its site of administration into the bloodstream; intravenous drugs have a bioavailability of 100 percent. Distribution is the spread of the drug into tissues. Metabolism, mostly in the liver, converts the drug into metabolites that are",
+      "ocr_cer": 0.0,
+      "ocr_latency_s": 1.0700916999921901
+    },
+    {
+      "id": "img-11",
+      "style": "handwriting",
+      "degradation": "noise",
+      "cer": 0.0,
+      "latency_s": 1.3480555999994976,
+      "output": "Wound healing proceeds through four overlapping stages. In haemostasis, blood vessels constrict and platelets form a clot that stops bleeding. In inflammation, neutrophils and then macrophages enter the wound and clear bacteria and debris. In proliferation, fibroblasts lay down granulation tissue, new blood vessels form, and the wound edges contract. In remodelling, which can last a year or more, ",
+      "ocr_cer": 0.0,
+      "ocr_latency_s": 0.8342946000047959
+    },
+    {
+      "id": "img-12",
+      "style": "typed",
+      "degradation": "jpeg",
+      "cer": 0.0,
+      "latency_s": 1.481839600004605,
+      "output": "Photosynthesis takes place in chloroplasts in two linked stages. In the light-dependent reactions, on the thylakoid membranes, light energy splits water, releasing oxygen, and the energy is stored in ATP and NADPH. In the light-independent reactions, the Calvin cycle, in the stroma, the enzyme RuBisCO fixes carbon dioxide onto ribulose bisphosphate, and ATP and NADPH from the first stage are used ",
+      "ocr_cer": 0.0,
+      "ocr_latency_s": 0.924783300011768
+    },
+    {
+      "id": "img-13",
+      "style": "handwriting",
+      "degradation": "clean",
+      "cer": 0.0,
+      "latency_s": 1.3573890999978175,
+      "output": "Alexander Fleming noticed in 1928 that a mould, Penicillium notatum, killed bacteria on a culture plate. The substance was hard to isolate, and little followed until 1940, when Howard Florey and Ernst Chain at Oxford purified penicillin and showed that it protected infected mice. The first human patient was treated in 1941. Mass production in the United States during the Second World War made peni",
+      "ocr_cer": 0.0,
+      "ocr_latency_s": 0.7371795999933966
+    }
+  ]
+}

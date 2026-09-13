@@ -1,0 +1,34 @@
+{"id": "qa-01", "passage": "eng-kirchhoff", "question": "What conservation principle does Kirchhoff's voltage law follow from?", "answers": ["conservation of energy"], "answerable": true}
+{"id": "qa-02", "passage": "eng-kirchhoff", "question": "In nodal analysis, what are the unknowns?", "answers": ["node voltages"], "answerable": true}
+{"id": "qa-03", "passage": "eng-kirchhoff", "question": "In what year did Kirchhoff publish his circuit laws?", "answers": [], "answerable": false}
+{"id": "qa-04", "passage": "eng-beam", "question": "What is the maximum bending moment in a simply supported beam carrying a uniformly distributed load?", "answers": ["wL²/8", "wl2/8"], "answerable": true}
+{"id": "qa-05", "passage": "eng-beam", "question": "What deflection limit is commonly used for floor beams?", "answers": ["360"], "answerable": true}
+{"id": "qa-06", "passage": "eng-tcp", "question": "What segment does the server send in reply to the client's SYN?", "answers": ["SYN-ACK"], "answerable": true}
+{"id": "qa-07", "passage": "eng-tcp", "question": "How long does a host wait in the TIME_WAIT state?", "answers": ["twice the maximum segment lifetime", "2 MSL", "two maximum segment lifetimes", "2 x maximum segment lifetime", "2 times the maximum segment lifetime"], "answerable": true}
+{"id": "qa-08", "passage": "eng-tcp", "question": "Which port number does HTTPS use by default?", "answers": [], "answerable": false}
+{"id": "qa-09", "passage": "eng-carnot", "question": "What is the highest possible efficiency of an engine working between 600 K and 300 K?", "answers": ["half", "50", "0.5"], "answerable": true}
+{"id": "qa-10", "passage": "eng-carnot", "question": "What kinds of processes make up the Carnot cycle?", "answers": ["isothermal"], "answerable": true}
+{"id": "qa-11", "passage": "eng-carnot", "question": "What is the thermal efficiency of a typical car petrol engine?", "answers": [], "answerable": false}
+{"id": "qa-12", "passage": "arch-orders", "question": "Which classical order has a capital carved with acanthus leaves?", "answers": ["Corinthian"], "answerable": true}
+{"id": "qa-13", "passage": "arch-orders", "question": "Which order's columns stand without a base?", "answers": ["Doric"], "answerable": true}
+{"id": "qa-14", "passage": "arch-passive", "question": "In the northern hemisphere, which way should the main glazing face?", "answers": ["south"], "answerable": true}
+{"id": "qa-15", "passage": "arch-passive", "question": "What removes heat from a room in summer in passive design?", "answers": ["cross-ventilation", "ventilation"], "answerable": true}
+{"id": "qa-16", "passage": "arch-passive", "question": "What U-value should external walls achieve?", "answers": [], "answerable": false}
+{"id": "qa-17", "passage": "arch-gothic", "question": "What do flying buttresses carry?", "answers": ["outward thrust", "thrust"], "answerable": true}
+{"id": "qa-18", "passage": "arch-gothic", "question": "Why were pinnacles placed on top of buttress piers?", "answers": ["add weight", "adds weight", "weight"], "answerable": true}
+{"id": "qa-19", "passage": "med-cardiac", "question": "What produces the first heart sound?", "answers": ["atrioventricular valves", "AV valves"], "answerable": true}
+{"id": "qa-20", "passage": "med-cardiac", "question": "How long does one cardiac cycle last at 75 beats per minute?", "answers": ["0.8"], "answerable": true}
+{"id": "qa-21", "passage": "med-cardiac", "question": "What is the normal resting stroke volume of an adult?", "answers": [], "answerable": false}
+{"id": "qa-22", "passage": "med-glucose", "question": "Which cells release glucagon?", "answers": ["alpha cells"], "answerable": true}
+{"id": "qa-23", "passage": "med-glucose", "question": "What happens to the beta cells in type 1 diabetes?", "answers": ["destroyed"], "answerable": true}
+{"id": "qa-24", "passage": "med-glucose", "question": "What is the normal fasting blood glucose range in mmol/L?", "answers": [], "answerable": false}
+{"id": "qa-25", "passage": "med-pk", "question": "What is the bioavailability of an intravenous drug?", "answers": ["100"], "answerable": true}
+{"id": "qa-26", "passage": "med-pk", "question": "After roughly how many half-lives is a drug considered almost eliminated?", "answers": ["five", "5"], "answerable": true}
+{"id": "qa-27", "passage": "med-pk", "question": "What is the half-life of paracetamol?", "answers": [], "answerable": false}
+{"id": "qa-28", "passage": "med-wound", "question": "In which stage of wound healing is granulation tissue laid down?", "answers": ["proliferation"], "answerable": true}
+{"id": "qa-29", "passage": "med-wound", "question": "Which cells clear bacteria and debris during inflammation?", "answers": ["neutrophils", "macrophages"], "answerable": true}
+{"id": "qa-30", "passage": "bio-photosynthesis", "question": "Which enzyme fixes carbon dioxide in the Calvin cycle?", "answers": ["RuBisCO"], "answerable": true}
+{"id": "qa-31", "passage": "bio-photosynthesis", "question": "Where do the light-dependent reactions take place?", "answers": ["thylakoid"], "answerable": true}
+{"id": "qa-32", "passage": "bio-photosynthesis", "question": "How many photons are needed to release one molecule of oxygen?", "answers": [], "answerable": false}
+{"id": "qa-33", "passage": "hist-penicillin", "question": "In which year did Florey and Chain purify penicillin?", "answers": ["1940"], "answerable": true}
+{"id": "qa-34", "passage": "hist-penicillin", "question": "When was the first human patient treated with penicillin?", "answers": ["1941"], "answerable": true}
