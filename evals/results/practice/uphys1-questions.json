@@ -1,0 +1,202 @@
+[
+  {
+    "section": "3.4",
+    "accepted": true,
+    "reasons": [],
+    "question": "When simplifying kinematic equations by setting the initial time to zero, what specific notation is used to distinguish between initial and final values for position and velocity?",
+    "answer": "When the initial time is set to zero, the subscript '0' is used to denote initial values (e.g., $x_0$ for initial position and $v_0$ for initial velocity). The absence of a subscript denotes the final value (e.g., $x$ for final position and $v$ for final velocity).",
+    "marking_points": [
+      "1 mark for stating that the subscript '0' denotes initial values.",
+      "1 mark for stating that the absence of a subscript denotes final values."
+    ]
+  },
+  {
+    "section": "3.4",
+    "accepted": true,
+    "reasons": [],
+    "question": "If an object is undergoing motion with constant acceleration, what is the relationship between its average velocity and its initial and final velocities?",
+    "answer": "When acceleration is constant, the average velocity ($\bar{v}$) is equal to the simple average of the initial velocity ($v_0$) and the final velocity ($v$), expressed by the equation $\bar{v} = \\frac{v_0 + v}{2}$.",
+    "marking_points": [
+      "1 mark for stating that the average velocity is the simple average of the initial and final velocities.",
+      "1 mark for correctly stating the formula: $\\bar{v} = \\frac{v_0 + v}{2}$."
+    ]
+  },
+  {
+    "section": "3.4",
+    "accepted": true,
+    "reasons": [],
+    "question": "A student needs to determine the final velocity of an object given its starting velocity, the time elapsed, and its constant acceleration. Which kinematic equation should they select, and what is the underlying principle that allows this selection?",
+    "answer": "The student should use the equation $v = v_0 + at$. The underlying principle that allows this is the assumption that the acceleration is constant, which allows the average and instantaneous accelerations to be treated as equal.",
+    "marking_points": [
+      "1 mark for correctly identifying the equation: $v = v_0 + at$.",
+      "1 mark for stating the principle that constant acceleration allows the use of this equation."
+    ]
+  },
+  {
+    "section": "5.3",
+    "accepted": true,
+    "reasons": [],
+    "question": "When defining a system of interest, explain the difference between an internal force and an external force, providing an example from the text to illustrate the distinction.",
+    "answer": "An external force is defined as a force acting on an object or system that originates outside of that object or system. In contrast, an internal force acts between the elements that make up the system itself. For example, the force the person inside a car exerts to hold onto the steering wheel is an internal force because it acts between elements of the system (the person and the car).",
+    "marking_points": [
+      "Correctly defines an external force as originating outside the system (1 mark).",
+      "Correctly defines an internal force as acting between elements of the system (1 mark)."
+    ]
+  },
+  {
+    "section": "5.3",
+    "accepted": true,
+    "reasons": [],
+    "question": "The text suggests a direct relationship between net external force and acceleration. If the net external force acting on a system is increased, what is the expected effect on the system's acceleration?",
+    "answer": "Acceleration is directly proportional to the net external force acting on a system. Therefore, if the net external force is increased, the acceleration of the system is expected to increase proportionally, provided the mass remains constant.",
+    "marking_points": [
+      "States that acceleration is directly proportional to net external force (1 mark).",
+      "Concludes that an increase in net external force leads to a proportional increase in acceleration (1 mark)."
+    ]
+  },
+  {
+    "section": "5.3",
+    "accepted": true,
+    "reasons": [],
+    "question": "According to the principles discussed, why does a larger mass result in a smaller acceleration when the same net external force is applied to it?",
+    "answer": "Acceleration is inversely proportional to the mass of the system. This means that the larger the mass (which relates to inertia), the smaller the acceleration that will be produced by a given net external force.",
+    "marking_points": [
+      "States that acceleration is inversely proportional to mass (1 mark).",
+      "Explains that a larger mass leads to a smaller acceleration for a given force (1 mark)."
+    ]
+  },
+  {
+    "section": "6.2",
+    "accepted": true,
+    "reasons": [],
+    "question": "Based on the state of the objects in contact, describe the specific condition under which the frictional force is termed 'static friction' and the condition under which it is termed 'kinetic friction'.",
+    "answer": "Static friction is the friction that acts between two systems that are in contact and stationary relative to one another. Kinetic friction is the friction that acts between two systems that are in contact and moving relative to one another.",
+    "marking_points": [
+      "1 mark for correctly defining static friction (stationary relative to each other).",
+      "1 mark for correctly defining kinetic friction (moving relative to one another)."
+    ]
+  },
+  {
+    "section": "6.2",
+    "accepted": true,
+    "reasons": [],
+    "question": "The text suggests that friction is not solely due to surface roughness. Identify the other type of force responsible for friction, and explain how this force relates to the nature of the materials involved.",
+    "answer": "Another force contributing to friction is adhesive force. This force is due to the attractive forces between the molecules making up the two objects, which explains why friction depends on the nature of the substances in contact.",
+    "marking_points": [
+      "1 mark for identifying adhesive forces.",
+      "1 mark for explaining that this force is due to the attractive forces between the molecules of the two objects."
+    ]
+  },
+  {
+    "section": "6.2",
+    "accepted": true,
+    "reasons": [],
+    "question": "How does the required force to start an object moving compare to the force needed to keep it moving once it is already in motion, and what is the relationship between the required force and the normal force applied to the object?",
+    "answer": "Static friction is usually greater than kinetic friction, meaning more force is needed to start the object moving than to keep it moving. Furthermore, increasing the force pushing the object together (the normal force) requires a greater push to initiate motion.",
+    "marking_points": [
+      "1 mark for stating that static friction is greater than kinetic friction (or that more force is needed to start motion).",
+      "1 mark for stating that increasing the normal force requires a greater push to move the object."
+    ]
+  },
+  {
+    "section": "10.6",
+    "accepted": true,
+    "reasons": [],
+    "question": "According to the principles described, what two factors, besides the magnitude of the applied force, directly influence the magnitude of the torque generated, and how does the angle between these factors affect the result?",
+    "answer": "The magnitude of the lever arm and the angle between the force vector and the lever arm influence the torque. The torque magnitude is dependent on the sine of the angle between the force vector and the lever arm.",
+    "marking_points": [
+      "Identifies the lever arm as an influencing factor (1 mark).",
+      "Identifies the angle between the force vector and lever arm as an influencing factor (1 mark)."
+    ]
+  },
+  {
+    "section": "10.6",
+    "accepted": true,
+    "reasons": [],
+    "question": "When analyzing the rotational effect of a force, what convention is used to assign a positive or negative sign to the resulting torque, and what physical orientation corresponds to a positive torque in the context of the right-hand rule?",
+    "answer": "The sign of the torque is determined by the right-hand rule. A positive torque is conventionally associated with the direction along the positive z-axis, which corresponds to a counterclockwise rotation.",
+    "marking_points": [
+      "States that the right-hand rule is used to determine the sign (1 mark).",
+      "Correctly links positive torque to the counterclockwise direction or positive z-axis (1 mark)."
+    ]
+  },
+  {
+    "section": "10.6",
+    "accepted": true,
+    "reasons": [],
+    "question": "Outline the first two essential steps one must take when applying the problem-solving strategy to calculate the net torque acting on a rigid body about a fixed axis.",
+    "answer": "The first step is to establish a coordinate system where the axis of rotation serves as the origin. The second step is to determine the specific angle between the lever arm and the force vector being considered.",
+    "marking_points": [
+      "Correctly states the need to choose a coordinate system with the axis/pivot as the origin (1 mark).",
+      "Correctly states the need to determine the angle between the lever arm and the force vector (1 mark)."
+    ]
+  },
+  {
+    "section": "13.2",
+    "accepted": false,
+    "reasons": [
+      "model answer is not supported by the section"
+    ],
+    "question": "If the acceleration due to gravity ($g$) at the surface of a celestial body and its radius ($R$) are known, what mathematical relationship can be used to calculate the mass of that body?",
+    "answer": "The mass ($M$) of the body can be found by rearranging Equation 13.2, which is $M = \frac{g R^2}{G}$. (1 mark for stating the correct rearrangement/formula, 1 mark for correctly identifying the variables $g$, $R$, and $G$ in the relationship.)",
+    "marking_points": [
+      "States the correct rearranged formula: $M = \frac{g R^2}{G}$ (1 mark).",
+      "Correctly identifies that $g$ and $R$ are the known inputs used to find $M$ (1 mark)."
+    ]
+  },
+  {
+    "section": "13.2",
+    "accepted": true,
+    "reasons": [],
+    "question": "Describe the characteristics of the gravitational field lines as depicted in Figure 13.8. Specifically, what is the direction of these lines, and how does their spacing relate to the field's strength?",
+    "answer": "The gravitational field lines are directed radially inward toward the mass. The strength of the field at any point is proportional to the density of these lines, meaning the strength is inversely proportional to the spacing between them. (1 mark for stating the lines are directed radially inward, 1 mark for correctly linking field strength to line spacing/density.)",
+    "marking_points": [
+      "States that the lines are directed radially inward (1 mark).",
+      "States that the field strength is proportional to the density/inversely proportional to the spacing of the lines (1 mark)."
+    ]
+  },
+  {
+    "section": "13.2",
+    "accepted": true,
+    "reasons": [],
+    "question": "According to the text, why do astronauts in the International Space Station appear to be weightless, even though the force of gravity is still acting upon them?",
+    "answer": "Astronautics appear weightless because they are in a state of free fall. (1 mark for identifying 'free fall' as the cause, 1 mark for linking this state of free fall to the apparent lack of weight.)",
+    "marking_points": [
+      "Identifies that the astronauts are in free fall (1 mark).",
+      "Explains that this state of free fall is what causes the apparent lack of weight (1 mark)."
+    ]
+  },
+  {
+    "section": "14.5",
+    "accepted": true,
+    "reasons": [],
+    "question": "Differentiate between laminar flow and turbulent flow based on the characteristics described in the text. (2 marks)",
+    "answer": "Laminar flow is characterized by smooth, parallel streamlines, sometimes described as steady flow. In contrast, turbulent flow features irregular streamlines where different parts of the fluid mix or form small circular regions resembling whirlpools. (1 mark for describing laminar flow; 1 mark for describing turbulent flow.)",
+    "marking_points": [
+      "1 mark for stating laminar flow has smooth, parallel streamlines.",
+      "1 mark for stating turbulent flow has irregular streamlines/mixing/swirling."
+    ]
+  },
+  {
+    "section": "14.5",
+    "accepted": true,
+    "reasons": [],
+    "question": "According to the section, how is the volume flow rate ($Q$) related to the average speed ($v$) and the cross-sectional area ($A$) of a conduit? (2 marks)",
+    "answer": "The volume flow rate ($Q$) is calculated by multiplying the cross-sectional area ($A$) by the average speed ($v$). This relationship indicates that the flow rate is directly proportional to both the average speed and the cross-sectional area. (1 mark for stating the formula $Q=Av$; 1 mark for stating the direct proportionality to both $A$ and $v$.)",
+    "marking_points": [
+      "1 mark for stating the relationship $Q = A \times v$.",
+      "1 mark for stating that $Q$ is directly proportional to both $A$ and $v$."
+    ]
+  },
+  {
+    "section": "14.5",
+    "accepted": true,
+    "reasons": [],
+    "question": "Explain the fundamental principle behind the equation of continuity when an incompressible fluid moves through a pipe of decreasing radius. (2 marks)",
+    "answer": "The equation of continuity is based on the conservation of mass, meaning there are no sources or sinks to add or remove mass. Therefore, the mass flowing into the pipe must equal the mass flowing out. Since the fluid is incompressible (constant density), this requires that the flow rate remains the same at all points, meaning the velocity must increase as the cross-sectional area decreases. (1 mark for stating the principle of mass conservation/no sources or sinks; 1 mark for explaining that the velocity must increase when the area decreases to maintain constant flow rate.)",
+    "marking_points": [
+      "1 mark for referencing the conservation of mass (no sources or sinks).",
+      "1 mark for concluding that the velocity must increase when the cross-sectional area decreases."
+    ]
+  }
+]

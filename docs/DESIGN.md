@@ -525,6 +525,59 @@ would reverse it.
   appear inline as LaTeX); support is lexical; and a visual costs 2.3× the time
   of notes alone, so CPU users need a way to skip it.
 
+### D28 — Practice: questions are checked in code, marks are computed in code, cards come from verified notes
+
+- **Chosen:** three pieces, each keeping the model to the one judgement it is
+  needed for.
+  - *Questions* (`practice/questions.py`) are generated under a JSON schema, so
+    each arrives with a model answer, its marks and a marking scheme. The three
+    D12 checks then run in code: at least 60% of the model answer's content
+    words occur in the section (answerable from the book, not from memory);
+    word overlap with every exercise the book already has for that section stays
+    below 70% (not a copy); and the marks are what was asked for. A question that
+    fails is kept with its reasons, so the rejection rate is measurable.
+  - *Marking* (`practice/grading.py`) asks for exactly one true/false per marking
+    point — the schema fixes the array length — and the mark is computed from
+    those. The model never picks the number, so every mark can be explained by
+    the points it counted, and a short or broken reply is padded with "not met",
+    never over-credited. A blank answer scores 0 without a model call.
+  - *Flashcards* (`practice/flashcards.py`) are the `**term**: definition` lines
+    the notes writer already produces, after the D27 verifier. Making cards needs
+    no model call and cannot invent a definition. Scheduling uses FSRS (`fsrs`),
+    the algorithm current Anki uses, and `genanki` writes a real `.apkg` with ids
+    derived from the deck name, so re-exporting updates the deck instead of
+    duplicating it.
+- **Why the agent remembers questions:** `grade_answer` takes only a question
+  and an answer. Marking is only as good as its marking scheme, so the executor
+  marks questions it generated itself and refuses others rather than inventing
+  a scheme on the spot.
+- **Evidence** (`evals/practice_eval.py`: 6 University Physics sections, 3
+  two-mark questions each, Gemma 4 E4B on GPU):
+
+  | Measure | Result |
+  |---|---|
+  | Sections whose reply matched the schema | 6 of 6 |
+  | Questions passing all three checks | 17 of 18 |
+  | Model answer supported by the section | 94.4% |
+  | Near-copies of the book's own exercises | 0 of 18 |
+  | Marks as asked | 18 of 18 |
+  | Marking order complete ≥ half ≥ off-topic (and complete > off-topic) | 17 of 17 |
+  | Mean marks: complete / half / off-topic | 2.0 / 1.0 / 0.0 |
+
+  Marking is checked without a judge model: every accepted question is marked
+  with its own model answer, with the first half of its marking points written
+  out, and with an off-topic answer.
+- **Limits:** the checks are lexical. A model answer that reuses the section's
+  words passes, even if the question is poor, so 17 of 18 is an upper bound on
+  quality, not a measure of it. The marking test is the easy case — the "half"
+  answer is the marking points verbatim — so it shows the arithmetic and the
+  point judgements are sound, not that the marker handles paraphrase or
+  partially right reasoning. There is no human-marked gold set yet, and the
+  sample is 18 questions from one book. The one rejection was probably wrong:
+  a question on finding a planet's mass from g and R, whose answer
+  (M = gR²/G, in LaTeX) is correct but shares few plain words with the section.
+  Formula-heavy answers are the known blind spot of the lexical check.
+
 ## 5. Evaluation suite
 
 `evals/` is a regression suite in the same discipline as the previous project:
@@ -809,6 +862,6 @@ Generated from every result file by `write_report()`.
 | 3 | Exam blueprint: past-paper parser, question→section mapping, weights | top-3 mapping accuracy measured | done: parser 100% on synthetic papers; best-match weighting; favourite chapters found 93%, section top-10 overlap 0.40 (D25); `margin blueprint` |
 | 4 | Visual tools: schemas, renderers | generated diagrams render with zero failures | done: flowchart repair and escaped renderers; 105 of 105 saved model outputs pass the structural check, 26 of 26 flowcharts usable after repair (D26) |
 | 5 | Orchestrator and notes: loop, verifier, checkpoints, export | a chapter survives a mid-run kill and resumes | done: tool loop with 2,048-token turns and one retry; `margin notes` with pick-then-fill visuals; 6 of 6 sections with a rendering visual, 99.3% of sentences supported, resume verified (D27) |
-| 6 | Questions and practice: generation checks, grading, FSRS, Anki | answerable rate and marker agreement measured | |
+| 6 | Questions and practice: generation checks, grading, FSRS, Anki | answerable rate and marker agreement measured | done: `margin questions` (with `--quiz`) and `margin cards`; agent tools bound; 17 of 18 questions pass the checks, 0 copies, marking order held on 17 of 17 (D28) |
 | 7 | Terminal UI | the whole flow runs from the UI | |
 | 8 | Packaging: README, demo recording, release | a stranger installs and runs the demo in 15 minutes plus download | |

@@ -116,6 +116,21 @@ def cmd_add(args: argparse.Namespace) -> int:
     return 1 if failures else 0
 
 
+def _server_config(args: argparse.Namespace):
+    """(spec, backend, ServerConfig) for the installed model, or None after telling the user to run setup."""
+    from margin.runtime.server import ServerConfig
+
+    hw, backend, spec = _selection(args)
+    paths = config.paths().ensure()
+    server_dir = paths.bin_dir / f"{LLAMA_CPP_BUILD}-{backend}"
+    exe = find_server(server_dir) if server_dir.exists() else None
+    if exe is None or not spec.path(paths.models_dir).exists():
+        console.print("The model is not installed yet. Run: margin setup")
+        return None
+    cfg = ServerConfig(exe=exe, model=spec.path(paths.models_dir), gpu=backend != "cpu", threads=hardware.default_threads(hw), ctx=16384, chat_template_file=spec.chat_template_path())
+    return spec, backend, cfg
+
+
 def cmd_notes(args: argparse.Namespace) -> int:
     """Write verified notes for a chapter or section, resuming any unfinished run."""
     from pathlib import Path
@@ -125,23 +140,20 @@ def cmd_notes(args: argparse.Namespace) -> int:
     from margin.retrieve import embed
     from margin.retrieve.search import Searcher
     from margin.runtime.client import ClientError, LlamaClient
-    from margin.runtime.server import LlamaServer, ServerConfig, ServerError
+    from margin.runtime.server import LlamaServer, ServerError
     from margin.store.db import Workspace
 
-    hw, backend, spec = _selection(args)
-    paths = config.paths().ensure()
-    server_dir = paths.bin_dir / f"{LLAMA_CPP_BUILD}-{backend}"
-    exe = find_server(server_dir) if server_dir.exists() else None
-    if exe is None or not spec.path(paths.models_dir).exists():
-        console.print("The model is not installed yet. Run: margin setup")
+    selected = _server_config(args)
+    if selected is None:
         return 1
+    spec, backend, cfg = selected
+    paths = config.paths()
     with Workspace.open(_workspace_path()) as ws:
         targets = sections_in_scope(ws, args.scope)
         if not targets:
             console.print(f"No sections match {args.scope!r}. Add books with margin add, and check ids with margin search.")
             return 1
         console.print(f"[{GOLD}]Writing notes[/] for {len(targets)} section(s) with {spec.id} on {backend.upper()} — finished sections are kept if you stop.")
-        cfg = ServerConfig(exe=exe, model=spec.path(paths.models_dir), gpu=backend != "cpu", threads=hardware.default_threads(hw), ctx=16384, chat_template_file=spec.chat_template_path())
         try:
             with LlamaServer(cfg, paths.logs_dir / "notes.log") as server:
                 client = LlamaClient(server.base_url, tools_template_kwarg=spec.tools_template_kwarg)
@@ -154,6 +166,92 @@ def cmd_notes(args: argparse.Namespace) -> int:
     out = Path(args.out)
     out.write_text(to_markdown(notes), encoding="utf-8")
     console.print(f"[{GOLD}]Saved[/] {out}")
+    return 0
+
+
+def cmd_questions(args: argparse.Namespace) -> int:
+    """Write checked exam questions with marking schemes; --quiz asks them and marks your answers."""
+    from pathlib import Path
+
+    from margin.notes.writer import sections_in_scope
+    from margin.practice.questions import generate_questions
+    from margin.runtime.client import ClientError, LlamaClient
+    from margin.runtime.server import LlamaServer, ServerError
+    from margin.store.db import Workspace
+
+    selected = _server_config(args)
+    if selected is None:
+        return 1
+    spec, backend, cfg = selected
+    with Workspace.open(_workspace_path()) as ws:
+        targets = sections_in_scope(ws, args.scope)
+        if not targets:
+            console.print(f"No sections match {args.scope!r}. Add books with margin add, and check ids with margin search.")
+            return 1
+        texts = [(sid, title, (ws.section_text(doc_id, sid, include_exercises=False) or "")[:6000]) for doc_id, sid, title in targets]
+    per_section, extra = divmod(args.count, len(texts))
+    accepted, rejected, lines = [], 0, []
+    console.print(f"[{GOLD}]Writing questions[/] from {len(texts)} section(s) with {spec.id} on {backend.upper()}")
+    try:
+        with LlamaServer(cfg, config.paths().logs_dir / "questions.log") as server:
+            client = LlamaClient(server.base_url)
+            for i, (sid, title, text) in enumerate(texts):
+                count = per_section + (1 if i < extra else 0)
+                if count == 0 or not text.strip():
+                    continue
+                checked = generate_questions(client, text, sid, count, args.marks, args.type)
+                rejected += sum(not c.accepted for c in checked)
+                accepted += [c.question for c in checked if c.accepted]
+            if args.quiz:
+                _quiz(client, accepted)
+            client.close()
+    except (ServerError, ClientError) as exc:
+        console.print(f"[red]Stopped:[/] {exc}")
+        return 1
+    for n, q in enumerate(accepted, 1):
+        points = "\n".join(f"   - {p}" for p in q.marking_points)
+        lines.append(f"**Q{n}** ({q.marks} marks, section {q.section}) {q.question}\n\n<details><summary>Model answer and marking scheme</summary>\n\n{q.answer}\n\n{points}\n\n</details>")
+    out = Path(args.out)
+    out.write_text("\n\n".join(lines) + "\n", encoding="utf-8")
+    console.print(f"[{GOLD}]Saved[/] {len(accepted)} question(s) to {out}" + (f"; {rejected} failed the checks and were left out" if rejected else ""))
+    return 0 if accepted else 1
+
+
+def _quiz(client, questions) -> None:
+    from margin.practice.grading import grade_answer
+
+    total = scored = 0
+    for n, q in enumerate(questions, 1):
+        console.print(f"\n[{GOLD}]Q{n}[/] ({q.marks} marks) {q.question}")
+        answer = console.input("your answer (blank to skip) > ")
+        grade = grade_answer(client, q.question, q.marking_points, answer, q.marks)
+        total, scored = total + q.marks, scored + grade.marks_awarded
+        console.print(f"  {grade.marks_awarded}/{q.marks}. {grade.feedback}")
+        for point in grade.missing:
+            console.print(f"  missing: {point}")
+    if questions:
+        console.print(f"\n[{GOLD}]Score[/] {scored}/{total}")
+
+
+def cmd_cards(args: argparse.Namespace) -> int:
+    """Turn the key terms in saved notes into an Anki deck."""
+    from pathlib import Path
+
+    from margin.notes.writer import sections_in_scope
+    from margin.practice.flashcards import cards_from_notes, export_anki
+    from margin.store.db import Workspace
+
+    cards = []
+    with Workspace.open(_workspace_path()) as ws:
+        for doc_id, sid, _ in sections_in_scope(ws, args.scope):
+            saved = ws.load_notes(doc_id, sid)
+            if saved:
+                cards += cards_from_notes(saved["markdown"], sid)
+    if not cards:
+        console.print(f"No saved notes with key terms for {args.scope!r}. Write them first with: margin notes {args.scope}")
+        return 1
+    path = export_anki(cards, f"Margin::{args.scope}", Path(args.out))
+    console.print(f"[{GOLD}]Saved[/] {len(cards)} card(s) to {path} — import it in Anki with File > Import.")
     return 0
 
 
@@ -302,6 +400,20 @@ def build_parser() -> argparse.ArgumentParser:
     notes.add_argument("--model", choices=list(models.BY_ID))
     notes.add_argument("--backend", choices=hardware.BACKENDS)
     notes.set_defaults(func=cmd_notes)
+    questions = sub.add_parser("questions", help="write exam questions that pass three checks, with marking schemes")
+    questions.add_argument("scope", help="chapter or section, e.g. ch4 or 4.2")
+    questions.add_argument("--count", type=int, default=5)
+    questions.add_argument("--marks", type=int, default=2, help="marks per question")
+    questions.add_argument("--type", choices=["short", "long", "numerical", "mcq"], default="short")
+    questions.add_argument("--quiz", action="store_true", help="ask each question now and mark your typed answer")
+    questions.add_argument("--out", default="questions.md", help="Markdown file to write")
+    questions.add_argument("--model", choices=list(models.BY_ID))
+    questions.add_argument("--backend", choices=hardware.BACKENDS)
+    questions.set_defaults(func=cmd_questions)
+    cards = sub.add_parser("cards", help="export the key terms from saved notes as an Anki deck")
+    cards.add_argument("scope", help="chapter or section, e.g. ch4 or 4.2")
+    cards.add_argument("--out", default="margin.apkg", help="Anki package to write")
+    cards.set_defaults(func=cmd_cards)
     parser.set_defaults(func=cmd_start)
     return parser
 

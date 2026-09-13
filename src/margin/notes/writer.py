@@ -95,7 +95,7 @@ def write_section(client: ClientLike, executor: ToolExecutor, ws: Workspace, doc
     return SectionNotes(doc_id, sid, title, verified.markdown, visuals, verified.kept, verified.dropped, round(time.perf_counter() - started, 2))
 
 
-def _load(ws: Workspace, doc_id: str, sid: str, title: str) -> SectionNotes | None:
+def load_saved(ws: Workspace, doc_id: str, sid: str, title: str) -> SectionNotes | None:
     saved = ws.load_notes(doc_id, sid)
     if saved is None:
         return None
@@ -109,7 +109,7 @@ def write_notes(client: ClientLike, ws: Workspace, scope: str | None = None, sid
     executor = executor or ToolExecutor(ws)
     written: list[SectionNotes] = []
     for doc_id, sid, title in sections_in_scope(ws, scope, sids):
-        notes = _load(ws, doc_id, sid, title)
+        notes = load_saved(ws, doc_id, sid, title)
         resumed = notes is not None
         if notes is None:
             notes = write_section(client, executor, ws, doc_id, sid, title, visuals_wanted=visuals)

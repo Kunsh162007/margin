@@ -1,0 +1,20 @@
+{
+  "model": "gemma4-e4b",
+  "backend": "cuda",
+  "sections": 6,
+  "requested": 18,
+  "schema_valid_sections": 6,
+  "questions": 18,
+  "accepted": 17,
+  "answerable_rate": 0.9444,
+  "copy_rate": 0.0,
+  "marks_mismatch": 0,
+  "graded_questions": 17,
+  "grading_order_ok_rate": 1.0,
+  "mean_marks": {
+    "complete": 2,
+    "half": 1,
+    "off_topic": 0
+  },
+  "run_at": "20260913_173717"
+}

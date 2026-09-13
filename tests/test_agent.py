@@ -48,7 +48,7 @@ def test_executor_renders_visuals_and_calculates():
     flow = ToolExecutor().run(ToolCall("make_flowchart", {"title": "t", "steps": [{"id": "1", "label": "A"}, {"id": "2", "label": "B"}], "edges": [{"source": "A", "target": "B"}]}, "{}"))
     assert flow.ok and flow.artifact is not None and flow.artifact.text.startswith("flowchart TD")
     assert ToolExecutor().run(ToolCall("calculate", {"expression": "3.2 * 450"}, "{}")).content == "1440"
-    assert "not available yet" in ToolExecutor().run(ToolCall("create_flashcards", {"topic": "x", "count": 3}, "{}")).content
+    assert "No library" in ToolExecutor().run(ToolCall("create_flashcards", {"topic": "x", "count": 3}, "{}")).content
     assert "No library" in ToolExecutor().run(ToolCall("read_section", {"section_id": "4.2"}, "{}")).content
     assert "margin blueprint" in ToolExecutor().run(ToolCall("get_exam_blueprint", {"top_n": 3}, "{}")).content
 

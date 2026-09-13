@@ -40,11 +40,20 @@ margin inspect biology-textbook.pdf      # see how a file is split into sections
 margin blueprint paper-2023.pdf paper-2024.jpg   # which chapters past papers weigh most
 margin notes ch25 --out kidney-notes.md          # verified notes with a diagram per section
 margin notes ch25 --no-visuals                   # faster on a CPU: notes only
+margin questions ch25 --count 10 --marks 3       # exam questions with marking schemes
+margin questions 25.2 --quiz                     # answer them now and get marked
+margin cards ch25 --out kidney.apkg              # key terms from your notes as an Anki deck
 ```
 
 Notes are checked sentence by sentence against the book, and every finished
 section is saved as it is written — stop at any time and run the same command
 again to carry on.
+
+Every generated question must be answerable from the book, must not copy one of
+its exercises, and must be worth the marks you asked for; questions that fail
+are left out. When marking, the model only decides which marking points your
+answer covers — the mark itself is counted, so you can see exactly what was
+missing.
 
 Books, Word files, slides and JPEG/PNG photos are supported; scanned pages and
 photos are read with OCR. Search combines keyword and meaning-based matching;
