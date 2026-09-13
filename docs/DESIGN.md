@@ -490,6 +490,41 @@ would reverse it.
   where Mermaid really parses; and the listed-order fallback assumes the model
   wrote steps in process order, which is usual but not guaranteed.
 
+### D27 — Notes: write, verify, checkpoint; visuals are picked by tool call and filled under a schema
+
+- **Chosen:** each section is handled in three model calls. (1) The model picks
+  one visual by calling a tool; only the tool's *name* is used. (2) The visual's
+  arguments are generated with that tool's JSON schema enforced by llama.cpp's
+  grammar. (3) The notes are written without tools. Every note sentence is
+  checked against the section (lexical support ≥ 0.5; unsupported sentences are
+  removed and counted), and each finished section is saved at once, so a stopped
+  run resumes at the first unfinished section.
+- **Evidence** (`evals/notes_eval.py`: 6 University Physics sections from 6
+  chapters, Gemma 4 E4B on GPU, run in two parts to test resume):
+
+  | Attempt | Sections with a visual | Visuals that render | Sentences supported | s / section |
+  |---|---|---|---|---|
+  | One prompt, tools optional | 0 of 6 | — | 97.1% | 10.8 |
+  | Separate tool pass | 0 of 6 | — | 99.3% | 19.7 |
+  | **Pick by tool call, fill under schema** | **6 of 6** | **6 of 6** | **99.3%** | 25.0 |
+
+  Resume reused exactly the three finished sections in every attempt.
+- **What went wrong twice, and how it was found:** the first attempt asked for
+  notes "and a visual if it helps"; the model always took the easier path and
+  just wrote notes. A direct probe showed it *does* call `make_table` when that is
+  the only job, so the second attempt split the work — and still produced
+  nothing. Printing every tool result showed why: the model chose sensible
+  visuals but filled nested schemas from memory — tables with no title and rows
+  as plain strings, mind maps with invented `name` and `sub_branches` fields —
+  so every call failed validation, and told what to fix, it repeated the mistake.
+  Grammar-constrained generation had already scored 100% schema validity in the
+  model benchmark (D8), so the choice stays with the model and the shape is
+  enforced by the runtime.
+- **Limits:** six sections is a small sample; the model chose a mind map five
+  times and a table once, never a flowchart or formula sheet (equations already
+  appear inline as LaTeX); support is lexical; and a visual costs 2.3× the time
+  of notes alone, so CPU users need a way to skip it.
+
 ## 5. Evaluation suite
 
 `evals/` is a regression suite in the same discipline as the previous project:

@@ -116,6 +116,47 @@ def cmd_add(args: argparse.Namespace) -> int:
     return 1 if failures else 0
 
 
+def cmd_notes(args: argparse.Namespace) -> int:
+    """Write verified notes for a chapter or section, resuming any unfinished run."""
+    from pathlib import Path
+
+    from margin.agent.executor import ToolExecutor
+    from margin.notes.writer import sections_in_scope, to_markdown, write_notes
+    from margin.retrieve import embed
+    from margin.retrieve.search import Searcher
+    from margin.runtime.client import ClientError, LlamaClient
+    from margin.runtime.server import LlamaServer, ServerConfig, ServerError
+    from margin.store.db import Workspace
+
+    hw, backend, spec = _selection(args)
+    paths = config.paths().ensure()
+    server_dir = paths.bin_dir / f"{LLAMA_CPP_BUILD}-{backend}"
+    exe = find_server(server_dir) if server_dir.exists() else None
+    if exe is None or not spec.path(paths.models_dir).exists():
+        console.print("The model is not installed yet. Run: margin setup")
+        return 1
+    with Workspace.open(_workspace_path()) as ws:
+        targets = sections_in_scope(ws, args.scope)
+        if not targets:
+            console.print(f"No sections match {args.scope!r}. Add books with margin add, and check ids with margin search.")
+            return 1
+        console.print(f"[{GOLD}]Writing notes[/] for {len(targets)} section(s) with {spec.id} on {backend.upper()} — finished sections are kept if you stop.")
+        cfg = ServerConfig(exe=exe, model=spec.path(paths.models_dir), gpu=backend != "cpu", threads=hardware.default_threads(hw), ctx=16384, chat_template_file=spec.chat_template_path())
+        try:
+            with LlamaServer(cfg, paths.logs_dir / "notes.log") as server:
+                client = LlamaClient(server.base_url, tools_template_kwarg=spec.tools_template_kwarg)
+                progress = lambda sid, n, resumed: console.print(f"  {sid} {n.title[:50]}: " + ("already written" if resumed else f"{n.seconds:.0f} s, {len(n.visuals)} diagram(s), {n.dropped} unsupported sentence(s) removed"))
+                notes = write_notes(client, ws, scope=args.scope, executor=ToolExecutor(ws, Searcher(ws, embed.Embedder())), on_progress=progress)
+                client.close()
+        except (ServerError, ClientError) as exc:
+            console.print(f"[red]Stopped:[/] {exc}. Run the same command again to continue.")
+            return 1
+    out = Path(args.out)
+    out.write_text(to_markdown(notes), encoding="utf-8")
+    console.print(f"[{GOLD}]Saved[/] {out}")
+    return 0
+
+
 def cmd_blueprint(args: argparse.Namespace) -> int:
     """Read past papers and show which chapters and sections of the library they weigh most."""
     from pathlib import Path
@@ -254,6 +295,12 @@ def build_parser() -> argparse.ArgumentParser:
     blueprint.add_argument("files", nargs="+", help="past papers: PDF, Word, photos or text")
     blueprint.add_argument("--top", type=int, default=10, help="how many chapters and sections to show")
     blueprint.set_defaults(func=cmd_blueprint)
+    notes = sub.add_parser("notes", help="write verified notes for a chapter or section (resumes if stopped)")
+    notes.add_argument("scope", help="chapter or section, e.g. ch4 or 4.2")
+    notes.add_argument("--out", default="notes.md", help="Markdown file to write")
+    notes.add_argument("--model", choices=list(models.BY_ID))
+    notes.add_argument("--backend", choices=hardware.BACKENDS)
+    notes.set_defaults(func=cmd_notes)
     parser.set_defaults(func=cmd_start)
     return parser
 

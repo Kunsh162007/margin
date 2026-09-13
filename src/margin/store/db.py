@@ -1,13 +1,13 @@
 """One SQLite file per workspace.
 
-Text, the FTS5 keyword index, vectors and metadata live in the same file, so a
-workspace is backed up by copying one file and cannot end up with an index that
-disagrees with its text. Vectors are float32 blobs searched exactly in numpy: a
-student's library is tens of thousands of chunks, which exact search handles in
-milliseconds.
+Text, the FTS5 keyword index, vectors, notes and metadata live in the same
+file, so a workspace is backed up by copying one file and cannot end up with an
+index that disagrees with its text. Vectors are float32 blobs searched exactly
+in numpy: a student's library is tens of thousands of chunks, which exact search
+handles in milliseconds.
 
-Exercise sections (review questions, problem sets) are flagged. Default searches
-skip them: a student searching the book wants the explanation, not the list of
+Exercise text (review questions, problem sets) is flagged. Default searches
+skip it: a student searching the book wants the explanation, not the list of
 questions about it — and an evaluation built from those questions would
 otherwise retrieve the questions themselves.
 """
@@ -20,12 +20,13 @@ import sqlite3
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 
 from margin.ingest.types import Document, Section
 
-SCHEMA_VERSION = "1"
+SCHEMA_VERSION = "2"
 _TOKEN = re.compile(r"[A-Za-z0-9]+")
 
 SCHEMA = """
@@ -48,6 +49,10 @@ CREATE TRIGGER IF NOT EXISTS chunks_ad AFTER DELETE ON chunks BEGIN
     INSERT INTO chunks_fts(chunks_fts, rowid, text) VALUES ('delete', old.id, old.text); END;
 CREATE TABLE IF NOT EXISTS vectors(
     chunk_id INTEGER PRIMARY KEY REFERENCES chunks(id) ON DELETE CASCADE, model TEXT NOT NULL, vec BLOB NOT NULL);
+CREATE TABLE IF NOT EXISTS notes(
+    doc_id TEXT NOT NULL REFERENCES documents(id) ON DELETE CASCADE, sid TEXT NOT NULL, markdown TEXT NOT NULL,
+    visuals_json TEXT NOT NULL, kept INTEGER NOT NULL, dropped INTEGER NOT NULL, seconds REAL NOT NULL, updated_at TEXT NOT NULL,
+    PRIMARY KEY (doc_id, sid));
 """
 
 
@@ -79,6 +84,10 @@ def fts_query(text: str) -> str | None:
     return " OR ".join(f'"{t}"' for t in tokens) if tokens else None
 
 
+def _now() -> str:
+    return datetime.now().isoformat(timespec="seconds")
+
+
 class Workspace:
     def __init__(self, conn: sqlite3.Connection):
         self._conn = conn
@@ -90,7 +99,7 @@ class Workspace:
         conn.row_factory = sqlite3.Row
         conn.execute("PRAGMA foreign_keys = ON")
         conn.executescript(SCHEMA)
-        conn.execute("INSERT OR IGNORE INTO meta VALUES ('schema_version', ?)", (SCHEMA_VERSION,))
+        conn.execute("INSERT OR REPLACE INTO meta VALUES ('schema_version', ?)", (SCHEMA_VERSION,))
         conn.commit()
         return cls(conn)
 
@@ -103,6 +112,8 @@ class Workspace:
     def __exit__(self, *exc: object) -> None:
         self.close()
 
+    # documents -----------------------------------------------------------------
+
     def has_document(self, doc_id: str) -> bool:
         return self._conn.execute("SELECT 1 FROM documents WHERE id = ?", (doc_id,)).fetchone() is not None
 
@@ -111,10 +122,7 @@ class Workspace:
             raise ValueError(f"{len(chunks)} chunks but {len(vectors)} vectors")
         with self._conn:
             self._conn.execute("DELETE FROM documents WHERE id = ?", (doc.id,))
-            self._conn.execute(
-                "INSERT INTO documents VALUES (?, ?, ?, ?, ?, ?, ?)",
-                (doc.id, doc.source, doc.kind, doc.title, doc.page_count, len(doc.ocr_pages), datetime.now().isoformat(timespec="seconds")),
-            )
+            self._conn.execute("INSERT INTO documents VALUES (?, ?, ?, ?, ?, ?, ?)", (doc.id, doc.source, doc.kind, doc.title, doc.page_count, len(doc.ocr_pages), _now()))
             self._conn.executemany(
                 "INSERT INTO sections VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 [(doc.id, s.id, i, s.title, s.level, json.dumps(list(s.path)), s.page_start, s.page_end, int(s.id in exercise_sids)) for i, s in enumerate(sections)],
@@ -132,6 +140,23 @@ class Workspace:
 
     def documents(self) -> list[dict[str, object]]:
         return [dict(r) for r in self._conn.execute("SELECT * FROM documents ORDER BY added_at")]
+
+    # sections and chunks ---------------------------------------------------------
+
+    def teaching_sections(self) -> list[tuple[str, str, str]]:
+        """(doc_id, sid, title) of sections with explanatory text, in book order."""
+        rows = self._conn.execute(
+            "SELECT s.doc_id, s.sid, s.title FROM sections s JOIN documents d ON d.id = s.doc_id "
+            "WHERE s.is_exercise = 0 AND EXISTS (SELECT 1 FROM chunks c WHERE c.doc_id = s.doc_id AND c.sid = s.sid AND c.is_exercise = 0) "
+            "ORDER BY d.added_at, s.ord"
+        ).fetchall()
+        return [(r[0], r[1], r[2]) for r in rows]
+
+    def find_section(self, sid: str) -> tuple[str, str] | None:
+        row = self._conn.execute(
+            "SELECT s.doc_id, s.title FROM sections s JOIN documents d ON d.id = s.doc_id WHERE s.sid = ? ORDER BY d.added_at LIMIT 1", (sid,)
+        ).fetchone()
+        return (row[0], row[1]) if row else None
 
     def chunk_count(self, include_exercises: bool = False) -> int:
         return self._conn.execute("SELECT COUNT(*) FROM chunks WHERE ? OR is_exercise = 0", (int(include_exercises),)).fetchone()[0]
@@ -170,6 +195,24 @@ class Workspace:
         by_id = {r["id"]: ChunkRow(**dict(r)) for r in rows}
         return [by_id[i] for i in ids if i in by_id]
 
-    def section_text(self, doc_id: str, sid: str) -> str | None:
-        rows = self._conn.execute("SELECT text FROM chunks WHERE doc_id = ? AND sid = ? ORDER BY ord", (doc_id, sid)).fetchall()
+    def section_text(self, doc_id: str, sid: str, include_exercises: bool = True) -> str | None:
+        rows = self._conn.execute(
+            "SELECT text FROM chunks WHERE doc_id = ? AND sid = ? AND (? OR is_exercise = 0) ORDER BY ord", (doc_id, sid, int(include_exercises))
+        ).fetchall()
         return "\n\n".join(r[0] for r in rows) if rows else None
+
+    # notes ------------------------------------------------------------------------
+
+    def save_notes(self, doc_id: str, sid: str, markdown: str, visuals_json: str, kept: int, dropped: int, seconds: float) -> None:
+        with self._conn:
+            self._conn.execute("INSERT OR REPLACE INTO notes VALUES (?, ?, ?, ?, ?, ?, ?, ?)", (doc_id, sid, markdown, visuals_json, kept, dropped, seconds, _now()))
+
+    def load_notes(self, doc_id: str, sid: str) -> dict[str, Any] | None:
+        row = self._conn.execute("SELECT markdown, visuals_json, kept, dropped, seconds FROM notes WHERE doc_id = ? AND sid = ?", (doc_id, sid)).fetchone()
+        return dict(row) if row else None
+
+    def clear_notes(self, sids: list[str] | None = None) -> int:
+        with self._conn:
+            if sids is None:
+                return self._conn.execute("DELETE FROM notes").rowcount
+            return self._conn.execute(f"DELETE FROM notes WHERE sid IN ({','.join('?' * len(sids))})", sids).rowcount
