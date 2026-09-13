@@ -19,9 +19,11 @@ class ScriptedClient:
     def __init__(self, script):
         self.script = list(script)
         self.calls = []
+        self.kwargs = []
 
     def chat(self, messages, *, tools=None, max_tokens=1024, **kwargs):
         self.calls.append((list(messages), max_tokens))
+        self.kwargs.append(kwargs)
         item = self.script.pop(0)
         if isinstance(item, Exception):
             raise item
@@ -71,6 +73,24 @@ def test_loop_retries_once_after_a_truncated_tool_call():
         run_agent(ScriptedClient([parse_error, parse_error]), ToolExecutor(), [{"role": "user", "content": "x"}], tools=[])
     with pytest.raises(ClientError):
         run_agent(ScriptedClient([ClientError("connection refused")]), ToolExecutor(), [{"role": "user", "content": "x"}], tools=[])
+
+
+TABLE_ROWS_AS_STRINGS = ("make_table", {"title": "Friction", "columns": ["Kind", "Acts when"], "rows": ["static | at rest", "kinetic | sliding"]})
+TABLE_FILLED = {"title": "Friction", "columns": ["Kind", "Acts when"], "rows": [["static", "at rest"], ["kinetic", "sliding"]]}
+
+
+def test_invalid_arguments_are_filled_again_under_the_tools_schema():
+    client = ScriptedClient([reply(calls=(TABLE_ROWS_AS_STRINGS,)), reply(json.dumps(TABLE_FILLED)), reply("Here is the table.")])
+    result = run_agent(client, ToolExecutor(), [{"role": "user", "content": "compare static and kinetic friction in a table"}], tools=[])
+    assert result.results[0].ok and result.results[0].artifact.kind == "table" and result.filled == 1
+    assert client.kwargs[1]["json_schema"]["title"] == "MakeTable"  # the fill ran with the tool's schema enforced
+    assert "rows.0" in client.calls[1][0][-1]["content"] and result.final == "Here is the table."
+
+
+def test_a_fill_that_cannot_be_read_leaves_the_error_for_the_model():
+    client = ScriptedClient([reply(calls=(TABLE_ROWS_AS_STRINGS,)), reply("not json"), reply("Sorry.")])
+    result = run_agent(client, ToolExecutor(), [{"role": "user", "content": "table"}], tools=[])
+    assert not result.results[0].ok and "Invalid arguments" in result.results[0].content and result.filled == 0
 
 
 def test_loop_stops_at_the_step_limit():

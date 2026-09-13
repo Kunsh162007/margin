@@ -72,6 +72,13 @@ def cmd_setup(args: argparse.Namespace) -> int:
         return 1
     if not _fetch_search_models():
         return 1
+    try:
+        from margin.export.assets import ensure_mermaid
+
+        ensure_mermaid()
+    except DownloadError as exc:
+        console.print(f"[red]Could not fetch the diagram renderer:[/] {exc}")
+        return 1
     console.print(f"[{GOLD}]Ready.[/] runtime {exe.name}, model {spec.file}, search models cached")
     return 0
 
@@ -118,17 +125,13 @@ def cmd_add(args: argparse.Namespace) -> int:
 
 def _server_config(args: argparse.Namespace):
     """(spec, backend, ServerConfig) for the installed model, or None after telling the user to run setup."""
-    from margin.runtime.server import ServerConfig
+    from margin.runtime.session import NotInstalled, server_config
 
-    hw, backend, spec = _selection(args)
-    paths = config.paths().ensure()
-    server_dir = paths.bin_dir / f"{LLAMA_CPP_BUILD}-{backend}"
-    exe = find_server(server_dir) if server_dir.exists() else None
-    if exe is None or not spec.path(paths.models_dir).exists():
-        console.print("The model is not installed yet. Run: margin setup")
+    try:
+        return server_config(getattr(args, "backend", None), getattr(args, "model", None))
+    except NotInstalled as exc:
+        console.print(str(exc))
         return None
-    cfg = ServerConfig(exe=exe, model=spec.path(paths.models_dir), gpu=backend != "cpu", threads=hardware.default_threads(hw), ctx=16384, chat_template_file=spec.chat_template_path())
-    return spec, backend, cfg
 
 
 def cmd_notes(args: argparse.Namespace) -> int:
@@ -174,7 +177,7 @@ def cmd_questions(args: argparse.Namespace) -> int:
     from pathlib import Path
 
     from margin.notes.writer import sections_in_scope
-    from margin.practice.questions import generate_questions
+    from margin.practice.questions import generate_for_sections
     from margin.runtime.client import ClientError, LlamaClient
     from margin.runtime.server import LlamaServer, ServerError
     from margin.store.db import Workspace
@@ -188,20 +191,15 @@ def cmd_questions(args: argparse.Namespace) -> int:
         if not targets:
             console.print(f"No sections match {args.scope!r}. Add books with margin add, and check ids with margin search.")
             return 1
-        texts = [(sid, title, (ws.section_text(doc_id, sid, include_exercises=False) or "")[:6000]) for doc_id, sid, title in targets]
-    per_section, extra = divmod(args.count, len(texts))
-    accepted, rejected, lines = [], 0, []
+        texts = [(sid, (ws.section_text(doc_id, sid, include_exercises=False) or "")[:6000]) for doc_id, sid, _ in targets]
+    lines: list[str] = []
     console.print(f"[{GOLD}]Writing questions[/] from {len(texts)} section(s) with {spec.id} on {backend.upper()}")
     try:
         with LlamaServer(cfg, config.paths().logs_dir / "questions.log") as server:
             client = LlamaClient(server.base_url)
-            for i, (sid, title, text) in enumerate(texts):
-                count = per_section + (1 if i < extra else 0)
-                if count == 0 or not text.strip():
-                    continue
-                checked = generate_questions(client, text, sid, count, args.marks, args.type)
-                rejected += sum(not c.accepted for c in checked)
-                accepted += [c.question for c in checked if c.accepted]
+            checked = generate_for_sections(client, texts, args.count, args.marks, args.type)
+            accepted = [c.question for c in checked if c.accepted]
+            rejected = len(checked) - len(accepted)
             if args.quiz:
                 _quiz(client, accepted)
             client.close()
@@ -353,13 +351,49 @@ def cmd_inspect(args: argparse.Namespace) -> int:
     return 0
 
 
-def cmd_start(args: argparse.Namespace) -> int:
-    _, backend, spec = _selection(args)
-    paths = config.paths()
-    installed = (paths.bin_dir / f"{LLAMA_CPP_BUILD}-{backend}").exists() and spec.path(paths.models_dir).exists()
-    if not installed and cmd_setup(args) != 0:
+def cmd_export(args: argparse.Namespace) -> int:
+    """Export saved notes as Markdown, self-contained HTML or an Anki deck."""
+    from pathlib import Path
+
+    from margin.export.assets import mermaid_script
+    from margin.export.files import export_notes, saved_notes
+    from margin.notes.writer import sections_in_scope
+    from margin.store.db import Workspace
+
+    with Workspace.open(_workspace_path()) as ws:
+        notes = saved_notes(ws, sections_in_scope(ws, args.scope))
+    if not notes:
+        console.print(f"No saved notes for {args.scope!r}. Write them first with: margin notes {args.scope}")
         return 1
-    console.print(f"[{GOLD}]Margin {__version__}[/] is installed. The study interface arrives in the next release; run `margin doctor` to check your setup.")
+    renderer = mermaid_script() if args.format == "html" else None
+    if args.format == "html" and renderer is None:
+        console.print("Diagrams will show as source text; run margin setup once to draw them.")
+    done = export_notes(notes, args.format, Path(args.out_dir), args.scope, renderer)
+    what = f"{done.cards} card(s)" if args.format == "anki" else f"{done.sections} section(s)"
+    console.print(f"[{GOLD}]Saved[/] {what} to {done.path}")
+    return 0
+
+
+def cmd_start(args: argparse.Namespace) -> int:
+    """Set up on first run, then open the study interface."""
+    from pathlib import Path
+
+    from margin.runtime.session import ModelSession, NotInstalled, server_config
+    from margin.study import Study
+    from margin.tui.app import MarginApp
+
+    try:
+        spec, backend, cfg = server_config(getattr(args, "backend", None), getattr(args, "model", None))
+    except NotInstalled:
+        if cmd_setup(args) != 0:
+            return 1
+        spec, backend, cfg = server_config(getattr(args, "backend", None), getattr(args, "model", None))
+    session = ModelSession(spec, backend, cfg, config.paths().logs_dir / "session.log")
+    study = Study(_workspace_path(), Path.cwd() / "margin-exports", session.client)
+    try:
+        MarginApp(study, model_label=f"{spec.id} on {backend.upper()}").run()
+    finally:
+        session.close()
     return 0
 
 
@@ -414,6 +448,11 @@ def build_parser() -> argparse.ArgumentParser:
     cards.add_argument("scope", help="chapter or section, e.g. ch4 or 4.2")
     cards.add_argument("--out", default="margin.apkg", help="Anki package to write")
     cards.set_defaults(func=cmd_cards)
+    export = sub.add_parser("export", help="export saved notes as Markdown, self-contained HTML or an Anki deck")
+    export.add_argument("scope", help="chapter or section, e.g. ch4 or 4.2")
+    export.add_argument("--format", choices=["markdown", "html", "anki"], default="html")
+    export.add_argument("--out-dir", default="margin-exports", help="folder to write into")
+    export.set_defaults(func=cmd_export)
     parser.set_defaults(func=cmd_start)
     return parser
 

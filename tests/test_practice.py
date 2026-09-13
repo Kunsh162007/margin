@@ -97,7 +97,9 @@ def _run_practice_tools(ws, sid, tmp_path, ToolExecutor, ToolCall):
     anki = ex.run(ToolCall("export_notes", {"format": "anki", "topic": sid}, "{}"))
     assert md.ok and anki.ok and "1 cards" in anki.content
     assert "Term one" in next((tmp_path / "out").glob("*.md")).read_text(encoding="utf-8")
-    assert "not available yet" in ex.run(ToolCall("export_notes", {"format": "pdf"}, "{}")).content
+    html_export = ex.run(ToolCall("export_notes", {"format": "html", "topic": sid}, "{}"))
+    assert html_export.ok and "Term one" in next((tmp_path / "out").glob("*.html")).read_text(encoding="utf-8")
+    assert "print" in ex.run(ToolCall("export_notes", {"format": "pdf"}, "{}")).content
 
 
 def test_anki_export_writes_a_valid_package(tmp_path):

@@ -578,6 +578,76 @@ would reverse it.
   (M = gR²/G, in LaTeX) is correct but shares few plain words with the section.
   Formula-heavy answers are the known blind spot of the lexical check.
 
+### D29 — HTML export is one self-contained file that cannot reach the network
+
+- **Chosen:** `margin export --format html` writes a single page with its styles,
+  the notes and the Mermaid diagram renderer inside it. A Content-Security-Policy
+  (`default-src 'none'`, inline scripts and styles only) forbids the page from
+  loading anything else. Mermaid 12.0.0 is downloaded once by `margin setup`,
+  pinned by version *and* SHA-256; a file that does not match is deleted, never
+  embedded. The renderer is embedded only in pages that have diagrams.
+- **Why a 5.6 MB page instead of a CDN link:** a CDN link breaks the offline
+  promise the moment the student opens the file without a connection, and it
+  would let a page built from untrusted book text make a network request. The
+  size is the cost of both guarantees. Rendering diagrams to SVG at export time
+  would need a headless browser — far heavier than the file.
+- **Safety of the content:** Markdown is rendered with raw HTML switched off, so
+  text from books and from the model is always escaped; diagram source is
+  escaped before Mermaid reads it, and Mermaid runs with `securityLevel: strict`.
+- **LaTeX is lifted out before Markdown runs.** Without that, `$a_1*b_2*c$`
+  became emphasis (seen in the first render test). Math is shown as written, in
+  monospace, not typeset — typesetting would embed KaTeX and its fonts too.
+- **No PDF engine:** the page has print styles (one section per page, diagrams
+  kept whole), and a browser's "Save as PDF" produces the PDF. PDF libraries
+  either need native GTK libraries on Windows or cannot draw the diagrams.
+- **Evidence:** the six Phase 5 physics sections exported to one 5.6 MB page and
+  opened in Chrome from disk: 5 of 5 diagrams drew under the policy, none were
+  left as source text, and no policy violation was reported.
+- **Limits:** math is not typeset; the check was one browser; and the contents
+  list first repeated section numbers ("3.4 3.4 …") because this book's titles
+  already contain them — fixed after the check.
+
+### D30 — The interface only draws; a study layer does the work, offline, and bad tool arguments are refilled under the schema
+
+- **Chosen:** `margin` opens a Textual app with five tabs in the order a student
+  works: Library, Blueprint, Notes, Practice, Ask. Every action is a blocking
+  method on `margin.study.Study`, run on a worker thread, one job at a time; the
+  app only draws and forwards clicks. The model is started on the first request
+  and kept for the session (`runtime/session.py`). Progress shows sections
+  actually written, never a predicted finish time, because CPU time per section
+  varies too much to promise one.
+- **Why a separate study layer:** SQLite connections belong to the thread that
+  opened them, so each action opens its own; and with the model and embedder
+  injected, the same flow runs under tests with a scripted model and under the
+  eval with the real one. The CLI and the agent share the exporter and question
+  code with it rather than keeping copies.
+- **Offline is now a test, not a claim (D15):** `evals/netguard.py` refuses every
+  connection and DNS lookup that leaves the machine and records each attempt.
+  Tests run the whole study flow under it, and the cached search models load
+  under it.
+- **Schema refill in the agent loop:** when a tool call names the right tool but
+  its arguments fail validation, the loop keeps the choice and generates the
+  arguments once more with the tool's JSON schema enforced by llama.cpp's
+  grammar — the fix D27 found for notes, now shared by both.
+- **Evidence** (`evals/ui_flow_eval.py`: the real app driven headless, Gemma 4 E4B
+  on GPU, real search models, a copy of the University Physics workspace, every
+  off-machine connection refused):
+
+  | Run | Steps passed | What failed |
+  |---|---|---|
+  | 1 | — | the eval switched tabs in code; the click landed on the header and opened the command palette. Now it clicks the tab bar, as a student would |
+  | 2 | 6 of 8 | export check demanded a diagram though the model had chosen a table (check wrong, export right); Ask sent table rows as strings and the call was rejected |
+  | 3 | 7 of 8 | Ask, same cause, now visible in the recorded transcript |
+  | **4** | **8 of 8** | — (schema refill added) |
+
+  Final run: 50 s end to end, notes 17.5 s, questions 20.3 s, 3 questions
+  accepted, the model answer marked full, **0 network attempts**. Screenshots of
+  the app also caught two layout faults, both fixed: content pushed the footer
+  off screen, and the question-count fields had no labels.
+- **Limits:** one run on one book, on GPU only; headless, not a real terminal;
+  the "notes with a visual" step passes on any visual, and this section got a
+  table, not a diagram; the refill costs one more model call when it fires.
+
 ## 5. Evaluation suite
 
 `evals/` is a regression suite in the same discipline as the previous project:
@@ -863,5 +933,5 @@ Generated from every result file by `write_report()`.
 | 4 | Visual tools: schemas, renderers | generated diagrams render with zero failures | done: flowchart repair and escaped renderers; 105 of 105 saved model outputs pass the structural check, 26 of 26 flowcharts usable after repair (D26) |
 | 5 | Orchestrator and notes: loop, verifier, checkpoints, export | a chapter survives a mid-run kill and resumes | done: tool loop with 2,048-token turns and one retry; `margin notes` with pick-then-fill visuals; 6 of 6 sections with a rendering visual, 99.3% of sentences supported, resume verified (D27) |
 | 6 | Questions and practice: generation checks, grading, FSRS, Anki | answerable rate and marker agreement measured | done: `margin questions` (with `--quiz`) and `margin cards`; agent tools bound; 17 of 18 questions pass the checks, 0 copies, marking order held on 17 of 17 (D28) |
-| 7 | Terminal UI | the whole flow runs from the UI | |
+| 7 | Terminal UI | the whole flow runs from the UI | done: five-tab Textual app over a study layer; self-contained HTML export (D29); the whole flow passed 8 of 8 steps from the UI with the real model and 0 network attempts (D30) |
 | 8 | Packaging: README, demo recording, release | a stranger installs and runs the demo in 15 minutes plus download | |

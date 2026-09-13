@@ -17,7 +17,7 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, Literal
+from typing import TYPE_CHECKING, Callable, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
@@ -98,3 +98,27 @@ def generate_questions(client: ClientLike, section_text: str, sid: str, count: i
         return []
     questions = [Question(sid, kind, q.question.strip(), q.answer.strip(), q.marks, tuple(p.strip() for p in q.marking_points)) for q in parsed.questions[:count]]
     return [check(q, section_text, existing, marks) for q in questions]
+
+
+MAX_PER_CALL = 10  # the schema's limit on one reply
+
+
+def generate_for_sections(client: ClientLike, sections: list[tuple[str, str]], count: int, marks: int, kind: QuestionType = "short",
+                          on_section: Callable[[str, list[Checked]], None] | None = None) -> list[Checked]:
+    """Spread ``count`` questions over ``(sid, text)`` sections, earlier sections first, at most 10 per model call."""
+    usable = [(sid, text) for sid, text in sections if text.strip()]
+    if not usable or count < 1:
+        return []
+    per_section, extra = divmod(count, len(usable))
+    checked: list[Checked] = []
+    for i, (sid, text) in enumerate(usable):
+        wanted = per_section + (1 if i < extra else 0)
+        batch: list[Checked] = []
+        while wanted > 0:
+            take = min(wanted, MAX_PER_CALL)
+            batch += generate_questions(client, text, sid, take, marks, kind)
+            wanted -= take
+        checked += batch
+        if on_section and batch:
+            on_section(sid, batch)
+    return checked

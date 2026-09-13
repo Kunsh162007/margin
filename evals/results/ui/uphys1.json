@@ -1,0 +1,70 @@
+{
+  "model": "gemma4-e4b",
+  "backend": "cuda",
+  "steps": [
+    {
+      "step": "add a Word file",
+      "ok": true,
+      "seconds": 0.9,
+      "status": "Ready.",
+      "detail": ""
+    },
+    {
+      "step": "read a past paper",
+      "ok": true,
+      "seconds": 0.4,
+      "status": "Ready.",
+      "detail": ""
+    },
+    {
+      "step": "write notes with a diagram",
+      "ok": true,
+      "seconds": 17.5,
+      "status": "Ready.",
+      "detail": "visuals saved: [('table', 'markdown')]"
+    },
+    {
+      "step": "export HTML",
+      "ok": true,
+      "seconds": 0.3,
+      "status": "Ready.",
+      "detail": "5,952 bytes; diagrams 0 (saved 0); tables 1 (saved 1)"
+    },
+    {
+      "step": "export an Anki deck",
+      "ok": true,
+      "seconds": 0.2,
+      "status": "Ready.",
+      "detail": ""
+    },
+    {
+      "step": "write questions",
+      "ok": true,
+      "seconds": 20.3,
+      "status": "Ready.",
+      "detail": ""
+    },
+    {
+      "step": "mark the model answer",
+      "ok": true,
+      "seconds": 1.2,
+      "status": "Ready.",
+      "detail": ""
+    },
+    {
+      "step": "ask for a comparison table",
+      "ok": true,
+      "seconds": 8.0,
+      "status": "Ready.",
+      "detail": "c\n                   when they are                            friction.\n                   moving relative to\n                   one another.\n\n\n\n Feature     Static Friction                  Kinetic Friction\n \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n Definition  Friction between two systems in  Friction between two systems in\n             contact that are stationary      contact that are moving relative\n             relative to one another.         to one another.\n\n\nLet me know if you have any other questions about friction or need help with\nanother topic!"
+    }
+  ],
+  "all_ok": true,
+  "steps_ok": 8,
+  "steps_run": 8,
+  "total_seconds": 50.8,
+  "network_attempts_refused": 0,
+  "refused_targets": [],
+  "questions_accepted": 3,
+  "run_at": "20260913_182522"
+}

@@ -30,8 +30,13 @@ margin
 ```
 
 The first run detects your hardware, downloads the matching llama.cpp runtime,
-the Gemma 4 E4B model and the search models, then starts. `margin doctor` shows
-what was detected; `margin models` lists the models you can switch to.
+the Gemma 4 E4B model and the search models, then opens the study interface: a
+Library, Blueprint, Notes, Practice and Ask tab, in the order you work. The model
+loads on the first request and stays loaded until you quit (Ctrl+Q).
+`margin doctor` shows what was detected; `margin models` lists the models you can
+switch to.
+
+Everything in the interface is also a command:
 
 ```sh
 margin add biology-textbook.pdf lecture-slides.pptx whiteboard.jpg
@@ -43,7 +48,11 @@ margin notes ch25 --no-visuals                   # faster on a CPU: notes only
 margin questions ch25 --count 10 --marks 3       # exam questions with marking schemes
 margin questions 25.2 --quiz                     # answer them now and get marked
 margin cards ch25 --out kidney.apkg              # key terms from your notes as an Anki deck
+margin export ch25 --format html                 # one offline HTML file with the diagrams drawn
 ```
+
+An HTML export works with no internet connection and can be printed to PDF from
+any browser.
 
 Notes are checked sentence by sentence against the book, and every finished
 section is saved as it is written — stop at any time and run the same command

@@ -14,7 +14,7 @@ from typing import Any, Callable
 from margin.agent.calc import CalcError, calculate
 from margin.agent.tools import validate_arguments
 from margin.blueprint.weights import Blueprint, chapter_shares
-from margin.practice.flashcards import cards_from_notes, export_anki
+from margin.practice.flashcards import cards_from_notes
 from margin.practice.grading import grade_answer
 from margin.practice.questions import Question, generate_questions
 from margin.retrieve.search import Searcher
@@ -24,7 +24,6 @@ from margin.visuals.render import Rendered, problems, render
 
 VISUAL_KINDS = {"make_flowchart": "flowchart", "make_table": "table", "make_mindmap": "mindmap",
                 "make_timeline": "timeline", "make_formula_sheet": "formula", "make_glossary": "glossary"}
-LATER_PHASE = {"html", "pdf"}  # export formats that arrive with the study interface
 PASSAGE_CHARS = 600
 SECTION_CHARS = 6000
 
@@ -137,25 +136,21 @@ class ToolExecutor:
         return ToolResult("create_flashcards", True, "\n".join(f"{c.front} — {c.back}" for c in cards[: args["count"]]))
 
     def _export(self, args: dict[str, Any]) -> ToolResult:
-        from margin.notes.writer import load_saved, to_markdown
+        from margin.export.assets import mermaid_script  # the exporter imports the notes writer, which imports this module
+        from margin.export.files import export_notes, saved_notes
 
-        if args["format"] in LATER_PHASE:
-            return ToolResult("export_notes", False, f"{args['format'].upper()} export is not available yet; use markdown or anki.")
+        fmt = args["format"]
+        if fmt == "pdf":
+            return ToolResult("export_notes", False, "PDF export is not available. Export html instead; it prints cleanly to PDF from a browser.")
         if self._ws is None or self._export_dir is None:
             return ToolResult("export_notes", False, "No library is open.")
         topic = args.get("topic")
-        saved = [n for doc_id, sid, title in self._sections(topic) if (n := load_saved(self._ws, doc_id, sid, title))]
-        if not saved:
+        notes = saved_notes(self._ws, self._sections(topic))
+        if not notes:
             return ToolResult("export_notes", False, "There are no saved notes to export. Write notes first.")
-        name = "".join(ch if ch.isalnum() else "-" for ch in (topic or "all")).strip("-") or "all"
-        if args["format"] == "anki":
-            cards = [c for n in saved for c in cards_from_notes(n.markdown, n.sid)]
-            path = export_anki(cards, f"Margin::{topic or 'all'}", self._export_dir / f"margin-{name}.apkg")
-            return ToolResult("export_notes", True, f"Saved {len(cards)} cards to {path}.")
-        path = self._export_dir / f"margin-{name}.md"
-        path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(to_markdown(saved), encoding="utf-8")
-        return ToolResult("export_notes", True, f"Saved notes for {len(saved)} section(s) to {path}.")
+        done = export_notes(notes, fmt, self._export_dir, topic or "all", mermaid_script() if fmt == "html" else None)
+        what = f"{done.cards} cards" if fmt == "anki" else f"notes for {done.sections} section(s)"
+        return ToolResult("export_notes", True, f"Saved {what} to {done.path}.")
 
     def _calculate(self, args: dict[str, Any]) -> ToolResult:
         return ToolResult("calculate", True, f"{calculate(args['expression']):.10g}")

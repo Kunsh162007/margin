@@ -15,9 +15,8 @@ from dataclasses import dataclass
 from typing import Callable
 
 from margin.agent.executor import ToolExecutor
-from margin.agent.loop import ClientLike
-from margin.agent.tools import BY_NAME, openai_tools
-from margin.runtime.client import ToolCall
+from margin.agent.loop import ClientLike, fill_arguments
+from margin.agent.tools import openai_tools
 from margin.notes.verify import verify_notes
 from margin.retrieve.search import in_scope
 from margin.store.db import ChunkRow, Workspace
@@ -75,12 +74,10 @@ def _visual_for(client: ClientLike, executor: ToolExecutor, section: dict[str, s
     if name is None:
         return ()
     fill_request = {"role": "user", "content": f"Fill in the {name.removeprefix('make_').replace('_', ' ')} using only content from the section."}
-    fill = client.chat([{"role": "system", "content": VISUAL_PROMPT}, section, fill_request], json_schema=BY_NAME[name].params.model_json_schema(), max_tokens=NOTES_MAX_TOKENS)
-    try:
-        arguments = json.loads(fill.content)
-    except json.JSONDecodeError:
+    filled = fill_arguments(client, [{"role": "system", "content": VISUAL_PROMPT}, section, fill_request], name, NOTES_MAX_TOKENS)
+    if filled is None:
         return ()
-    outcome = executor.run(ToolCall(name, arguments if isinstance(arguments, dict) else None, fill.content))
+    outcome = executor.run(filled)
     return (outcome.artifact,) if outcome.ok and outcome.artifact is not None else ()
 
 
