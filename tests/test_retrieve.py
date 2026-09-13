@@ -96,6 +96,28 @@ def test_removing_a_document_clears_its_index(tmp_path):
         assert Searcher(ws, embedder).search("kirchhoff") == []
 
 
+def test_cli_add_then_search_uses_the_default_workspace(tmp_path, monkeypatch, capsys):
+    docx = pytest.importorskip("docx")
+    import margin.retrieve.embed as embed
+    from margin.cli import main
+
+    monkeypatch.setenv("MARGIN_HOME", str(tmp_path / "home"))
+    monkeypatch.setattr(embed, "Embedder", FakeEmbedder)
+    d = docx.Document()
+    d.add_heading("Kirchhoff's laws", level=1)
+    d.add_paragraph("Kirchhoff's voltage law says the voltage around a loop sums to zero.")
+    d.add_heading("Photosynthesis", level=1)
+    d.add_paragraph("Photosynthesis in the chloroplast turns light into sugar.")
+    path = tmp_path / "notes.docx"
+    d.save(path)
+
+    assert main(["search", "voltage"]) == 1  # empty workspace says how to add files
+    assert main(["add", str(path), str(tmp_path / "missing.pdf")]) == 1  # one bad file reported, the good one added
+    assert main(["add", str(path)]) == 0 and "already added" in capsys.readouterr().out
+    assert main(["search", "voltage around a loop", "--no-rerank", "--top-k", "1"]) == 0
+    assert "Kirchhoff" in capsys.readouterr().out
+
+
 def test_gold_questions_are_split_on_their_numbers():
     from evals.datasets.build_retrieval_gold import extract, split_questions
 

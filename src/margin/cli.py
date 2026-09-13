@@ -70,7 +70,75 @@ def cmd_setup(args: argparse.Namespace) -> int:
     except (DownloadError, UnsupportedPlatform) as exc:
         console.print(f"[red]Setup failed:[/] {exc}")
         return 1
-    console.print(f"[{GOLD}]Ready.[/] runtime {exe.name}, model {spec.file}")
+    if not _fetch_search_models():
+        return 1
+    console.print(f"[{GOLD}]Ready.[/] runtime {exe.name}, model {spec.file}, search models cached")
+    return 0
+
+
+def _fetch_search_models() -> bool:
+    """Download the embedding and reranking models now, so searching later needs no network."""
+    from margin.retrieve.embed import Embedder, Reranker
+
+    try:
+        Embedder().passages(["warm-up"])
+        Reranker().scores("warm-up", ["warm-up"])
+    except Exception as exc:  # fastembed surfaces network and file errors as several types
+        console.print(f"[red]Could not fetch search models:[/] {exc}")
+        return False
+    return True
+
+
+def _workspace_path():
+    return config.paths().ensure().workspaces_dir / "default.db"
+
+
+def cmd_add(args: argparse.Namespace) -> int:
+    """Index files into the default workspace."""
+    from pathlib import Path
+
+    from margin.ingest.detect import UnsupportedFile
+    from margin.retrieve import embed
+    from margin.retrieve.search import index_document
+    from margin.store.db import Workspace
+
+    embedder, failures = embed.Embedder(), 0
+    with Workspace.open(_workspace_path()) as ws:
+        for name in args.files:
+            try:
+                result = index_document(ws, Path(name), embedder)
+            except (FileNotFoundError, UnsupportedFile) as exc:
+                console.print(f"[red]skipped[/] {name}: {exc}")
+                failures += 1
+                continue
+            status = "already added" if result.skipped else f"{result.sections} sections, {result.chunks} chunks"
+            console.print(f"[{GOLD}]{result.title}[/]  {status}")
+    return 1 if failures else 0
+
+
+def cmd_search(args: argparse.Namespace) -> int:
+    """Search the default workspace."""
+    from margin.retrieve import embed
+    from margin.retrieve.search import Searcher
+    from margin.store.db import Workspace
+
+    with Workspace.open(_workspace_path()) as ws:
+        if ws.chunk_count() == 0:
+            console.print("Nothing to search yet. Add files with: margin add <file> ...")
+            return 1
+        searcher = Searcher(ws, embed.Embedder(), None if args.no_rerank else embed.Reranker())
+        hits = searcher.search(args.query, top_k=args.top_k, scope=args.scope)
+    if not hits:
+        console.print("No matches.")
+        return 0
+    table = Table(box=None)
+    for col in ("section", "title", "pages", "passage"):
+        table.add_column(col)
+    for hit in hits:
+        r = hit.row
+        pages = "" if r.page_start is None else (f"{r.page_start}" if r.page_start == r.page_end else f"{r.page_start}-{r.page_end}")
+        table.add_row(r.sid, r.section_title[:40], pages, " ".join(r.text.split())[:160])
+    console.print(table)
     return 0
 
 
@@ -126,6 +194,15 @@ def build_parser() -> argparse.ArgumentParser:
     inspect = sub.add_parser("inspect", help="show how a file is read and split into sections")
     inspect.add_argument("file")
     inspect.set_defaults(func=cmd_inspect)
+    add = sub.add_parser("add", help="add books, notes, slides or photos to your library")
+    add.add_argument("files", nargs="+")
+    add.set_defaults(func=cmd_add)
+    search = sub.add_parser("search", help="search your library")
+    search.add_argument("query")
+    search.add_argument("--top-k", type=int, default=5)
+    search.add_argument("--scope", help="chapter or section, e.g. ch4 or 4.2")
+    search.add_argument("--no-rerank", action="store_true", help="skip the reranker (faster, less precise)")
+    search.set_defaults(func=cmd_search)
     parser.set_defaults(func=cmd_start)
     return parser
 
