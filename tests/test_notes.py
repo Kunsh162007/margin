@@ -1,7 +1,6 @@
 import json
 
 import numpy as np
-import pytest
 
 from margin.ingest.types import Block, Document, Section
 from margin.notes.verify import verify_notes

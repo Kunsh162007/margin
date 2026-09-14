@@ -41,6 +41,7 @@ SID = "6.2"
 PAPER_SECTIONS = ("5.3", "6.2", "10.6")
 GOLD = Path(__file__).parent / "datasets" / "retrieval_gold.jsonl"
 OUT_DIR = Path(__file__).parent / "results" / "ui"
+JOB_TIMEOUT_S = 600  # the longest step, writing notes with a diagram, takes about a minute on this machine's GPU
 ASK = f"Make a table comparing static and kinetic friction, using section {SID}."
 
 
@@ -86,7 +87,11 @@ async def _flow(app: MarginApp, study: Study, work_dir: Path, record) -> None:
             if target.region.area == 0:  # not on screen: a click would land on whatever is at the origin
                 return False
             clicked = await pilot.click(target)
+            await pilot.pause()  # let the click start its job before waiting: waiting first can return before the worker exists
             await app.workers.wait_for_complete()
+            deadline = time.perf_counter() + JOB_TIMEOUT_S
+            while app._busy is not None and time.perf_counter() < deadline:  # the job reports back on the app loop after its worker ends
+                await pilot.pause(0.05)
             await pilot.pause()
             return clicked
 
@@ -137,7 +142,8 @@ async def _flow(app: MarginApp, study: Study, work_dir: Path, record) -> None:
             tables = sum(1 for kind, fmt in visuals if fmt != "mermaid" and kind == "table")
             ok = (page.count('class="mermaid"') >= diagrams and (diagrams == 0 or "mermaid.initialize" in page)
                   and page.count("<table>") >= tables)
-            return ok, f"{html_path.stat().st_size:,} bytes; diagrams {page.count('class=\"mermaid\"')} (saved {diagrams}); tables {page.count('<table>')} (saved {tables})"
+            drawn = page.count('class="mermaid"')  # counted outside the f-string: Python 3.11 allows no backslashes there
+            return ok, f"{html_path.stat().st_size:,} bytes; diagrams {drawn} (saved {diagrams}); tables {page.count('<table>')} (saved {tables})"
 
         await step("export HTML", lambda: press("#export-html"), html_exported)
         await step("export an Anki deck", lambda: press("#export-anki"), lambda: (study.export_dir / f"margin-{SID.replace('.', '-')}.apkg").exists())
