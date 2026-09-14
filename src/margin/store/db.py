@@ -26,14 +26,14 @@ import numpy as np
 
 from margin.ingest.types import Document, Section
 
-SCHEMA_VERSION = "3"
+SCHEMA_VERSION = "4"
 _TOKEN = re.compile(r"[A-Za-z0-9]+")
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS meta(key TEXT PRIMARY KEY, value TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS documents(
     id TEXT PRIMARY KEY, source TEXT NOT NULL, kind TEXT NOT NULL, title TEXT NOT NULL,
-    pages INTEGER NOT NULL, ocr_pages INTEGER NOT NULL, added_at TEXT NOT NULL);
+    pages INTEGER NOT NULL, ocr_pages INTEGER NOT NULL, added_at TEXT NOT NULL, formulas_read INTEGER NOT NULL DEFAULT 0);
 CREATE TABLE IF NOT EXISTS sections(
     doc_id TEXT NOT NULL REFERENCES documents(id) ON DELETE CASCADE, sid TEXT NOT NULL, ord INTEGER NOT NULL,
     title TEXT NOT NULL, level INTEGER NOT NULL, path TEXT NOT NULL, page_start INTEGER, page_end INTEGER,
@@ -105,6 +105,8 @@ class Workspace:
         conn.row_factory = sqlite3.Row
         conn.execute("PRAGMA foreign_keys = ON")
         conn.executescript(SCHEMA)
+        if "formulas_read" not in {row[1] for row in conn.execute("PRAGMA table_info(documents)")}:
+            conn.execute("ALTER TABLE documents ADD COLUMN formulas_read INTEGER NOT NULL DEFAULT 0")  # libraries made before equations were read
         conn.execute("INSERT OR REPLACE INTO meta VALUES ('schema_version', ?)", (SCHEMA_VERSION,))
         conn.commit()
         return cls(conn)
@@ -123,22 +125,43 @@ class Workspace:
     def has_document(self, doc_id: str) -> bool:
         return self._conn.execute("SELECT 1 FROM documents WHERE id = ?", (doc_id,)).fetchone() is not None
 
-    def add_document(self, doc: Document, sections: list[Section], chunks: list[ChunkRecord], vectors: np.ndarray, model: str, exercise_sids: set[str]) -> None:
+    def add_document(self, doc: Document, sections: list[Section], chunks: list[ChunkRecord], vectors: np.ndarray, model: str,
+                     exercise_sids: set[str], formulas_read: bool = False) -> None:
         if len(chunks) != len(vectors):
             raise ValueError(f"{len(chunks)} chunks but {len(vectors)} vectors")
         with self._conn:
             self._conn.execute("DELETE FROM documents WHERE id = ?", (doc.id,))
-            self._conn.execute("INSERT INTO documents VALUES (?, ?, ?, ?, ?, ?, ?)", (doc.id, doc.source, doc.kind, doc.title, doc.page_count, len(doc.ocr_pages), _now()))
-            self._conn.executemany(
-                "INSERT INTO sections VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                [(doc.id, s.id, i, s.title, s.level, json.dumps(list(s.path)), s.page_start, s.page_end, int(s.id in exercise_sids)) for i, s in enumerate(sections)],
+            self._conn.execute("INSERT INTO documents (id, source, kind, title, pages, ocr_pages, added_at, formulas_read) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                               (doc.id, doc.source, doc.kind, doc.title, doc.page_count, len(doc.ocr_pages), _now(), int(formulas_read)))
+            self._insert_content(doc, sections, chunks, vectors, model, exercise_sids)
+
+    def replace_document(self, doc: Document, sections: list[Section], chunks: list[ChunkRecord], vectors: np.ndarray, model: str,
+                         exercise_sids: set[str], formulas_read: bool) -> None:
+        """Swap a book's text for a fresh reading of it. The document row stays, so notes written from it are kept."""
+        if len(chunks) != len(vectors):
+            raise ValueError(f"{len(chunks)} chunks but {len(vectors)} vectors")
+        with self._conn:
+            self._conn.execute("DELETE FROM chunks WHERE doc_id = ?", (doc.id,))  # vectors and search index follow
+            self._conn.execute("DELETE FROM sections WHERE doc_id = ?", (doc.id,))
+            self._conn.execute("UPDATE documents SET source = ?, kind = ?, title = ?, pages = ?, ocr_pages = ?, formulas_read = ? WHERE id = ?",
+                               (doc.source, doc.kind, doc.title, doc.page_count, len(doc.ocr_pages), int(formulas_read), doc.id))
+            self._insert_content(doc, sections, chunks, vectors, model, exercise_sids)
+
+    def _insert_content(self, doc: Document, sections: list[Section], chunks: list[ChunkRecord], vectors: np.ndarray, model: str, exercise_sids: set[str]) -> None:
+        self._conn.executemany(
+            "INSERT INTO sections VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            [(doc.id, s.id, i, s.title, s.level, json.dumps(list(s.path)), s.page_start, s.page_end, int(s.id in exercise_sids)) for i, s in enumerate(sections)],
+        )
+        for chunk, vec in zip(chunks, vectors):
+            cur = self._conn.execute(
+                "INSERT INTO chunks (doc_id, sid, ord, text, page_start, page_end, is_exercise) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                (doc.id, chunk.sid, chunk.ord, chunk.text, chunk.page_start, chunk.page_end, int(chunk.is_exercise)),
             )
-            for chunk, vec in zip(chunks, vectors):
-                cur = self._conn.execute(
-                    "INSERT INTO chunks (doc_id, sid, ord, text, page_start, page_end, is_exercise) VALUES (?, ?, ?, ?, ?, ?, ?)",
-                    (doc.id, chunk.sid, chunk.ord, chunk.text, chunk.page_start, chunk.page_end, int(chunk.is_exercise)),
-                )
-                self._conn.execute("INSERT INTO vectors VALUES (?, ?, ?)", (cur.lastrowid, model, np.asarray(vec, dtype=np.float32).tobytes()))
+            self._conn.execute("INSERT INTO vectors VALUES (?, ?, ?)", (cur.lastrowid, model, np.asarray(vec, dtype=np.float32).tobytes()))
+
+    def document(self, doc_id: str) -> dict[str, Any] | None:
+        row = self._conn.execute("SELECT * FROM documents WHERE id = ?", (doc_id,)).fetchone()
+        return dict(row) if row else None
 
     def remove_document(self, doc_id: str) -> bool:
         with self._conn:

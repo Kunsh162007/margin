@@ -83,6 +83,28 @@ def test_whole_flow_runs_from_the_interface(tmp_path):
     assert client.script == []  # every scripted reply was used, in order
 
 
+def test_the_library_rereads_books_added_before_their_equations_could_be_read(tmp_path, monkeypatch):
+    import margin.ingest.formulas as formulas
+    from tests.test_formulas import _FakeReader, _pdf_with_drawn_equation
+
+    study, _ = _study(tmp_path)
+    pdf = tmp_path / "book.pdf"
+    _pdf_with_drawn_equation(pdf)
+    monkeypatch.setattr(formulas, "installed_reader", lambda models_dir: None)
+    study.add([pdf])
+    monkeypatch.setattr(formulas, "installed_reader", lambda models_dir: _FakeReader())
+    app = MarginApp(study)
+
+    async def scenario():
+        async with app.run_test(size=(140, 45)) as pilot:
+            await pilot.click("#reread")
+            await _settle(app, pilot)
+            log = "\n".join(line.text for line in app.query_one("#library-log", RichLog).lines)
+            assert "re-read with its equations" in log and "not found" in log
+
+    asyncio.run(scenario())
+
+
 def test_mistakes_come_back_through_the_retry_button(tmp_path):
     from datetime import datetime, timedelta, timezone
 

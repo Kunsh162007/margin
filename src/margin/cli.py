@@ -318,6 +318,29 @@ def _retry(questions, args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_reread(args: argparse.Namespace) -> int:
+    """Read again the PDFs in your library that were added before their drawn equations could be read."""
+    from margin.ingest import formulas as formula_reading
+    from margin.retrieve import embed
+    from margin.retrieve.search import reread_library
+    from margin.store.db import Workspace
+
+    reader = formula_reading.installed_reader(config.paths().models_dir)
+    if reader is None:
+        console.print("The formula reader is not installed. Run: margin setup")
+        return 1
+    with Workspace.open(_workspace_path()) as ws:
+        if not any(d["kind"] == "pdf" and not d["formulas_read"] for d in ws.documents()):
+            console.print("Nothing to re-read: every PDF in your library already has its equations read.")
+            return 0
+        console.print("Re-reading the PDFs added before their equations could be read…")
+        done, missing = reread_library(ws, embed.Embedder(), reader)
+    console.print(f"[{GOLD}]Done:[/] re-read {len(done)} PDF(s); notes you already wrote are kept.")
+    for path in missing:
+        console.print(f"not found — add it again from where it is now: {path}")
+    return 1 if missing else 0
+
+
 def cmd_cards(args: argparse.Namespace) -> int:
     """Turn the key terms in saved notes into an Anki deck."""
     from pathlib import Path
@@ -540,6 +563,8 @@ def build_parser() -> argparse.ArgumentParser:
     mistakes.add_argument("--model", choices=list(models.BY_ID))
     mistakes.add_argument("--backend", choices=hardware.BACKENDS)
     mistakes.set_defaults(func=cmd_mistakes)
+    reread = sub.add_parser("reread", help="read again the PDFs added before their equations could be read (keeps your notes)")
+    reread.set_defaults(func=cmd_reread)
     cards = sub.add_parser("cards", help="export the key terms from saved notes as an Anki deck")
     cards.add_argument("scope", help="chapter or section, e.g. ch4 or 4.2")
     cards.add_argument("--out", default="margin.apkg", help="Anki package to write")

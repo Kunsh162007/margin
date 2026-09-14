@@ -33,6 +33,19 @@ def test_a_note_whose_formula_the_section_does_not_hold_is_dropped():
     assert "P = I V" in v.markdown  # not in the section, but it contradicts nothing there
 
 
+def test_a_book_formula_the_reader_was_unsure_of_cannot_drop_a_note():
+    source = SOURCE + "\n\n$$%uncertain\nV=I/R$$"  # a misread the reader flagged
+    v = verify_notes("- Ohm's relation is $V = IR$.", source)
+    assert (v.kept, v.dropped) == (1, 0)
+
+
+def test_the_uncertain_mark_never_reaches_written_notes(tmp_path):
+    client = ScriptedClient([reply("# 5.1 Magnetism\n- Magnets have north and south poles that attract opposite poles: $$%uncertain\nF=qvB$$")])
+    with _workspace(tmp_path) as ws:
+        notes = write_notes(client, ws, sids=["5.1"], visuals=False)
+    assert "%uncertain" not in notes[0].markdown and "F=qvB" in notes[0].markdown
+
+
 def _workspace(tmp_path):
     doc = Document("d1", "physics.pdf", "pdf", "Physics", 10, (Block("x", 1),))
     sections = [

@@ -17,6 +17,7 @@ from typing import Callable
 from margin.agent.executor import ToolExecutor
 from margin.agent.loop import ClientLike, fill_arguments
 from margin.agent.tools import openai_tools
+from margin.ingest.formulas import UNCERTAIN
 from margin.notes.verify import verify_notes
 from margin.retrieve.search import in_scope
 from margin.store.db import ChunkRow, Workspace
@@ -88,7 +89,7 @@ def write_section(client: ClientLike, executor: ToolExecutor, ws: Workspace, doc
     started = time.perf_counter()
     visuals = _visual_for(client, executor, section) if visuals_wanted else ()
     notes_reply = client.chat([{"role": "system", "content": NOTES_PROMPT}, section], max_tokens=NOTES_MAX_TOKENS)
-    verified = verify_notes(notes_reply.content, text)
+    verified = verify_notes(notes_reply.content.replace(UNCERTAIN, ""), text)  # the model may copy the book's uncertainty mark
     return SectionNotes(doc_id, sid, title, verified.markdown, visuals, verified.kept, verified.dropped, round(time.perf_counter() - started, 2))
 
 

@@ -1,14 +1,14 @@
 {
   "model": "gemma4-e4b",
   "backend": "cuda",
-  "questions": 5,
-  "off_topic_lost_marks": 5,
+  "questions": 6,
+  "off_topic_lost_marks": 6,
   "due_same_day": 0,
-  "retries_after_two_days": 5,
+  "retries_after_two_days": 6,
   "retry_full_marks": 5,
   "cleared_after_full_marks": 5,
-  "partial_retries_still_due": 0,
+  "partial_retries_still_due": 1,
   "network_attempts": 0,
-  "run_at": "20260914_112513",
+  "run_at": "20260914_154409",
   "passed": true
 }

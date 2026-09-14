@@ -63,7 +63,7 @@ another drive.
 
 | | |
 |---|---|
-| **Reads messy material** | PDFs (typed or scanned), Word, PowerPoint and JPEG, PNG or WebP photos of pages and whiteboards, with OCR where there is no text. Displayed equations that a PDF draws as pictures are read into LaTeX, so they reach your notes and can be checked. |
+| **Reads messy material** | PDFs (typed or scanned), Word, PowerPoint and JPEG, PNG or WebP photos of pages and whiteboards, with OCR where there is no text. Equations that a PDF draws as pictures, on their own line or inside a sentence, are read into LaTeX, so they reach your notes and can be checked. |
 | **Finds what the exam wants** | Reads past papers — PDF, Word, photos or text — splits them into questions with marks and years, and ranks chapters by how much they are worth. |
 | **Writes notes you can trust** | Every sentence is checked against the book, and anything the book does not support is removed. Each section is saved as it finishes, so you can stop and carry on later. |
 | **Draws it out** | Flowcharts, comparison tables, mind maps, timelines, formula sheets and glossaries, repaired automatically so they always render. |
@@ -153,28 +153,32 @@ yourself.
 | What was tested | Result |
 |---|---|
 | Reading two full textbooks (2,306 pages) | 100% of the text kept |
-| Search over the textbook's own end-of-chapter questions | right chapter in the top 5 for 85%, right section for 60% |
+| Search over the textbook's own end-of-chapter questions | right chapter in the top 5 for 85%, right section for 59% |
 | Blueprint on generated exam papers (5 seeds) | 93% of the favoured chapters found |
 | Diagrams from nine models | 105 of 105 render |
-| Notes for six physics sections, equations included | all 107 sentences supported by the book; no formula contradicts it |
-| Practice questions | 18 of 18 passed all checks; none copied the book |
-| Marking (complete, half and off-topic answers) | ranked in the right order 18 of 18 times |
-| Mistakes coming back, with the real model | all 5 missed questions returned two days later, none the same day, and cleared once answered in full |
+| Notes for six physics sections, equations included | all 140 sentences supported by the book; no formula contradicts it |
+| Practice questions | 17 of 18 passed all checks; none copied the book |
+| Marking (complete, half and off-topic answers) | ranked in the right order 17 of 17 times |
+| Mistakes coming back, with the real model | all 6 missed questions returned two days later, none the same day; the 5 answered in full cleared and the 1 answered in part stayed due |
 | Formula matching on 500 competition answers ([MATH-500](https://huggingface.co/datasets/HuggingFaceH4/MATH-500)) | 472 read; no false match among 937 answers altered on purpose |
-| Reading displayed equations from book and exam pages ([OmniDocBench](https://huggingface.co/datasets/opendatalab/OmniDocBench), 1,016 labelled) | 71% read as the same maths where it can be checked; 18% of characters differ on average |
+| Reading displayed equations from book and exam pages ([OmniDocBench](https://huggingface.co/datasets/opendatalab/OmniDocBench), 1,016 labelled) | 71% read as the same maths where it can be checked; 18% of characters differ on average; a third of the misreads (33%) are marked uncertain so they cannot reject a correct note, against 6% of correct readings |
 | Sentence check on answers labelled by people ([RAGTruth](https://github.com/ParticleMedia/RAGTruth)) | catches 61% of unsupported sentences; wrongly removes 22% of supported ones |
 | The whole flow through the interface, network blocked | 8 of 8 steps, no connection attempts |
 
-The tests (195 of them) run on Windows, Linux and macOS for every change. Public test sets are downloaded and checked against pinned hashes, never copied into this repository.
+The tests (207 of them) run on Windows, Linux and macOS for every change. Public test sets are downloaded and checked against pinned hashes, never copied into this repository.
 
 ## Honest limits
 
 - The sentence check on notes compares words, not meaning. On public labelled
   answers it misses about two in five unsupported sentences and removes about
   one in five supported ones.
-- Equations a PDF draws as pictures are read only when they stand on their own
-  line; one drawn inside a sentence stays unread. A misread equation can make a
-  correct note or question fail its check.
+- About 3 in 10 equations read from a PDF's drawings are misread. The reader's
+  own confidence catches only a third of those, so a misread book equation can
+  still make a correct note or question fail its check.
+- Reading every equation makes the first read of a maths-heavy book slow on a
+  CPU. Reading it again is quick, because each drawing is read only once.
+- Books added before equations were read keep their old text until you run
+  `margin reread` (or press Re-read equations in the Library); your notes stay.
 - Maths in exports is shown as written, not typeset.
 - The blueprint is dependable at chapter level and rough at section level, so the
   app leads with chapters.
@@ -195,6 +199,7 @@ margin models                                    # list the models you can switc
 
 margin add biology-textbook.pdf slides.pptx whiteboard.jpg
 margin add history-reader.pdf --no-formulas      # skip reading drawn equations (quicker for books without maths)
+margin reread                                    # read the equations in PDFs added before, keeping your notes
 margin inspect biology-textbook.pdf              # see how a file is split into sections
 margin search "how does the nephron filter blood" --scope ch25
 

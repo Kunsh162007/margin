@@ -25,7 +25,7 @@ from margin.notes.writer import SectionNotes, sections_in_scope, write_notes
 from margin.practice import progress
 from margin.practice.grading import Grade, grade_answer
 from margin.practice.questions import Question, QuestionType, generate_for_sections
-from margin.retrieve.search import EmbedderLike, IndexResult, Searcher, index_document
+from margin.retrieve.search import EmbedderLike, IndexResult, Searcher, index_document, reread_library
 from margin.store.db import Workspace
 
 SECTION_CHARS = 6000
@@ -90,6 +90,17 @@ class Study:
                 if on_file:
                     on_file(path, "already in the library" if result.skipped else f"{result.title}: {result.sections} sections, {result.chunks} passages")
         return added
+
+    def reread(self) -> tuple[list[IndexResult], list[Path]]:
+        """Read again the PDFs added before their drawn equations could be read; notes written from them are kept."""
+        from margin import config
+        from margin.ingest import formulas as formula_reading
+
+        reader = formula_reading.installed_reader(config.paths().models_dir)
+        if reader is None:
+            raise ValueError("The formula reader is not installed. Run: margin setup")
+        with Workspace.open(self.workspace) as ws:
+            return reread_library(ws, self.embedder(), reader)
 
     def read_papers(self, paths: list[Path]) -> Blueprint:
         questions = []

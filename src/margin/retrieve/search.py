@@ -17,7 +17,7 @@ from typing import Protocol
 import numpy as np
 
 from margin.ingest.images import OcrEngine
-from margin.ingest.pipeline import ingest_file
+from margin.ingest.pipeline import content_id, ingest_file
 from margin.retrieve.chunking import chunk_section, is_exercise_section
 from margin.store.db import ChunkRow, Workspace
 
@@ -52,6 +52,7 @@ class IndexResult:
     sections: int
     chunks: int
     skipped: bool
+    reread: bool = False  # read again, with its equations, because it was first read without them
 
 
 def rrf(*rankings: list[int], k: int = RRF_K) -> list[tuple[int, float]]:
@@ -71,14 +72,35 @@ def in_scope(row: ChunkRow, scope: str | None) -> bool:
 
 
 def index_document(ws: Workspace, path: Path, embedder: EmbedderLike, ocr: OcrEngine | None = None, formulas: object | None = None) -> IndexResult:
+    """Read a file into the library. A file already there is skipped without reading it again — unless a formula
+    reader is given and the file was read without one, in which case it is read again and its notes are kept."""
+    doc_id = content_id(path)
+    known = ws.document(doc_id)
+    if known is not None and (formulas is None or known["formulas_read"]):
+        return IndexResult(doc_id, str(known["title"]), 0, 0, skipped=True)
     doc, sections = ingest_file(path, ocr, formulas)
-    if ws.has_document(doc.id):
-        return IndexResult(doc.id, doc.title, 0, 0, skipped=True)
     chunks = [chunk for section in sections for chunk in chunk_section(section)]
     vectors = embedder.passages([c.text for c in chunks]) if chunks else np.empty((0, 0), dtype=np.float32)
     exercise_sids = {s.id for s in sections if is_exercise_section(s.title)}
-    ws.add_document(doc, sections, chunks, vectors, embedder.name, exercise_sids)
-    return IndexResult(doc.id, doc.title, len(sections), len(chunks), skipped=False)
+    store = ws.replace_document if known is not None else ws.add_document
+    store(doc, sections, chunks, vectors, embedder.name, exercise_sids, formulas_read=formulas is not None)
+    return IndexResult(doc.id, doc.title, len(sections), len(chunks), skipped=False, reread=known is not None)
+
+
+def reread_library(ws: Workspace, embedder: EmbedderLike, formulas: object) -> tuple[list[IndexResult], list[Path]]:
+    """Read again every PDF added before its drawn equations could be read. Returns what was re-read and the files
+    no longer where they were added from."""
+    done: list[IndexResult] = []
+    missing: list[Path] = []
+    for document in ws.documents():
+        if document["kind"] != "pdf" or document["formulas_read"]:
+            continue
+        path = Path(str(document["source"]))
+        if path.is_file():
+            done.append(index_document(ws, path, embedder, formulas=formulas))
+        else:
+            missing.append(path)
+    return done, missing
 
 
 class Searcher:

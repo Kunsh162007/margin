@@ -49,6 +49,23 @@ def test_add_indexes_files_and_reports_the_ones_it_cannot_read(tmp_path):
     assert study.add([tmp_path / "ohm.docx"])[0].skipped
 
 
+def test_reread_upgrades_pdfs_added_before_formulas_and_lists_missing_files(tmp_path, monkeypatch):
+    from pathlib import Path
+
+    import margin.ingest.formulas as formulas
+    from tests.test_formulas import _FakeReader, _pdf_with_drawn_equation
+
+    study, _ = _study(tmp_path)  # its library already holds "physics.pdf", a book whose file is not on disk
+    pdf = tmp_path / "book.pdf"
+    _pdf_with_drawn_equation(pdf)
+    monkeypatch.setattr(formulas, "installed_reader", lambda models_dir: None)
+    study.add([pdf])
+    monkeypatch.setattr(formulas, "installed_reader", lambda models_dir: _FakeReader())
+    done, missing = study.reread()
+    assert [r.reread for r in done] == [True] and missing == [Path("physics.pdf")]
+    assert study.reread() == ([], [Path("physics.pdf")])
+
+
 def test_blueprint_reads_a_text_paper_and_refuses_an_empty_one(tmp_path):
     study, _ = _study(tmp_path)
     paper = tmp_path / "2024.txt"

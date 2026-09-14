@@ -1,12 +1,16 @@
 {
   "dataset": "OmniDocBench (English displayed equations on book, exam-paper and textbook pages)",
+  "min_confidence": 0.99,
   "overall": {
     "equations": 1016,
     "exact_rate": 0.2785,
     "mean_edit_distance": 0.1792,
     "sympy_comparable": 232,
     "sympy_match_rate": 0.7112,
-    "plausible_rate": 0.9872
+    "plausible_rate": 0.9872,
+    "uncertain_rate": 0.3061,
+    "misreads_marked_rate": 0.3284,
+    "correct_marked_rate": 0.0606
   },
   "by_source": {
     "book": {
@@ -15,7 +19,10 @@
       "mean_edit_distance": 0.1932,
       "sympy_comparable": 130,
       "sympy_match_rate": 0.7769,
-      "plausible_rate": 0.9893
+      "plausible_rate": 0.9893,
+      "uncertain_rate": 0.3761,
+      "misreads_marked_rate": 0.5862,
+      "correct_marked_rate": 0.0495
     },
     "exam_paper": {
       "equations": 437,
@@ -23,7 +30,10 @@
       "mean_edit_distance": 0.161,
       "sympy_comparable": 96,
       "sympy_match_rate": 0.6458,
-      "plausible_rate": 0.9886
+      "plausible_rate": 0.9886,
+      "uncertain_rate": 0.2014,
+      "misreads_marked_rate": 0.0882,
+      "correct_marked_rate": 0.0806
     },
     "colorful_textbook": {
       "equations": 18,
@@ -31,8 +41,11 @@
       "mean_edit_distance": 0.1836,
       "sympy_comparable": 6,
       "sympy_match_rate": 0.3333,
-      "plausible_rate": 0.8889
+      "plausible_rate": 0.8889,
+      "uncertain_rate": 0.6667,
+      "misreads_marked_rate": 0.5,
+      "correct_marked_rate": 0
     }
   },
-  "run_at": "20260914_110059"
+  "run_at": "20260914_151032"
 }

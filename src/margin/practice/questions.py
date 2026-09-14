@@ -21,6 +21,7 @@ from typing import TYPE_CHECKING, Callable, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
+from margin.ingest.formulas import UNCERTAIN
 from margin.notes.verify import content_stems
 from margin.practice.maths import relations, relations_consistent
 
@@ -99,7 +100,8 @@ def generate_questions(client: ClientLike, section_text: str, sid: str, count: i
         parsed = _QuestionSet.model_validate(json.loads(reply.content))
     except (json.JSONDecodeError, ValidationError):
         return []
-    questions = [Question(sid, kind, q.question.strip(), q.answer.strip(), q.marks, tuple(p.strip() for p in q.marking_points)) for q in parsed.questions[:count]]
+    clean = lambda text: text.replace(UNCERTAIN, "").strip()  # noqa: E731 — the model may copy the book's uncertainty mark
+    questions = [Question(sid, kind, clean(q.question), clean(q.answer), q.marks, tuple(clean(p) for p in q.marking_points)) for q in parsed.questions[:count]]
     return [check(q, section_text, existing, marks) for q in questions]
 
 

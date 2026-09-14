@@ -129,6 +129,64 @@ def test_removing_a_document_clears_its_index(tmp_path):
         assert Searcher(ws, embedder).search("kirchhoff") == []
 
 
+def test_an_old_workspace_gains_the_formulas_column_and_keeps_its_documents(tmp_path):
+    import sqlite3
+
+    path = tmp_path / "old.db"
+    con = sqlite3.connect(path)
+    con.executescript(
+        "CREATE TABLE documents(id TEXT PRIMARY KEY, source TEXT NOT NULL, kind TEXT NOT NULL, title TEXT NOT NULL, pages INTEGER NOT NULL, "
+        "ocr_pages INTEGER NOT NULL, added_at TEXT NOT NULL); INSERT INTO documents VALUES ('d1', 'book.pdf', 'pdf', 'Book', 1, 0, '2026-09-01T00:00:00');"
+    )
+    con.commit()
+    con.close()
+    with Workspace.open(path) as ws:
+        assert [(d["id"], d["formulas_read"]) for d in ws.documents()] == [("d1", 0)]
+
+
+def _library_text(ws):
+    return "\n".join(ws.section_text(doc_id, sid) or "" for doc_id, sid, _ in ws.teaching_sections())
+
+
+def test_adding_a_pdf_again_rereads_it_with_formulas_and_keeps_its_notes(tmp_path):
+    from margin.retrieve.search import index_document
+    from tests.test_formulas import _FakeReader, _pdf_with_drawn_equation
+    from tests.test_study import FakeEmbedder
+
+    pdf = tmp_path / "book.pdf"
+    _pdf_with_drawn_equation(pdf)
+    with Workspace.open(tmp_path / "ws.db") as ws:
+        first = index_document(ws, pdf, FakeEmbedder())
+        ws.save_notes(first.doc_id, "s1", "# notes written earlier", "[]", 1, 0, 1.0)
+        assert "$$" not in _library_text(ws)
+
+        again = index_document(ws, pdf, FakeEmbedder(), formulas=_FakeReader())
+        assert not again.skipped and again.reread and "$$g=9.8$$" in _library_text(ws)
+        assert ws.load_notes(first.doc_id, "s1")["markdown"] == "# notes written earlier"
+
+        reader = _FakeReader()
+        assert index_document(ws, pdf, FakeEmbedder(), formulas=reader).skipped and reader.crops == []  # read already
+        assert index_document(ws, pdf, FakeEmbedder()).skipped
+
+
+def test_cli_reread_upgrades_pdfs_added_without_formulas(tmp_path, monkeypatch, capsys):
+    import margin.ingest.formulas as formulas
+    import margin.retrieve.embed as embed
+    from margin.cli import main
+    from tests.test_formulas import _FakeReader, _pdf_with_drawn_equation
+    from tests.test_study import FakeEmbedder
+
+    monkeypatch.setenv("MARGIN_HOME", str(tmp_path / "home"))
+    monkeypatch.setattr(embed, "Embedder", FakeEmbedder)
+    pdf = tmp_path / "book.pdf"
+    _pdf_with_drawn_equation(pdf)
+    assert main(["add", str(pdf), "--no-formulas"]) == 0
+    monkeypatch.setattr(formulas, "installed_reader", lambda models_dir: _FakeReader())
+    capsys.readouterr()
+    assert main(["reread"]) == 0 and "re-read 1" in capsys.readouterr().out
+    assert main(["reread"]) == 0 and "Nothing to re-read" in capsys.readouterr().out
+
+
 def test_cli_add_then_search_uses_the_default_workspace(tmp_path, monkeypatch, capsys):
     docx = pytest.importorskip("docx")
     import margin.retrieve.embed as embed

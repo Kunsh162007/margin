@@ -44,6 +44,14 @@ def test_a_formula_in_the_answer_must_be_one_the_section_holds():
     assert elsewhere.accepted  # a formula the section does not show is not a contradiction
 
 
+def test_the_uncertain_mark_never_reaches_a_question_or_its_marking_scheme():
+    payload = {"questions": [{"question": "When does kinetic friction act? $%uncertain\nf=\\mu N$", "answer": "Kinetic friction acts once surfaces slide, $$%uncertain\nf=\\mu N$$.",
+                              "marks": 2, "marking_points": ["acts when sliding", "$%uncertain\nf=\\mu N$"]}]}
+    [checked] = generate_questions(ScriptedClient([reply(json.dumps(payload))]), SECTION, "6.2", count=1, marks=2)
+    q = checked.question
+    assert "%uncertain" not in q.question + q.answer + " ".join(q.marking_points)
+
+
 def test_generate_questions_uses_the_schema_and_checks_each_question():
     payload = {"questions": [
         {"question": "When does kinetic friction act?", "answer": "Kinetic friction acts once surfaces slide.", "marks": 2, "marking_points": ["acts", "when sliding"]},

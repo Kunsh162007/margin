@@ -1,35 +1,42 @@
 [
   {
     "section": "3.4",
-    "question": "When simplifying kinematic equations by setting the initial time to zero, how are the expressions for the final position ($x$) and the change in velocity ($\text{dv}$) written using the simplified notation described in the text?",
+    "question": "When the initial time is set to zero, what are the simplified expressions for the change in displacement ($\\Delta x$) and the change in velocity ($\\Delta v$) using the notation defined in Section 3.4?",
     "max": 2,
     "off_topic_marks": 0,
     "retry_marks": 2
   },
   {
     "section": "3.4",
-    "question": "For an object undergoing constant acceleration, what is the relationship used to determine the average velocity ($\bar{v}$) based on its initial and final velocities? Briefly explain why this relationship holds true under the assumption of constant acceleration.",
+    "question": "For an object undergoing motion with constant acceleration, how is the average velocity ($\\\\overline{v}$) related to the object's initial velocity ($v_0$) and its final velocity ($v$)?",
     "max": 2,
     "off_topic_marks": 0,
     "retry_marks": 2
   },
   {
     "section": "5.3",
-    "question": "When defining a system in physics, explain the difference between an internal force and an external force, providing an example of each based on a system consisting of a car and its driver.",
+    "question": "When analyzing the motion of a system, what criterion must be met for a force to be classified as an external force, and provide an example from the text illustrating a force that is internal to a defined system.",
     "max": 2,
     "off_topic_marks": 0,
-    "retry_marks": 2
+    "retry_marks": 1
   },
   {
     "section": "5.3",
-    "question": "According to the principles derived from Newton's second law, describe the relationship between the mass of a system and the acceleration it achieves when a specific net external force is applied.",
+    "question": "According to the relationships established for Newton's second law, if the net external force acting on a system is kept constant, how does the resulting acceleration change when the mass of that system is increased?",
     "max": 2,
     "off_topic_marks": 0,
     "retry_marks": 2
   },
   {
     "section": "13.2",
-    "question": "According to the text, why do astronauts aboard the International Space Station appear to be weightless, despite the fact that the force of gravity is still acting upon them?",
+    "question": "According to the derived equation for gravity near Earth's surface, how does the acceleration due to gravity ($g$) change as the distance ($r$) from the center of the Earth increases?",
+    "max": 2,
+    "off_topic_marks": 0,
+    "retry_marks": 2
+  },
+  {
+    "section": "13.2",
+    "question": "The text mentions that astronauts in the International Space Station appear weightless. Based on the section's explanation, what physical state are they actually experiencing?",
     "max": 2,
     "off_topic_marks": 0,
     "retry_marks": 2

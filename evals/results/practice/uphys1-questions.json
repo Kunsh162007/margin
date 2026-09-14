@@ -3,165 +3,167 @@
     "section": "3.4",
     "accepted": true,
     "reasons": [],
-    "question": "When simplifying the notation in Section 3.4 by setting the initial time to zero, what specific relationships are established for the elapsed time ($\triangle t$), the change in position ($\triangle x$), and the change in velocity ($\triangle v$)? (2 marks)",
-    "answer": "When the initial time is set to zero, the elapsed time ($\triangle t$) is equal to the final time ($t$). The change in position ($\triangle x$) is defined as the final position minus the initial position ($\triangle x = x - x_0$). The change in velocity ($\triangle v$) is defined as the final velocity minus the initial velocity ($\triangle v = v - v_0$).",
+    "question": "When simplifying the notation for motion where the initial time is set to zero, what specific notation is used to represent the initial position and the initial velocity, respectively?",
+    "answer": "The initial position is denoted by $x_0$, and the initial velocity is denoted by $v_0$.",
     "marking_points": [
-      "1 mark for $\triangle t = t$",
-      "1 mark for $\triangle x = x - x_0$ and $\triangle v = v - v_0$ (or correct statement of the three relationships)"
+      "1 mark for correctly identifying $x_0$ for initial position.",
+      "1 mark for correctly identifying $v_0$ for initial velocity."
     ]
   },
   {
     "section": "3.4",
     "accepted": true,
     "reasons": [],
-    "question": "If an object is undergoing motion with constant acceleration, how is the average velocity ($\bar{v}$) calculated using only the object's initial velocity ($v_0$) and its final velocity ($v$)? (2 marks)",
-    "answer": "When acceleration is constant, the average velocity ($\bar{v}$) is calculated as the simple average of the initial and final velocities: $\bar{v} = \frac{v_0 + v}{2}$.",
+    "question": "Under the assumption that acceleration is constant, how is the average velocity ($\bar{v}$) related to the initial velocity ($v_0$) and the final velocity ($v$)?",
+    "answer": "When acceleration is constant, the average velocity ($\bar{v}$) is equal to the simple average of the initial and final velocities: $\bar{v} = \\frac{v_0 + v}{2}$.",
     "marking_points": [
-      "1 mark for stating that the average velocity is the simple average of initial and final velocities.",
-      "1 mark for providing the correct formula: $\bar{v} = \frac{v_0 + v}{2}$"
+      "1 mark for stating that the average velocity is related to the initial and final velocities.",
+      "1 mark for providing the correct formula: $\\bar{v} = \\frac{v_0 + v}{2}$."
     ]
   },
   {
     "section": "3.4",
     "accepted": true,
     "reasons": [],
-    "question": "A particle starts with an initial velocity of $10 \text{ m/s}$ and experiences a constant acceleration of $2.0 \text{ m/s}^2$ over a period of $5.0 \text{ s}$. Which kinematic equation allows you to determine the particle's final velocity, and what is that final velocity? (2 marks)",
-    "answer": "The equation used is $v = v_0 + at$. Substituting the values: $v = 10 \text{ m/s} + (2.0 \text{ m/s}^2)(5.0 \text{ s})$, which results in a final velocity of $20 \text{ m/s}$.",
+    "question": "If a problem requires finding the final velocity ($v$) given the initial velocity ($v_0$), the constant acceleration ($a$), and the time interval ($t$), which kinematic equation should be selected, and what is that equation?",
+    "answer": "The equation that should be selected is the one derived from the definition of acceleration, which is $v = v_0 + at$.",
     "marking_points": [
-      "1 mark for correctly identifying the equation $v = v_0 + at$.",
-      "1 mark for calculating the correct final velocity ($20 \text{ m/s}$)."
+      "1 mark for correctly identifying the required equation (or the concept of using the equation relating $v, v_0, a, t$).",
+      "1 mark for writing the correct equation: $v = v_0 + at$."
     ]
   },
   {
     "section": "5.3",
     "accepted": true,
     "reasons": [],
-    "question": "When defining a system in physics, what is the key distinction between an internal force and an external force acting upon that system?",
-    "answer": "An external force is defined as a force that originates outside of the object or system of interest. In contrast, an internal force is a force that acts between the different elements within the system itself.",
+    "question": "When analyzing the motion of a car and its driver as a single system, explain why the force the driver uses to hold onto the steering wheel is classified as an internal force rather than an external force.",
+    "answer": "The force the person in the car exerts on the steering wheel is an internal force because it acts between elements that are already part of the defined system of interest (the car plus the person).",
     "marking_points": [
-      "1 mark for correctly defining an external force (originates outside the system).",
-      "1 mark for correctly defining an internal force (acts between elements of the system)."
+      "Identifies the force as internal.",
+      "States that the force acts between elements of the system of interest."
     ]
   },
   {
     "section": "5.3",
     "accepted": true,
     "reasons": [],
-    "question": "The text suggests two proportional relationships govern motion. Describe how acceleration relates to the net external force and how it relates to the mass of the system.",
-    "answer": "Acceleration is directly proportional to the net external force acting on a system ($\\vec{a} \\propto \\vec{F}_{\\text{net}}$). Furthermore, acceleration is exactly inversely proportional to the mass of the system ($a \\propto 1/m$).",
+    "question": "Based on the relationships described in the section, describe how the acceleration of a system would change if the net external force acting upon it were tripled, assuming the system's mass does not change.",
+    "answer": "The acceleration would also triple because the text states that acceleration is directly proportional to the net external force ($\\vec{a} \\propto \\vec{F}_{\\text{net}}$).",
     "marking_points": [
-      "1 mark for stating that acceleration is directly proportional to net external force.",
-      "1 mark for stating that acceleration is inversely proportional to mass."
+      "States that the acceleration triples.",
+      "References the direct proportionality between acceleration and net external force."
     ]
   },
   {
     "section": "5.3",
     "accepted": true,
     "reasons": [],
-    "question": "According to the section, what physical change is equivalent to a change in velocity, and what specific type of force causes this change in motion?",
-    "answer": "A change in motion is equivalent to a change in velocity, which by definition means there is acceleration. This change in motion is caused by a net external force.",
+    "question": "According to the principles discussed, what fundamental concept must be established before one can accurately determine which forces are relevant to the motion of a system?",
+    "answer": "One must first define the boundaries of the system. This is necessary because only external forces affect the motion of a system, and internal forces cancel each other out.",
     "marking_points": [
-      "1 mark for stating that a change in motion is equivalent to a change in velocity.",
-      "1 mark for stating that a net external force causes this change in motion (or causes nonzero acceleration)."
+      "States that the boundaries of the system must be defined.",
+      "Explains that only external forces affect the system's motion (or that internal forces cancel out)."
     ]
   },
   {
     "section": "6.2",
     "accepted": true,
     "reasons": [],
-    "question": "When two objects are in contact, how is the frictional force categorized if they are currently sliding past each other, and how is it categorized if they are stationary relative to one another?",
-    "answer": "If the two systems are moving relative to one another, the friction is called kinetic friction. If the two systems are in contact and stationary relative to one another, the friction is called static friction.",
+    "question": "When two surfaces are in contact, what is the specific term used for the frictional force acting between them if they are currently moving relative to one another, and what is the term used if they are not moving relative to one another?",
+    "answer": "If two systems are in contact and moving relative to one another, the friction between them is called kinetic friction. If two systems are in contact and stationary relative to one another, the friction between them is called static friction.",
     "marking_points": [
-      "1 mark for correctly identifying kinetic friction when objects are moving relative to each other.",
-      "1 mark for correctly identifying static friction when objects are stationary relative to each other."
+      "1 mark for correctly identifying kinetic friction as the force when systems are moving relative to each other.",
+      "1 mark for correctly identifying static friction as the force when systems are stationary relative to one another."
     ]
   },
   {
     "section": "6.2",
     "accepted": true,
     "reasons": [],
-    "question": "Describe the nature of static friction when an external force is applied to an object, and name one physical characteristic of the surfaces that contributes to the existence of friction even when no apparent motion occurs.",
-    "answer": "Static friction is a responsive force that increases to be equal and opposite to the applied force, up to its maximum limit. A physical characteristic contributing to friction is the adhesive forces between the surface molecules of the two objects.",
+    "question": "Describe the relationship between the magnitude of static friction and kinetic friction, and explain how the static frictional force behaves when an external push is applied up to its limit.",
+    "answer": "Static friction is usually greater than the kinetic friction between two objects. The static friction is a responsive force that increases to be equal and in the opposite direction of the applied push, up to its maximum limit.",
     "marking_points": [
-      "1 mark for describing static friction as a responsive force that increases to match the applied force up to a limit.",
-      "1 mark for mentioning adhesive forces (or surface roughness) as a contributor to friction."
+      "1 mark for stating that static friction is usually greater than kinetic friction.",
+      "1 mark for describing static friction as a responsive force that increases to match the applied push up to its maximum."
     ]
   },
   {
     "section": "6.2",
     "accepted": true,
     "reasons": [],
-    "question": "State the formula used to calculate the maximum magnitude of static friction, and define the two variables present in this equation.",
-    "answer": "The formula is $f_{\text{s}}(\text{max}) = \text{μ}_{\text{s}}N$. The variables are $f_{\text{s}}(\text{max})$, which is the maximum static friction, $\text{μ}_{\text{s}}$, which is the coefficient of static friction, and $N$, which is the magnitude of the normal force.",
+    "question": "Besides the physical roughness of surfaces, what underlying molecular phenomenon contributes to the existence of friction, and how does this relate to the force required to keep an object moving once it is already in motion?",
+    "answer": "Part of the friction is due to adhesive forces between the surface molecules of the two objects. Once an object is moving, there are fewer points of contact (fewer molecules adhering), so less force is required to keep the object moving.",
     "marking_points": [
-      "1 mark for correctly stating the formula $f_{\text{s}}(\text{max}) = \text{μ}_{\text{s}}N$.",
-      "1 mark for correctly defining the variables (e.g., identifying $\text{μ}_{\text{s}}$ as the coefficient of static friction and $N$ as the normal force)."
+      "1 mark for identifying adhesive forces between surface molecules as a contributor to friction.",
+      "1 mark for explaining that fewer points of contact when moving require less force to maintain motion."
     ]
   },
   {
     "section": "10.6",
     "accepted": true,
     "reasons": [],
-    "question": "Based on the relationship $|\boldsymbol{\tau}| = rF\text{sin}\theta$, explain why applying a force parallel to the lever arm results in zero torque.",
-    "answer": "When the force is applied parallel to the lever arm, the angle ($\theta$) between the force vector ($\boldsymbol{F}$) and the position vector ($\boldsymbol{r}$) is $0^\text{o}$ or $180^\text{o}$. Since $\text{sin}(0^\text{o}) = 0$ and $\text{sin}(180^\text{o}) = 0$, the resulting torque ($\boldsymbol{\tau}$) is zero.",
+    "question": "According to the section, what is the relationship between the angle ($\theta$) between the position vector ($\\vec{r}$) and the force vector ($\\vec{F}$), and the magnitude of the resulting torque? Provide the formula that describes this relationship.",
+    "answer": "The magnitude of the torque is given by the formula $|τ| = rF\\sin\\theta$. This shows that the torque depends on the sine of the angle between the vectors.",
     "marking_points": [
-      "Identifies that the angle ($\theta$) is $0^\text{o}$ or $180\text{o}$ when the force is parallel to the lever arm (1 mark).",
-      "States that the sine of these angles is zero, leading to zero torque (1 mark)."
+      "States the formula $|τ| = rF\\sin\\theta$ (1 mark)",
+      "Correctly identifies that the torque depends on the sine of the angle $\\theta$ (1 mark)"
     ]
   },
   {
     "section": "10.6",
     "accepted": true,
     "reasons": [],
-    "question": "In the context of rotational dynamics, what physical quantity does torque represent, and how does the magnitude of this quantity change if the distance from the axis of rotation (the lever arm) is doubled while the applied force remains constant?",
-    "answer": "Torque is the turning or twisting effectiveness of a force. If the lever arm ($r$) is doubled while the force ($F$) is constant, the magnitude of the torque will also double, as torque is directly proportional to the lever arm ($|\boldsymbol{\tau}| = r_{\text{perp}}F$).",
+    "question": "The concept of the lever arm ($r_{\\perp}$) is introduced as an alternative way to express the magnitude of torque. Define the lever arm and state how the magnitude of torque can be expressed using this quantity.",
+    "answer": "The lever arm ($r_{\\perp}$) is defined as the perpendicular distance from the pivot point (O) to the line determined by the force vector ($υ$). The magnitude of the torque can then be expressed as $|τ| = r_{\\perp}F$.",
     "marking_points": [
-      "Correctly defines torque as the turning or twisting effectiveness of a force (1 mark).",
-      "States that the torque will double because it is directly proportional to the lever arm ($r$) (1 mark)."
+      "Correctly defines the lever arm ($r_{\\perp}$) as the perpendicular distance from O to the line of $υ$ (1 mark)",
+      "States the magnitude formula $|τ| = r_{\\perp}F$ (1 mark)"
     ]
   },
   {
     "section": "10.6",
     "accepted": true,
     "reasons": [],
-    "question": "If a system experiences three individual torques ($\boldsymbol{\tau}_1, \boldsymbol{\tau}_2, \text{and } \boldsymbol{\tau}_3$) acting on a fixed axis, describe the procedure for determining the net torque ($\boldsymbol{\tau}_{\text{net}}$) acting on that system.",
-    "answer": "To find the net torque, one must first assign the appropriate sign (positive or negative) to the magnitude of each individual torque based on its direction relative to the chosen axis. The net torque is then calculated by summing these signed individual torques: $\boldsymbol{\tau}_{\text{net}} = \boldsymbol{\tau}_1 + \boldsymbol{\tau}_2 + \boldsymbol{\tau}_3$.",
+    "question": "When analyzing torque in three dimensions, how is the direction (sign) of the resulting torque determined, and what mathematical operation is used to establish this direction?",
+    "answer": "The direction of the torque is determined by the cross product of the position vector and the force vector ($υ\\vec{r} \\times \\vec{F}$). The sign is established by using the right-hand rule, where the cross product along the positive z-axis is conventionally considered a positive torque.",
     "marking_points": [
-      "Mentions the necessity of assigning a sign (positive or negative) to each individual torque based on direction (1 mark).",
-      "States that the net torque is the sum of these individual torques ($\boldsymbol{\tau}_{\text{net}} = \text{sum of } \boldsymbol{\tau}_i$) (1 mark)."
+      "States that the direction is determined by the cross product $υ\\vec{r} \\times \\vec{F}$ (1 mark)",
+      "Mentions the use of the right-hand rule to assign the sign (positive or negative) (1 mark)"
     ]
   },
   {
     "section": "13.2",
     "accepted": true,
     "reasons": [],
-    "question": "When applying Newton's Law of Universal Gravitation to an object near Earth's surface, what substitution is made to relate the gravitational force to the concept of weight, and what is the resulting scalar equation for the acceleration due to gravity ($g$)?",
-    "answer": "The weight ($mg$) is substituted for the magnitude of the gravitational force ($G\\frac{mM_{\\mathrm{E}}}{r^{2}}$). This substitution causes the mass of the object ($m$) to cancel out, resulting in the scalar equation $g=G\\frac{M_{\\mathrm{E}}}{r^{2}}$.",
+    "question": "When deriving the formula for the acceleration due to gravity ($g$) near Earth's surface, why does the mass of the object being weighed cancel out of the final equation?",
+    "answer": "The mass ($m$) of the object cancels out because the weight of the object ($mg$) is equated to the gravitational force ($G\\frac{mM_{\\mathrm{E}}}{r^{2}}$), and the mass $m$ appears on both sides of the equation.",
     "marking_points": [
-      "Correct identification of the substitution ($mg$ for gravitational force). (1 mark)",
-      "Correct statement of the resulting scalar equation ($g=G\\frac{M_{\\mathrm{E}}}{r^{2}}$). (1 mark)"
+      "States that the weight ($mg$) is equated to the gravitational force ($G\\frac{mM_{\\mathrm{E}}}{r^{2}}$). (1 mark)",
+      "States that the mass $m$ appears on both sides and therefore cancels out. (1 mark)"
+    ]
+  },
+  {
+    "section": "13.2",
+    "accepted": false,
+    "reasons": [
+      "model answer is not supported by the section"
+    ],
+    "question": "How does the value of $g$ change as the distance ($r$) from the center of the Earth increases, and what mathematical relationship describes this change?",
+    "answer": "The value of $g$ decreases as the distance ($r$) from the center of the Earth increases. This is described by the relationship $g=G\\frac{M_{\\mathrm{E}}}{r^{2}}$, indicating that $g$ is inversely proportional to the square of the distance ($r^2$).",
+    "marking_points": [
+      "States that $g$ decreases as the distance ($r$) increases. (1 mark)",
+      "References the formula $g=G\\frac{M_{\\mathrm{E}}}{r^{2}}$ or states that $g$ is inversely proportional to the square of the distance. (1 mark)"
     ]
   },
   {
     "section": "13.2",
     "accepted": true,
     "reasons": [],
-    "question": "If an object is situated at a height above the Earth's surface, how must the distance ($r$) used in the gravitational acceleration equation ($g=G M_E/r^2$) be defined, based on the principles discussed in the text?",
-    "answer": "The distance $r$ must be defined as the sum of the Earth's average radius and the object's height above the surface, i.e., $r = R_{\\mathrm{E}} + \text{height}$.",
+    "question": "According to the text, what is the physical reason astronauts in the International Space Station appear to be weightless, despite the presence of Earth's gravitational pull?",
+    "answer": "The astronauts appear weightless because they are in a state of free fall. The text explains that comparing the calculated value of $g$ at the ISS to the value on Earth shows that the force of gravity is still acting on them, but they only appear weightless because they are falling.",
     "marking_points": [
-      "Identification that $r$ must account for the Earth's radius. (1 mark)",
-      "Correct description of how the height is added to the Earth's radius to find $r$. (1 mark)"
-    ]
-  },
-  {
-    "section": "13.2",
-    "accepted": true,
-    "reasons": [],
-    "question": "According to the text, what physical state allows astronauts in the International Space Station to appear weightless, even though gravity is still acting on them?",
-    "answer": "The astronauts appear weightless because they are in a state of free fall, meaning the gravitational force is acting on them, but they are accelerating along with the station.",
-    "marking_points": [
-      "Stating that the astronauts are in free fall. (1 mark)",
-      "Explaining that this free fall is the reason they appear weightless despite gravity acting on them. (1 mark)"
+      "States that the astronauts are in free fall. (1 mark)",
+      "States that gravity is still acting on them, but this free fall is what causes the apparent weightlessness. (1 mark)"
     ]
   },
   {
@@ -169,32 +171,32 @@
     "accepted": true,
     "reasons": [],
     "question": "Differentiate between laminar flow and turbulent flow by describing the characteristics of the streamlines in each type of fluid motion.",
-    "answer": "Laminar flow is represented by smooth, parallel streamlines, often described as layers of fluid moving in regular paths. In contrast, turbulent flow features irregular streamlines where different parts of the fluid mix together or form small circular regions resembling whirlpools.",
+    "answer": "Laminar flow is represented by smooth, parallel streamlines, suggesting layers of fluid moving in regular paths. In contrast, turbulent flow features irregular streamlines that change over time, causing different parts of the fluid to mix or form small swirling regions.",
     "marking_points": [
       "1 mark for describing laminar flow (smooth, parallel streamlines/regular paths).",
-      "1 mark for describing turbulent flow (irregular streamlines/mixing/whirlpools)."
+      "1 mark for describing turbulent flow (irregular streamlines/mixing/swirling)."
     ]
   },
   {
     "section": "14.5",
     "accepted": true,
     "reasons": [],
-    "question": "State the fundamental relationship that connects the volume flow rate ($Q$), the cross-sectional area ($A$), and the average speed ($v$) of a fluid.",
-    "answer": "The precise relationship between flow rate ($Q$) and average speed ($v$) is given by the equation $Q = Av$, where $A$ is the cross-sectional area and $v$ is the average speed.",
+    "question": "According to the relationship $Q=Av$, what two physical properties determine the flow rate ($Q$), and how is the relationship between these properties described?",
+    "answer": "The flow rate ($Q$) is determined by the cross-sectional area ($A$) and the average speed ($v$) of the fluid. The relationship indicates that the flow rate is directly proportional to both the average speed and the cross-sectional area.",
     "marking_points": [
-      "1 mark for stating the correct formula ($Q=Av$).",
-      "1 mark for correctly identifying that $A$ is the cross-sectional area and $v$ is the average speed."
+      "1 mark for identifying the two determining properties (Area A and velocity v).",
+      "1 mark for stating that the flow rate is directly proportional to both A and v."
     ]
   },
   {
     "section": "14.5",
     "accepted": true,
     "reasons": [],
-    "question": "When an incompressible fluid flows through a pipe whose radius is decreasing, what must happen to the fluid's velocity, and what principle dictates this change?",
-    "answer": "The velocity of the fluid must necessarily increase. This is dictated by the equation of continuity, which states that for an incompressible fluid, the flow rate ($Q$) must remain the same at all points along the pipe ($A_1v_1 = A_2v_2$).",
+    "question": "When an incompressible fluid moves through a pipe whose radius is decreasing, what must be true about the flow rate at different points, and what must happen to the fluid's velocity?",
+    "answer": "Because the fluid is incompressible and there are no sources or sinks, the flow rate ($Q$) must remain the same at all points along the pipe. Consequently, as the cross-sectional area decreases, the velocity must necessarily increase.",
     "marking_points": [
-      "1 mark for stating that the velocity must increase.",
-      "1 mark for correctly referencing the equation of continuity or the requirement that flow rate must be constant ($Q_1=Q_2$)."
+      "1 mark for stating that the flow rate must be the same at all points ($Q_1 = Q_2$).",
+      "1 mark for stating that the velocity must increase as the cross-sectional area decreases."
     ]
   }
 ]

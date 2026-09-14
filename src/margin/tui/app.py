@@ -100,6 +100,7 @@ class MarginApp(App[None]):
                 with Horizontal(classes="row"):
                     yield Input(placeholder="biology-textbook.pdf; lecture-3.pptx; whiteboard.jpg", id="add-paths")
                     yield Button("Add", id="add", variant="primary")
+                    yield Button("Re-read equations", id="reread")
                 yield DataTable(id="documents", cursor_type="row", zebra_stripes=True)
                 yield RichLog(id="library-log", wrap=True, max_lines=200)
             with TabPane("Blueprint", id="blueprint"):
@@ -211,6 +212,21 @@ class MarginApp(App[None]):
 
         if self._run(f"adding {len(paths)} file(s)", lambda: self.study.add(paths, report), lambda _: self._refresh_documents()):
             box.clear()
+
+    @on(Button.Pressed, "#reread")
+    def reread(self) -> None:
+        self._run("re-reading books for their equations", self.study.reread, self._reread_done)
+
+    def _reread_done(self, result: tuple[list[Any], list[Path]]) -> None:
+        done, missing = result
+        log = self.query_one("#library-log", RichLog)
+        for book in done:
+            log.write(Text(f"{book.title}: re-read with its equations; your notes are kept"))
+        for path in missing:
+            log.write(Text(f"{path}: not found — add it again from where it is now"))
+        if not done and not missing:
+            log.write(Text("Every PDF in the library already has its equations read."))
+        self._refresh_documents()
 
     # blueprint --------------------------------------------------------------------
 

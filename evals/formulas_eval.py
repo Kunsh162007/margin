@@ -34,7 +34,7 @@ from PIL import Image
 
 from evals.datasets import fetch
 from margin import config
-from margin.ingest.formulas import installed_reader, plausible
+from margin.ingest.formulas import MIN_CONFIDENCE, installed_reader, plausible
 from margin.practice.maths import equivalent, parse
 
 OUT_DIR = Path(__file__).parent / "results" / "formulas"
@@ -73,15 +73,24 @@ def equations(folder: Path) -> list[dict]:
     return found
 
 
+def _share(rows: list[dict], key: str) -> float | None:
+    return round(mean(bool(r[key]) for r in rows), 4) if rows else None
+
+
 def score(rows: list[dict]) -> dict[str, float | int | None]:
     comparable = [r for r in rows if parse(normalise(r["label"])) is not None]
+    misread = [r for r in comparable if not r["same_maths"]]
+    correct = [r for r in comparable if r["same_maths"]]
     return {
         "equations": len(rows),
-        "exact_rate": round(mean(r["exact"] for r in rows), 4) if rows else None,
+        "exact_rate": _share(rows, "exact"),
         "mean_edit_distance": round(mean(r["distance"] for r in rows), 4) if rows else None,
         "sympy_comparable": len(comparable),
-        "sympy_match_rate": round(mean(r["same_maths"] for r in comparable), 4) if comparable else None,
-        "plausible_rate": round(mean(r["plausible"] for r in rows), 4) if rows else None,
+        "sympy_match_rate": _share(comparable, "same_maths"),
+        "plausible_rate": _share(rows, "plausible"),
+        "uncertain_rate": _share(rows, "uncertain"),  # readings marked so formula checks ignore them
+        "misreads_marked_rate": _share(misread, "uncertain"),  # of checkable misreads, the share the mark keeps out of checks
+        "correct_marked_rate": _share(correct, "uncertain"),  # of correct readings, the share checks lose to the mark
     }
 
 
@@ -95,14 +104,15 @@ def main() -> int:
     items = equations(folder)
     for n, item in enumerate(items, 1):
         with Image.open(folder / "images" / item["image"]) as page:
-            reading = reader.read(page.convert("RGB").crop(tuple(int(v) for v in item["box"])))
+            reading, confidence = reader.read_scored(page.convert("RGB").crop(tuple(int(v) for v in item["box"])))
         label = normalise(item["label"])
         rows.append({**item, "reading": reading, "exact": normalise(reading) == label, "distance": edit_distance(normalise(reading), label),
-                     "same_maths": equivalent(reading, label), "plausible": plausible(reading)})
+                     "same_maths": equivalent(reading, label), "plausible": plausible(reading),
+                     "confidence": confidence, "uncertain": confidence < MIN_CONFIDENCE})
         if n % 100 == 0:
             print(f"{n}/{len(items)}", flush=True)
     summary = {
-        "dataset": "OmniDocBench (English displayed equations on book, exam-paper and textbook pages)",
+        "dataset": "OmniDocBench (English displayed equations on book, exam-paper and textbook pages)", "min_confidence": MIN_CONFIDENCE,
         "overall": score(rows), "by_source": {s: score([r for r in rows if r["source"] == s]) for s in SOURCES},
         "run_at": datetime.now().strftime("%Y%m%d_%H%M%S"),
     }

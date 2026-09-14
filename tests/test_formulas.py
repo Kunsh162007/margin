@@ -3,7 +3,45 @@ import hashlib
 import pytest
 
 from margin.ingest import formulas
-from margin.ingest.formulas import clean_latex, equation_regions, merge_page_text, plausible
+from margin.ingest.formulas import clean_latex, equation_regions, inline_regions, place_formulas, plausible
+
+
+def _chars(text, lines):
+    """Synthetic character boxes: each (first_index, top) starts a line; characters are 5 pt wide from x = 72."""
+    boxes = []
+    starts = dict(lines)
+    top = None
+    x = 72.0
+    for i, ch in enumerate(text):
+        if i in starts:
+            top, x = starts[i], 72.0
+        if ch in "\r\n":
+            continue
+        boxes.append((i, (x, top - 12, x + 5, top)))
+        x += 5
+    return boxes
+
+
+def test_inline_regions_are_shapes_on_a_text_line_with_crops_clipped_to_the_letters():
+    chars = [(0, (72, 700, 77, 712)), (1, (77, 700, 82, 712)), (2, (100, 700, 105, 712))]
+    paths = [(84, 701, 90, 711), (91, 701, 96, 708),  # one symbol drawn in the gap between two words
+             (300, 400, 306, 410)]  # a shape on no text line
+    assert inline_regions([box for _, box in chars], paths, [], W) == [((84, 701, 96, 711), (82.0, 699.0, 100.0, 713.0))]
+
+
+def test_pieces_of_one_inline_equation_with_only_spaces_between_are_one_region():
+    chars = [(72, 700, 77, 712), (77, 700, 82, 712), (140, 700, 145, 712)]
+    paths = [(86, 701, 94, 711), (101, 704, 107, 707), (114, 701, 119, 708)]  # "R_E", "=", "r" drawn apart, no letters between
+    assert [group for group, _ in inline_regions(chars, paths, [], W)] == [(86, 701, 119, 711)]
+
+
+def test_formulas_go_where_they_were_drawn():
+    text = "the magnitude of  in the law\r\nwhere r is"
+    chars = _chars(text, [(0, 712), (30, 560)])
+    gap = chars[16][1][0]  # the two spaces after "of" leave room for the drawn symbol
+    inline = [((gap + 1, 701, gap + 6, 711), r"\vec{F}")]
+    display = [((250, 590, 353, 640), r"g=G\frac{M}{r^{2}}")]
+    assert place_formulas(text, chars, display, inline) == "the magnitude of $\\vec{F}$ in the law\r\n\n$$g=G\\frac{M}{r^{2}}$$\n\nwhere r is"
 
 W, H = 612.0, 792.0
 
@@ -75,6 +113,16 @@ def test_a_pdf_page_gets_its_drawn_equation_as_latex_between_its_lines(tmp_path)
     assert "$$" not in "\n".join(b.text for b in read_pdf(path, "d1", None).blocks)
 
 
+def test_a_reading_the_reader_is_unsure_of_is_marked_and_kept_out_of_formula_checks(monkeypatch):
+    from margin.practice.maths import relations
+
+    monkeypatch.setattr(formulas, "MIN_CONFIDENCE", 0.8)
+    assert formulas.mark_uncertain("V=IR", 0.95) == "V=IR"
+    unsure = formulas.mark_uncertain("V=I/R", 0.4)
+    assert unsure.startswith("%uncertain") and unsure.endswith("V=I/R")
+    assert relations(f"$${unsure}$$") == [] and relations("$$V=IR$$") == ["V=IR"]
+
+
 def test_regions_are_drawn_shapes_clear_of_text_rules_icons_and_specks():
     texts = [(72, 700, 540, 712), (72, 600, 540, 612)]
     paths = [
@@ -105,13 +153,10 @@ def test_plausible_rejects_text_read_as_maths():
     assert not plausible("")
 
 
-def test_formulas_are_placed_between_the_text_above_and_below_them():
-    lines = {720: "The weight is mg.", 600: "where r is the distance.", 300: "End of page."}
-
-    def text_between(top, bottom):
-        return "\n".join(t for y, t in sorted(lines.items(), reverse=True) if bottom < y <= top)
-
-    formulas = [((100, 400, 200, 420), "g=9.8"), ((272, 637, 339, 665), r"mg=G\frac{mM}{r^{2}}")]
-    assert merge_page_text(text_between, formulas, H) == (
-        "The weight is mg.\n\n$$mg=G\\frac{mM}{r^{2}}$$\n\nwhere r is the distance.\n\n$$g=9.8$$\n\nEnd of page."
+def test_display_formulas_become_their_own_paragraph_before_the_text_below():
+    text = "The weight is mg.\r\nwhere r is the distance.\r\nEnd of page."
+    chars = _chars(text, [(0, 720), (19, 600), (45, 300)])
+    display = [((100, 400, 200, 420), "g=9.8"), ((272, 637, 339, 665), r"mg=G\frac{mM}{r^{2}}")]
+    assert place_formulas(text, chars, display, []) == (
+        "The weight is mg.\r\n\n$$mg=G\\frac{mM}{r^{2}}$$\n\nwhere r is the distance.\r\n\n$$g=9.8$$\n\nEnd of page."
     )
