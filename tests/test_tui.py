@@ -83,6 +83,44 @@ def test_whole_flow_runs_from_the_interface(tmp_path):
     assert client.script == []  # every scripted reply was used, in order
 
 
+def test_mistakes_come_back_through_the_retry_button(tmp_path):
+    from datetime import datetime, timedelta, timezone
+
+    now = [datetime.now(timezone.utc)]
+    script = [reply(json.dumps(QUESTIONS)), reply(json.dumps({"points_met": [False, False], "feedback": "Name the loop."})),
+              reply(json.dumps({"points_met": [True, True], "feedback": "Complete."}))]
+    study, client = _study(tmp_path, script, clock=lambda: now[0])
+    app = MarginApp(study)
+
+    async def scenario():
+        async with app.run_test(size=(140, 45)) as pilot:
+            await _open(app, pilot, "practice")
+            await pilot.click("#retry")
+            await _settle(app, pilot)
+            assert app.query_one("#questions", OptionList).option_count == 0  # nothing answered yet
+
+            app.query_one("#practice-scope", Input).value = "4.1"
+            app.query_one("#count", Input).value = "1"
+            await pilot.click("#generate")
+            await _settle(app, pilot)
+            app.query_one("#answer", TextArea).load_text("No idea.")
+            await pilot.click("#mark")
+            await _settle(app, pilot)
+
+            now[0] += timedelta(days=2)
+            await pilot.click("#retry")
+            await _settle(app, pilot)
+            assert app.query_one("#questions", OptionList).option_count == 1
+            assert "missed before" in _text(app.query_one("#question-text", Static))
+            app.query_one("#answer", TextArea).load_text("Around a closed loop the voltages sum to zero.")
+            await pilot.click("#mark")
+            await _settle(app, pilot)
+            assert "2/2 marks" in _text(app.query_one("#feedback", Static))
+
+    asyncio.run(scenario())
+    assert client.script == []
+
+
 def test_a_failed_job_is_shown_and_frees_the_app(tmp_path):
     study, _ = _study(tmp_path, script=[])  # the model has nothing to say: the first call raises
     app = MarginApp(study)

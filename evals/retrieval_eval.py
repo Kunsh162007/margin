@@ -33,6 +33,7 @@ from statistics import mean
 from typing import Any, Callable
 
 from margin import config
+from margin.ingest.formulas import installed_reader
 from margin.retrieve.embed import Embedder, Reranker
 from margin.retrieve.search import CANDIDATE_POOL, Searcher, index_document, rrf
 from margin.store.db import ChunkRow, Workspace
@@ -114,6 +115,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("pdf", type=Path)
     ap.add_argument("--book", default="uphys1")
     ap.add_argument("--arms", default="keyword,vector,hybrid,hybrid+rerank")
+    ap.add_argument("--no-formulas", action="store_true", help="index without reading drawn equations, as before formulas were recovered")
     args = ap.parse_args(argv)
 
     gold = load_gold(args.book)
@@ -121,10 +123,11 @@ def main(argv: list[str] | None = None) -> int:
         print(f"no gold questions for book {args.book!r}; build them with evals.datasets.build_retrieval_gold")
         return 1
     embedder = Embedder()
+    formulas = None if args.no_formulas else installed_reader(config.paths().models_dir)  # the same default as `margin add`
     ws_path = config.paths().ensure().workspaces_dir / f"eval-{args.book}.db"
     with Workspace.open(ws_path) as ws:
         started = time.perf_counter()
-        indexed = index_document(ws, args.pdf, embedder)
+        indexed = index_document(ws, args.pdf, embedder, formulas=formulas)
         index_seconds = round(time.perf_counter() - started, 1)
         chunks, all_chunks = ws.chunk_count(), ws.chunk_count(include_exercises=True)
         print(f"index: {chunks} searchable of {all_chunks} chunks ({'reused' if indexed.skipped else f'built in {index_seconds} s'})", flush=True)
@@ -134,7 +137,7 @@ def main(argv: list[str] | None = None) -> int:
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     doc = {
-        "book": args.book, "questions": len(gold), "chunks_searchable": chunks, "chunks_total": all_chunks,
+        "book": args.book, "formulas": formulas is not None, "questions": len(gold), "chunks_searchable": chunks, "chunks_total": all_chunks,
         "index_seconds": None if indexed.skipped else index_seconds, "arms": results, "run_at": datetime.now().strftime("%Y%m%d_%H%M%S"),
     }
     (OUT_DIR / f"{args.book}.json").write_text(json.dumps(doc, indent=2), encoding="utf-8")

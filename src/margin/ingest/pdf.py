@@ -9,9 +9,11 @@ none or only a page number.
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Any
 
 import pypdfium2 as pdfium
 
+from margin.ingest.formulas import page_text as page_text_with_formulas
 from margin.ingest.images import OcrEngine
 from margin.ingest.sections import split_blocks
 from margin.ingest.types import Block, Document, TocEntry
@@ -41,11 +43,13 @@ def _page_text(page: pdfium.PdfPage) -> str:
         textpage.close()
 
 
-def read_pdf(path: Path, doc_id: str, ocr: OcrEngine | None) -> Document:
+def read_pdf(path: Path, doc_id: str, ocr: OcrEngine | None, formulas: Any | None = None) -> Document:
+    """``formulas`` is a formula reader (``ingest/formulas.py``); without one, equations drawn as shapes stay unread."""
     pdf = pdfium.PdfDocument(str(path))
     try:
         blocks: list[Block] = []
         ocr_pages: list[int] = []
+        formula_pages: list[int] = []
         for index in range(len(pdf)):
             page = pdf[index]
             try:
@@ -55,10 +59,13 @@ def read_pdf(path: Path, doc_id: str, ocr: OcrEngine | None) -> Document:
                     ocr_pages.append(index + 1)
                     blocks.extend(split_blocks(text, index + 1, "ocr"))
                 else:
-                    blocks.extend(split_blocks(text, index + 1))
+                    recovered = page_text_with_formulas(page, formulas) if formulas is not None else None
+                    if recovered is not None:
+                        formula_pages.append(index + 1)
+                    blocks.extend(split_blocks(recovered or text, index + 1))
             finally:
                 page.close()
         title = (pdf.get_metadata_dict().get("Title") or "").strip() or path.stem
-        return Document(doc_id, str(path), "pdf", title, len(pdf), tuple(blocks), _toc(pdf), tuple(ocr_pages))
+        return Document(doc_id, str(path), "pdf", title, len(pdf), tuple(blocks), _toc(pdf), tuple(ocr_pages), tuple(formula_pages))
     finally:
         pdf.close()

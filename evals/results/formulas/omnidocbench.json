@@ -1,0 +1,38 @@
+{
+  "dataset": "OmniDocBench (English displayed equations on book, exam-paper and textbook pages)",
+  "overall": {
+    "equations": 1016,
+    "exact_rate": 0.2785,
+    "mean_edit_distance": 0.1792,
+    "sympy_comparable": 232,
+    "sympy_match_rate": 0.7112,
+    "plausible_rate": 0.9872
+  },
+  "by_source": {
+    "book": {
+      "equations": 561,
+      "exact_rate": 0.2852,
+      "mean_edit_distance": 0.1932,
+      "sympy_comparable": 130,
+      "sympy_match_rate": 0.7769,
+      "plausible_rate": 0.9893
+    },
+    "exam_paper": {
+      "equations": 437,
+      "exact_rate": 0.2677,
+      "mean_edit_distance": 0.161,
+      "sympy_comparable": 96,
+      "sympy_match_rate": 0.6458,
+      "plausible_rate": 0.9886
+    },
+    "colorful_textbook": {
+      "equations": 18,
+      "exact_rate": 0.3333,
+      "mean_edit_distance": 0.1836,
+      "sympy_comparable": 6,
+      "sympy_match_rate": 0.3333,
+      "plausible_rate": 0.8889
+    }
+  },
+  "run_at": "20260914_110059"
+}

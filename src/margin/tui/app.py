@@ -130,6 +130,7 @@ class MarginApp(App[None]):
                     yield Label("Marks each", classes="field")
                     yield Input("2", type="integer", id="marks")
                     yield Button("Write questions", id="generate", variant="primary")
+                    yield Button("Retry mistakes", id="retry")
                 with Horizontal(id="practice-body"):
                     yield OptionList(id="questions")
                     with Vertical(id="question-pane"):
@@ -292,16 +293,32 @@ class MarginApp(App[None]):
         marks = _positive_int(self.query_one("#marks", Input).value, 2)
         self._run("writing questions", lambda: self.study.generate_questions(scope, count, marks), self._show_questions, uses_model=True)
 
-    def _show_questions(self, result: tuple[list[Question], int]) -> None:
-        questions, rejected = result
+    def _fill_questions(self, questions: list[Question]) -> None:
         options = self.query_one("#questions", OptionList)
         options.clear_options()
         options.add_options([Text(f"Q{i + 1}  {q.question}") for i, q in enumerate(questions)])
-        left_out = f"; {rejected} failed the checks and were left out" if rejected else ""
-        self.notify(f"{len(questions)} question(s) ready{left_out}.")
         if questions:
             options.highlighted = 0
             self._choose(0)
+        else:
+            self._current = None
+
+    def _show_questions(self, result: tuple[list[Question], int]) -> None:
+        questions, rejected = result
+        self._fill_questions(questions)
+        left_out = f"; {rejected} failed the checks and were left out" if rejected else ""
+        self.notify(f"{len(questions)} question(s) ready{left_out}.")
+
+    @on(Button.Pressed, "#retry")
+    def retry(self) -> None:
+        self._run("finding mistakes to retry", lambda: (self.study.load_retries(), self.study.weak_topics(3)), self._show_retries)
+
+    def _show_retries(self, result: tuple[list[Question], list[Any]]) -> None:
+        questions, weak = result
+        self._fill_questions(questions)
+        weakest = "; weakest: " + ", ".join(f"{t.sid} ({t.score:.0%} of marks)" for t in weak) if weak else ""
+        found = f"{len(questions)} question(s) you lost marks on are due again" if questions else "No mistakes are due for retry"
+        self.notify(f"{found}{weakest}.", timeout=8)
 
     @on(OptionList.OptionHighlighted, "#questions")
     def question_highlighted(self, event: OptionList.OptionHighlighted) -> None:
@@ -312,7 +329,12 @@ class MarginApp(App[None]):
             return
         self._current = index
         q = self.study.questions[index]
-        self.query_one("#question-text", Static).update(Text.assemble((f"Q{index + 1} · {q.marks} marks · section {q.section}\n\n", "bold"), q.question))
+        text = Text.assemble((f"Q{index + 1} · {q.marks} marks · section {q.section}\n\n", "bold"), q.question)
+        last = self.study.missed_before.get(q.question)
+        if last is not None:
+            cause = f", marked as {last.cause}" if last.cause else ""
+            text.append(f"\n\nmissed before: {last.marks_awarded}/{last.max_marks}, {len(last.missing)} point(s) missing{cause}", style="italic")
+        self.query_one("#question-text", Static).update(text)
         self.query_one("#answer", TextArea).load_text("")
         self.query_one("#feedback", Static).update("")
 

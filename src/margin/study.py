@@ -9,6 +9,7 @@ the offline check drive the same flow with a scripted model.
 
 from __future__ import annotations
 
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable
 
@@ -16,11 +17,12 @@ from margin.agent.executor import ToolExecutor
 from margin.agent.loop import ClientLike, LoopResult, run_agent
 from margin.agent.tools import openai_tools
 from margin.blueprint.paper import paper_text, parse_paper
-from margin.blueprint.weights import Blueprint, build_blueprint
+from margin.blueprint.weights import Blueprint, blueprint_from_json, blueprint_to_json, build_blueprint
 from margin.export.assets import mermaid_script
 from margin.export.files import Exported, export_notes, saved_notes
 from margin.ingest.detect import UnsupportedFile
 from margin.notes.writer import SectionNotes, sections_in_scope, write_notes
+from margin.practice import progress
 from margin.practice.grading import Grade, grade_answer
 from margin.practice.questions import Question, QuestionType, generate_for_sections
 from margin.retrieve.search import EmbedderLike, IndexResult, Searcher, index_document
@@ -36,16 +38,25 @@ SYSTEM_PROMPT = (
 )
 
 
+def _utc_now() -> datetime:
+    return datetime.now(timezone.utc)
+
+
 class Study:
     def __init__(self, workspace: Path, export_dir: Path, client_factory: Callable[[], ClientLike],
-                 embedder: EmbedderLike | None = None, mermaid_js: Callable[[], str | None] = mermaid_script):
+                 embedder: EmbedderLike | None = None, mermaid_js: Callable[[], str | None] = mermaid_script,
+                 clock: Callable[[], datetime] = _utc_now):
         self.workspace = workspace
         self.export_dir = export_dir
         self._client_factory = client_factory
         self._embedder = embedder
         self._mermaid_js = mermaid_js
-        self.blueprint: Blueprint | None = None
+        self._clock = clock
+        with Workspace.open(workspace) as ws:  # past papers read in an earlier session still weigh the chapters
+            saved = ws.load_blueprint_json()
+        self.blueprint: Blueprint | None = blueprint_from_json(saved) if saved else None
         self.questions: list[Question] = []
+        self.missed_before: dict[str, progress.Attempt] = {}  # question text -> its last attempt, for retried questions
         self.history: list[dict[str, Any]] = []
 
     def embedder(self) -> EmbedderLike:
@@ -62,11 +73,15 @@ class Study:
             return ws.documents()
 
     def add(self, paths: list[Path], on_file: Callable[[Path, str], None] | None = None) -> list[IndexResult]:
+        from margin import config
+        from margin.ingest.formulas import installed_reader
+
         added: list[IndexResult] = []
+        formulas = installed_reader(config.paths().models_dir)  # drawn PDF equations are read once `margin setup` fetched the reader
         with Workspace.open(self.workspace) as ws:
             for path in paths:
                 try:
-                    result = index_document(ws, path, self.embedder())
+                    result = index_document(ws, path, self.embedder(), formulas=formulas)
                 except (FileNotFoundError, UnsupportedFile) as exc:
                     if on_file:
                         on_file(path, f"skipped: {exc}")
@@ -89,6 +104,7 @@ class Study:
             if ws.chunk_count() == 0:
                 raise ValueError("Add your books to the library first.")
             self.blueprint = build_blueprint(Searcher(ws, self.embedder()), questions)
+            ws.save_blueprint_json(blueprint_to_json(self.blueprint))
         return self.blueprint
 
     def sections(self, scope: str | None) -> list[tuple[str, str, str]]:
@@ -120,11 +136,37 @@ class Study:
             raise ValueError(f"No sections match {scope!r}.")
         checked = generate_for_sections(self._client_factory(), texts, count, marks, kind)
         self.questions = [c.question for c in checked if c.accepted]
+        self.missed_before = {}
         return self.questions, sum(not c.accepted for c in checked)
 
     def mark(self, index: int, answer: str) -> Grade:
+        """Mark an answer and remember it, so a question that lost marks comes back for retry."""
         q = self.questions[index]
-        return grade_answer(self._client_factory(), q.question, q.marking_points, answer, q.marks)
+        grade = grade_answer(self._client_factory(), q.question, q.marking_points, answer, q.marks)
+        with Workspace.open(self.workspace) as ws:
+            progress.record_attempt(ws, q, grade, self._clock())
+        return grade
+
+    # mistakes -----------------------------------------------------------------------
+
+    def mistakes(self) -> list[progress.Attempt]:
+        with Workspace.open(self.workspace) as ws:
+            return progress.due_retries(ws, self._clock())
+
+    def load_retries(self) -> list[Question]:
+        """Make the questions due for retry the current question set."""
+        due = self.mistakes()
+        self.questions = [a.question for a in due]
+        self.missed_before = {a.question.question: a for a in due}
+        return self.questions
+
+    def weak_topics(self, limit: int = 10) -> list[progress.WeakTopic]:
+        with Workspace.open(self.workspace) as ws:
+            return progress.weak_topics(ws, self.blueprint, limit)
+
+    def set_cause(self, attempt_id: int, cause: str) -> bool:
+        with Workspace.open(self.workspace) as ws:
+            return progress.set_cause(ws, attempt_id, cause)
 
     # ask ------------------------------------------------------------------------------
 

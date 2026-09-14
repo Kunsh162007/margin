@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 from pathlib import Path
+from typing import Any
 
 from margin.ingest import detect
 from margin.ingest.images import OcrEngine, load_image
@@ -24,15 +25,15 @@ def content_id(path: Path) -> str:
     return h.hexdigest()[:16]
 
 
-def read_document(path: Path, ocr: OcrEngine | None = None, use_ocr: bool = True) -> Document:
-    """`use_ocr=False` skips OCR for scanned PDF pages; images always need it."""
+def read_document(path: Path, ocr: OcrEngine | None = None, use_ocr: bool = True, formulas: Any | None = None) -> Document:
+    """`use_ocr=False` skips OCR for scanned PDF pages; images always need it. `formulas` reads drawn PDF equations."""
     if not path.is_file():
         raise FileNotFoundError(path)
     kind = detect.sniff(path)
     doc_id = content_id(path)
     ocr = ocr or OcrEngine()
     if kind == "pdf":
-        return read_pdf(path, doc_id, ocr if use_ocr else None)
+        return read_pdf(path, doc_id, ocr if use_ocr else None, formulas)
     if kind == "docx":
         return read_docx(path, doc_id)
     if kind == "pptx":
@@ -44,6 +45,6 @@ def read_document(path: Path, ocr: OcrEngine | None = None, use_ocr: bool = True
     return Document(doc_id, str(path), "text", path.stem, 0, tuple(split_blocks(text, None)))
 
 
-def ingest_file(path: Path, ocr: OcrEngine | None = None) -> tuple[Document, list[Section]]:
-    doc = read_document(path, ocr)
+def ingest_file(path: Path, ocr: OcrEngine | None = None, formulas: Any | None = None) -> tuple[Document, list[Section]]:
+    doc = read_document(path, ocr, formulas=formulas)
     return doc, build_sections(doc)

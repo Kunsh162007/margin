@@ -26,6 +26,24 @@ def test_check_accepts_a_supported_answer_and_rejects_invented_or_copied_ones():
     assert "3 marks" in " ".join(check(_q(SECTION, marks=3), SECTION, (), 2).reasons)
 
 
+def test_check_ignores_formula_markup_and_mark_notes_when_comparing_words():
+    section = "The weight of an object near the surface of a planet depends on the mass of the planet and its radius."
+    answer = r"The mass of the planet follows from its surface weight and radius: $M = \frac{g R^2}{G}$. (1 mark for stating the rearranged formula, 1 mark for identifying the variables.)"
+    assert check(_q(answer), section, (), 2).accepted
+
+
+def test_a_formula_in_the_answer_must_be_one_the_section_holds():
+    words = "Near the surface the weight of an object equals its mass times the acceleration due to gravity."
+    section = words + "\n\n$$mg=G\\frac{mM_{\\mathrm{E}}}{r^{2}}$$\n\nwhere r is the distance between the centres of mass."
+    right = check(_q(r"The weight of an object equals its mass times the acceleration due to gravity, so $g = \frac{G M_E}{r^2}$."), section, (), 2)
+    wrong = check(_q(r"The weight of an object equals its mass times the acceleration due to gravity, so $g = \frac{G M_E}{r}$."), section, (), 2)
+    assert right.accepted and not wrong.accepted and "contradicts a formula" in " ".join(wrong.reasons)
+    older_library = check(wrong.question, words, (), 2)  # a book read before formulas were recovered: nothing to compare with
+    assert older_library.accepted
+    elsewhere = check(_q(r"The weight of an object equals its mass times the acceleration due to gravity, and $v = v_0 + a t$."), section, (), 2)
+    assert elsewhere.accepted  # a formula the section does not show is not a contradiction
+
+
 def test_generate_questions_uses_the_schema_and_checks_each_question():
     payload = {"questions": [
         {"question": "When does kinetic friction act?", "answer": "Kinetic friction acts once surfaces slide.", "marks": 2, "marking_points": ["acts", "when sliding"]},
@@ -45,6 +63,15 @@ def test_marks_are_computed_from_points_not_chosen_by_the_model():
     assert (grade.marks_awarded, grade.points_met, grade.missing) == (1, (True, False), ("smaller than static",))
     short_list = ScriptedClient([reply(json.dumps({"points_met": [True], "feedback": ""}))])
     assert grade_answer(short_list, "q", ("a", "b"), "answer", 2).points_met == (True, False)  # padded, never over-credited
+
+
+def test_a_formula_only_point_is_met_by_an_equivalent_formula_the_model_missed():
+    client = ScriptedClient([reply(json.dumps({"points_met": [False, True], "feedback": "State the formula."}))])
+    points = (r"States the rearranged formula $M = \frac{g R^2}{G}$.", "Names g and R as the known quantities.")
+    grade = grade_answer(client, "Find the planet's mass.", points, "From g = GM/R^2, the mass follows; g and R are known.", 2)
+    assert (grade.marks_awarded, grade.points_met, grade.points_by_formula, grade.missing) == (2, (True, True), (True, False), ())
+    wrong = ScriptedClient([reply(json.dumps({"points_met": [False, True], "feedback": ""}))])
+    assert grade_answer(wrong, "Find the planet's mass.", points, "From g = GM/R, the mass follows.", 2).points_met == (False, True)
 
 
 def test_blank_answer_scores_zero_without_asking_the_model():

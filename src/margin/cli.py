@@ -45,6 +45,9 @@ def cmd_doctor(args: argparse.Namespace) -> int:
     table.add_row("home", str(paths.home))
     table.add_row("runtime", f"llama.cpp {LLAMA_CPP_BUILD} " + ("installed" if server else "not installed"))
     table.add_row("model", f"{spec.id} ({spec.size_gb} GB) " + ("installed" if spec.path(paths.models_dir).exists() else "not installed"))
+    from margin.ingest.formulas import installed_reader
+
+    table.add_row("formula reader", "installed" if installed_reader(paths.models_dir) else "not installed — run margin setup")
     console.print(table)
     return 0
 
@@ -75,10 +78,12 @@ def cmd_setup(args: argparse.Namespace) -> int:
         return 1
     try:
         from margin.export.assets import ensure_mermaid
+        from margin.ingest.formulas import ensure_model
 
         ensure_mermaid()
+        ensure_model(paths.models_dir)
     except DownloadError as exc:
-        console.print(f"[red]Could not fetch the diagram renderer:[/] {exc}")
+        console.print(f"[red]Could not fetch the diagram renderer or the formula reader:[/] {exc}")
         return 1
     console.print(f"[{GOLD}]Ready.[/] runtime {exe.name}, model {spec.file}, search models cached")
     return 0
@@ -107,14 +112,16 @@ def cmd_add(args: argparse.Namespace) -> int:
 
     from margin.ingest.detect import UnsupportedFile
     from margin.retrieve import embed
+    from margin.ingest.formulas import installed_reader
     from margin.retrieve.search import index_document
     from margin.store.db import Workspace
 
     embedder, failures = embed.Embedder(), 0
+    formulas = None if args.no_formulas else installed_reader(config.paths().models_dir)
     with Workspace.open(_workspace_path()) as ws:
         for name in args.files:
             try:
-                result = index_document(ws, Path(name), embedder)
+                result = index_document(ws, Path(name), embedder, formulas=formulas)
             except (FileNotFoundError, UnsupportedFile) as exc:
                 console.print(f"[red]skipped[/] {name}: {exc}")
                 failures += 1
@@ -217,19 +224,98 @@ def cmd_questions(args: argparse.Namespace) -> int:
 
 
 def _quiz(client, questions) -> None:
+    """Ask each question, mark the typed answer, and remember it so lost marks come back for retry."""
+    from rich.markup import escape
+
     from margin.practice.grading import grade_answer
+    from margin.practice.progress import record_attempt
+    from margin.store.db import Workspace
 
     total = scored = 0
     for n, q in enumerate(questions, 1):
-        console.print(f"\n[{GOLD}]Q{n}[/] ({q.marks} marks) {q.question}")
+        console.print(f"\n[{GOLD}]Q{n}[/] ({q.marks} marks) {escape(q.question)}")
         answer = console.input("your answer (blank to skip) > ")
         grade = grade_answer(client, q.question, q.marking_points, answer, q.marks)
+        with Workspace.open(_workspace_path()) as ws:
+            record_attempt(ws, q, grade)
         total, scored = total + q.marks, scored + grade.marks_awarded
         console.print(f"  {grade.marks_awarded}/{q.marks}. {grade.feedback}")
         for point in grade.missing:
             console.print(f"  missing: {point}")
     if questions:
         console.print(f"\n[{GOLD}]Score[/] {scored}/{total}")
+
+
+def cmd_mistakes(args: argparse.Namespace) -> int:
+    """Questions you lost marks on and when each is due again, your weakest sections, and why answers lost marks."""
+    from datetime import datetime, timezone
+
+    from rich.text import Text
+
+    from margin.blueprint.weights import blueprint_from_json
+    from margin.practice import progress
+    from margin.store.db import Workspace
+
+    with Workspace.open(_workspace_path()) as ws:
+        if args.cause:
+            return _note_cause(ws, *args.cause)
+        now = datetime.now(timezone.utc)
+        open_mistakes = sorted((a for a in progress.latest_attempts(ws) if a.lost_marks), key=lambda a: (a.due_at, a.id))
+        saved = ws.load_blueprint_json()
+        weak = progress.weak_topics(ws, blueprint_from_json(saved) if saved else None, limit=args.top)
+    if args.retry:
+        return _retry([a.question for a in open_mistakes if a.due_at <= now], args)
+    if not open_mistakes:
+        console.print("No mistakes recorded. Answer questions with: margin questions <scope> --quiz")
+        return 0
+    table = Table(title="Questions that lost marks", box=None)
+    for col in ("id", "section", "marks", "due", "question", "cause"):
+        table.add_column(col)
+    for a in open_mistakes:
+        due = "now" if a.due_at <= now else a.due_at.date().isoformat()
+        table.add_row(str(a.id), a.question.section, f"{a.marks_awarded}/{a.max_marks}", due, Text(a.question.question[:70]), a.cause or "")
+    console.print(table)
+    if weak:
+        console.print("Weakest sections: " + ", ".join(f"{t.sid} ({t.score:.0%} of marks)" for t in weak))
+    console.print(f"Retry the ones due now with: margin mistakes --retry. Note why one lost marks with: margin mistakes --cause ID {'|'.join(progress.CAUSES)}")
+    return 0
+
+
+def _note_cause(ws, attempt_id: str, cause: str) -> int:
+    from margin.practice import progress
+
+    if not attempt_id.isdigit():
+        console.print(f"[red]The attempt id must be a number, not {attempt_id!r}.[/]")
+        return 1
+    try:
+        found = progress.set_cause(ws, int(attempt_id), cause)
+    except ValueError as exc:
+        console.print(f"[red]{exc}[/]")
+        return 1
+    console.print(f"Noted: attempt {attempt_id} lost marks through {cause}." if found else f"There is no attempt {attempt_id}.")
+    return 0 if found else 1
+
+
+def _retry(questions, args: argparse.Namespace) -> int:
+    from margin.runtime.client import ClientError, LlamaClient
+    from margin.runtime.server import LlamaServer, ServerError
+
+    if not questions:
+        console.print("Nothing is due for another try yet.")
+        return 0
+    selected = _server_config(args)
+    if selected is None:
+        return 1
+    _, _, cfg = selected
+    try:
+        with LlamaServer(cfg, config.paths().logs_dir / "questions.log") as server:
+            client = LlamaClient(server.base_url)
+            _quiz(client, questions)
+            client.close()
+    except (ServerError, ClientError) as exc:
+        console.print(f"[red]Stopped:[/] {exc}")
+        return 1
+    return 0
 
 
 def cmd_cards(args: argparse.Namespace) -> int:
@@ -259,7 +345,7 @@ def cmd_blueprint(args: argparse.Namespace) -> int:
     from pathlib import Path
 
     from margin.blueprint.paper import paper_text, parse_paper
-    from margin.blueprint.weights import build_blueprint, chapter_shares
+    from margin.blueprint.weights import blueprint_to_json, build_blueprint, chapter_shares
     from margin.ingest.detect import UnsupportedFile
     from margin.retrieve import embed
     from margin.retrieve.search import Searcher
@@ -283,6 +369,7 @@ def cmd_blueprint(args: argparse.Namespace) -> int:
             console.print("Add your books first with: margin add <file> ...")
             return 1
         blueprint = build_blueprint(Searcher(ws, embed.Embedder()), questions)
+        ws.save_blueprint_json(blueprint_to_json(blueprint))
 
     chapters = Table(title="Chapters by exam weight", box=None)
     chapters.add_column("chapter")
@@ -417,6 +504,7 @@ def build_parser() -> argparse.ArgumentParser:
     inspect.set_defaults(func=cmd_inspect)
     add = sub.add_parser("add", help="add books, notes, slides or photos to your library")
     add.add_argument("files", nargs="+")
+    add.add_argument("--no-formulas", action="store_true", help="do not read equations a PDF draws as pictures (faster on a CPU; formulas then cannot be checked against the book)")
     add.set_defaults(func=cmd_add)
     search = sub.add_parser("search", help="search your library")
     search.add_argument("query")
@@ -445,6 +533,13 @@ def build_parser() -> argparse.ArgumentParser:
     questions.add_argument("--model", choices=list(models.BY_ID))
     questions.add_argument("--backend", choices=hardware.BACKENDS)
     questions.set_defaults(func=cmd_questions)
+    mistakes = sub.add_parser("mistakes", help="questions you lost marks on, when each is due again, and your weakest sections")
+    mistakes.add_argument("--retry", action="store_true", help="ask the questions due now and mark your answers")
+    mistakes.add_argument("--cause", nargs=2, metavar=("ID", "CAUSE"), help="note why an attempt lost marks: concept, misread, calculation, keyword or no-attempt")
+    mistakes.add_argument("--top", type=int, default=5, help="how many weak sections to show")
+    mistakes.add_argument("--model", choices=list(models.BY_ID))
+    mistakes.add_argument("--backend", choices=hardware.BACKENDS)
+    mistakes.set_defaults(func=cmd_mistakes)
     cards = sub.add_parser("cards", help="export the key terms from saved notes as an Anki deck")
     cards.add_argument("scope", help="chapter or section, e.g. ch4 or 4.2")
     cards.add_argument("--out", default="margin.apkg", help="Anki package to write")

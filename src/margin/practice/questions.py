@@ -22,6 +22,7 @@ from typing import TYPE_CHECKING, Callable, Literal
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 
 from margin.notes.verify import content_stems
+from margin.practice.maths import relations, relations_consistent
 
 if TYPE_CHECKING:  # the agent executor imports this module
     from margin.agent.loop import ClientLike
@@ -80,6 +81,8 @@ def check(question: Question, source: str, existing: tuple[str, ...], marks_want
         reasons.append("model answer is not supported by the section")
     if len(answer_stems) < MIN_ANSWER_WORDS and question.kind != "numerical":
         reasons.append("model answer is too short to check")
+    if not relations_consistent(question.answer, relations(source)):
+        reasons.append("model answer contradicts a formula in the section")
     if existing and max(similarity(question.question, e) for e in existing) >= COPY_SIMILARITY:
         reasons.append("near-copy of a question already in the book")
     if question.marks != marks_wanted:

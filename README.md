@@ -63,11 +63,12 @@ another drive.
 
 | | |
 |---|---|
-| **Reads messy material** | PDFs (typed or scanned), Word, PowerPoint and JPEG, PNG or WebP photos of pages and whiteboards, with OCR where there is no text. |
+| **Reads messy material** | PDFs (typed or scanned), Word, PowerPoint and JPEG, PNG or WebP photos of pages and whiteboards, with OCR where there is no text. Displayed equations that a PDF draws as pictures are read into LaTeX, so they reach your notes and can be checked. |
 | **Finds what the exam wants** | Reads past papers — PDF, Word, photos or text — splits them into questions with marks and years, and ranks chapters by how much they are worth. |
 | **Writes notes you can trust** | Every sentence is checked against the book, and anything the book does not support is removed. Each section is saved as it finishes, so you can stop and carry on later. |
 | **Draws it out** | Flowcharts, comparison tables, mind maps, timelines, formula sheets and glossaries, repaired automatically so they always render. |
-| **Sets and marks practice** | Questions must be answerable from the book, must not copy its exercises and must be worth the marks you asked for. Your answers are marked point by point, so you see exactly what was missing. |
+| **Sets and marks practice** | Questions must be answerable from the book, must not copy its exercises and must be worth the marks you asked for. Your answers are marked point by point, so you see exactly what was missing, and a formula counts when it is the same maths written another way. |
+| **Brings mistakes back** | Every marked answer is remembered. Questions you lost marks on come back on a spaced schedule until you get them right, and your weakest sections are ranked by how much the exam weighs them. |
 | **Answers questions with tools** | An assistant with 14 tools that searches the book, reads sections, draws diagrams, does exact arithmetic, writes questions and exports your notes. |
 | **Exports** | One-file HTML that works offline with the diagrams drawn (and prints to PDF), Markdown, and Anki decks with spaced-repetition scheduling. |
 
@@ -152,20 +153,28 @@ yourself.
 | What was tested | Result |
 |---|---|
 | Reading two full textbooks (2,306 pages) | 100% of the text kept |
-| Search over the textbook's own end-of-chapter questions | right chapter in the top 5 for 86%, right section for 60% |
+| Search over the textbook's own end-of-chapter questions | right chapter in the top 5 for 85%, right section for 60% |
 | Blueprint on generated exam papers (5 seeds) | 93% of the favoured chapters found |
 | Diagrams from nine models | 105 of 105 render |
-| Notes for six physics sections | 99.3% of sentences supported by the book |
-| Practice questions | 17 of 18 passed all checks; none copied the book |
-| Marking (complete, half and off-topic answers) | ranked in the right order 17 of 17 times |
+| Notes for six physics sections, equations included | all 107 sentences supported by the book; no formula contradicts it |
+| Practice questions | 18 of 18 passed all checks; none copied the book |
+| Marking (complete, half and off-topic answers) | ranked in the right order 18 of 18 times |
+| Mistakes coming back, with the real model | all 5 missed questions returned two days later, none the same day, and cleared once answered in full |
+| Formula matching on 500 competition answers ([MATH-500](https://huggingface.co/datasets/HuggingFaceH4/MATH-500)) | 472 read; no false match among 937 answers altered on purpose |
+| Reading displayed equations from book and exam pages ([OmniDocBench](https://huggingface.co/datasets/opendatalab/OmniDocBench), 1,016 labelled) | 71% read as the same maths where it can be checked; 18% of characters differ on average |
+| Sentence check on answers labelled by people ([RAGTruth](https://github.com/ParticleMedia/RAGTruth)) | catches 61% of unsupported sentences; wrongly removes 22% of supported ones |
 | The whole flow through the interface, network blocked | 8 of 8 steps, no connection attempts |
 
-The tests (137 of them) run on Windows, Linux and macOS for every change.
+The tests (195 of them) run on Windows, Linux and macOS for every change. Public test sets are downloaded and checked against pinned hashes, never copied into this repository.
 
 ## Honest limits
 
-- The checks on notes and answers compare words, not meaning; answers written
-  mostly as formulas are their weak spot.
+- The sentence check on notes compares words, not meaning. On public labelled
+  answers it misses about two in five unsupported sentences and removes about
+  one in five supported ones.
+- Equations a PDF draws as pictures are read only when they stand on their own
+  line; one drawn inside a sentence stays unread. A misread equation can make a
+  correct note or question fail its check.
 - Maths in exports is shown as written, not typeset.
 - The blueprint is dependable at chapter level and rough at section level, so the
   app leads with chapters.
@@ -185,6 +194,7 @@ margin doctor                                    # show detected hardware and wh
 margin models                                    # list the models you can switch to
 
 margin add biology-textbook.pdf slides.pptx whiteboard.jpg
+margin add history-reader.pdf --no-formulas      # skip reading drawn equations (quicker for books without maths)
 margin inspect biology-textbook.pdf              # see how a file is split into sections
 margin search "how does the nephron filter blood" --scope ch25
 
@@ -193,6 +203,8 @@ margin notes ch25 --out kidney-notes.md          # checked notes with a diagram 
 margin notes ch25 --no-visuals                   # notes only, without diagrams
 margin questions ch25 --count 10 --marks 3       # exam questions with marking schemes
 margin questions 25.2 --quiz                     # answer them now and get marked
+margin mistakes                                  # questions you lost marks on and your weakest sections
+margin mistakes --retry                          # try again the ones that are due
 margin cards ch25 --out kidney.apkg              # key terms as an Anki deck
 margin export ch25 --format html                 # one offline HTML file with diagrams drawn
 ```
@@ -207,6 +219,8 @@ uv sync --group dev
 uv run pytest                                    # the test suite, no model needed
 uv run python -m evals.ui_flow_eval              # the whole flow with the real model
 uv run python -m evals.bench_models              # benchmark every model on every backend
+uv run python -m evals.maths_eval                # formula matching on MATH-500, no model needed
+uv run python -m evals.support_eval              # the notes sentence check on RAGTruth, no model needed
 ```
 
 ## License

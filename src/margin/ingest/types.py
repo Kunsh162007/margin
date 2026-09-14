@@ -33,6 +33,7 @@ class Document:
     blocks: tuple[Block, ...]
     toc: tuple[TocEntry, ...] = ()
     ocr_pages: tuple[int, ...] = ()  # pages whose text came from OCR, so answers can say so
+    formula_pages: tuple[int, ...] = ()  # pages whose drawn equations were read into the text as LaTeX
 
     @property
     def char_count(self) -> int:

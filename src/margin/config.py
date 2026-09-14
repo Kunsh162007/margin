@@ -36,6 +36,11 @@ class Paths:
     def logs_dir(self) -> Path:
         return self.home / "logs"
 
+    @property
+    def datasets_dir(self) -> Path:
+        """Public gold sets fetched for evaluation; created only when an eval downloads one."""
+        return self.home / "datasets"
+
     def ensure(self) -> "Paths":
         for d in (self.bin_dir, self.models_dir, self.workspaces_dir, self.logs_dir):
             d.mkdir(parents=True, exist_ok=True)

@@ -1,0 +1,32 @@
+{"a": "v = v_0 + a t", "b": "a = \\frac{v - v_0}{t}", "equivalent": true}
+{"a": "x = x_0 + v_0 t + \\frac{1}{2} a t^2", "b": "x - x_0 = v_0 t + a t^2/2", "equivalent": true}
+{"a": "x = x_0 + v_0 t + \\frac{1}{2} a t^2", "b": "x = x_0 + v_0 t + a t^2", "equivalent": false}
+{"a": "v^2 = v_0^2 + 2 a (x - x_0)", "b": "a = \\frac{v^2 - v_0^2}{2(x - x_0)}", "equivalent": true}
+{"a": "F = m a", "b": "a = F/m", "equivalent": true}
+{"a": "F = m a", "b": "m = F a", "equivalent": false}
+{"a": "K = \\frac{1}{2} m v^2", "b": "v = \\sqrt{\\frac{2K}{m}}", "equivalent": true}
+{"a": "K = \\frac{1}{2} m v^2", "b": "v = \\sqrt{\\frac{K}{2m}}", "equivalent": false}
+{"a": "p = m v", "b": "v = p/m", "equivalent": true}
+{"a": "F = \\frac{G m_1 m_2}{r^2}", "b": "r = \\sqrt{\\frac{G m_1 m_2}{F}}", "equivalent": true}
+{"a": "F = \\frac{G m_1 m_2}{r^2}", "b": "r = \\frac{G m_1 m_2}{F}", "equivalent": false}
+{"a": "g = \\frac{G M}{R^2}", "b": "M = \\frac{g R^2}{G}", "equivalent": true}
+{"a": "\\tau = r F \\sin\\theta", "b": "F = \\frac{\\tau}{r \\sin\\theta}", "equivalent": true}
+{"a": "T = 2\\pi\\sqrt{\\frac{m}{k}}", "b": "k = \\frac{4\\pi^2 m}{T^2}", "equivalent": true}
+{"a": "T = 2\\pi\\sqrt{\\frac{m}{k}}", "b": "k = \\frac{2\\pi m}{T^2}", "equivalent": false}
+{"a": "\\omega = 2\\pi f", "b": "f = \\frac{\\omega}{2\\pi}", "equivalent": true}
+{"a": "v = \\omega r", "b": "\\omega = v r", "equivalent": false}
+{"a": "a_c = \\frac{v^2}{r}", "b": "v = \\sqrt{a_c r}", "equivalent": true}
+{"a": "P = \\frac{W}{t}", "b": "W = P t", "equivalent": true}
+{"a": "W = F d \\cos\\theta", "b": "F = \\frac{W}{d\\cos\\theta}", "equivalent": true}
+{"a": "U = m g h", "b": "h = \\frac{U}{m g}", "equivalent": true}
+{"a": "U = m g h", "b": "h = U m g", "equivalent": false}
+{"a": "5.97 \\times 10^{24}", "b": "5.97e24", "equivalent": true}
+{"a": "9.8", "b": "9.81", "equivalent": false}
+{"a": "\\frac{1}{2} m v^2", "b": "0.5 m v^2", "equivalent": true}
+{"a": "\\frac{1}{2} m v^2", "b": "m v^2", "equivalent": false}
+{"a": "I = \\frac{1}{2} M R^2", "b": "M = \\frac{2I}{R^2}", "equivalent": true}
+{"a": "L = I \\omega", "b": "\\omega = L / I", "equivalent": true}
+{"a": "\\rho = m/V", "b": "V = m \\rho", "equivalent": false}
+{"a": "P = \\rho g h", "b": "h = \\frac{P}{\\rho g}", "equivalent": true}
+{"a": "E = mc^2", "b": "m = E/c^2", "equivalent": true}
+{"a": "f = \\frac{1}{T}", "b": "T = f", "equivalent": false}

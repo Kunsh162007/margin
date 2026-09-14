@@ -1,0 +1,61 @@
+{
+  "math500": {
+    "answers": 500,
+    "parsed": 472,
+    "parse_rate": 0.944,
+    "round_trip_match_rate": 1.0,
+    "decimal_match_rate": 1.0,
+    "changed_pairs": 937,
+    "false_match_rate": 0.0,
+    "unparsed_examples": [
+      "\\text{Evelyn}",
+      "\\text{east}",
+      "\\begin{pmatrix} -1/3 \\\\ 2/3 \\\\ 5/3 \\end{pmatrix}",
+      "(3,4]",
+      "\\text{even}",
+      "\\begin{pmatrix} -2 \\\\ -14 \\\\ -7 \\end{pmatrix}",
+      "\\text{(C)}",
+      "\\$32,\\!348",
+      "\\begin{pmatrix} -1 & 0 \\\\ 0 & -1 \\end{pmatrix}",
+      "\\text{(E)}",
+      "864 \\mbox{ inches}^2",
+      "\\left(\\frac{3}{5},\\frac{8}{3}\\right]",
+      "\\text{(B)}",
+      "\\begin{pmatrix} -18 \\\\ -49 \\\\ 96 \\end{pmatrix}",
+      "(-\\infty, 0]"
+    ],
+    "false_match_examples": []
+  },
+  "physics_pairs": {
+    "pairs": 32,
+    "accuracy": 1.0,
+    "wrong": []
+  },
+  "saved_questions": {
+    "questions": 18,
+    "accepted_before": 16,
+    "accepted_now": 18,
+    "flipped": [
+      {
+        "section": "3.4",
+        "question": "A particle starts with an initial velocity of $10 \text{ m/s}$ and experiences a constant acceleration of $2.0 \text{ m/s}^2$ over a period of $5.0 \text{ s}$. Which kinematic equation allows you to determine the particle's final velocity, and what is that final velocity? (2 marks)",
+        "was": false,
+        "now": true,
+        "reasons": []
+      },
+      {
+        "section": "14.5",
+        "question": "When an incompressible fluid flows through a pipe whose radius is decreasing, what must happen to the fluid's velocity, and what principle dictates this change?",
+        "was": false,
+        "now": true,
+        "reasons": []
+      }
+    ]
+  },
+  "datasets": {
+    "math500": [
+      "35dc41080a3680858b27fa7e0533d2d547825316fc5dafe5d316f4ccc5a06132"
+    ]
+  },
+  "run_at": "20260914_111841"
+}

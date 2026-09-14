@@ -20,6 +20,19 @@ def test_verify_keeps_supported_sentences_headings_and_formulas():
     assert (v.kept, v.dropped) == (2, 1) and v.dropped_sentences[0].startswith("Quantum")
 
 
+def test_formula_markup_is_not_counted_as_unsupported_words():
+    notes = r"- The voltage around a closed loop sums to zero: $\frac{\Delta V}{\Delta t} = \mathrm{const} \cdot \sqrt{\alpha}$."
+    v = verify_notes(notes, SOURCE)
+    assert (v.kept, v.dropped) == (1, 0)
+
+
+def test_a_note_whose_formula_the_section_does_not_hold_is_dropped():
+    source = SOURCE + "\n\n$$V=IR$$"
+    v = verify_notes("- Ohm's relation is $I = V/R$.\n- A wrong form is $V = I/R$.\n- Power is $P = I V$.", source)
+    assert (v.kept, v.dropped) == (2, 1) and "I = V/R" in v.markdown and "I/R" not in v.markdown
+    assert "P = I V" in v.markdown  # not in the section, but it contradicts nothing there
+
+
 def _workspace(tmp_path):
     doc = Document("d1", "physics.pdf", "pdf", "Physics", 10, (Block("x", 1),))
     sections = [

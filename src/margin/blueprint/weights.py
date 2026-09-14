@@ -15,7 +15,8 @@ split is kept as an option, not the default.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+import json
+from dataclasses import asdict, dataclass
 from typing import Protocol
 
 from margin.blueprint.paper import PaperQuestion
@@ -51,6 +52,16 @@ class Blueprint:
 
     def top(self, n: int) -> tuple[SectionWeight, ...]:
         return self.sections[:n]
+
+
+def blueprint_to_json(blueprint: Blueprint) -> str:
+    return json.dumps({"questions": blueprint.questions, "unmatched": blueprint.unmatched, "sections": [asdict(s) for s in blueprint.sections]})
+
+
+def blueprint_from_json(text: str) -> Blueprint:
+    data = json.loads(text)
+    rows = tuple(SectionWeight(**{**s, "questions": tuple(s["questions"])}) for s in data["sections"])
+    return Blueprint(rows, data["questions"], data["unmatched"])
 
 
 def chapter_of(sid: str) -> str:

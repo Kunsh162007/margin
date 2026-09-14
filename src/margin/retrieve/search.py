@@ -70,8 +70,8 @@ def in_scope(row: ChunkRow, scope: str | None) -> bool:
     return row.doc_id == scope or row.sid == target or row.sid.startswith(target + ".")
 
 
-def index_document(ws: Workspace, path: Path, embedder: EmbedderLike, ocr: OcrEngine | None = None) -> IndexResult:
-    doc, sections = ingest_file(path, ocr)
+def index_document(ws: Workspace, path: Path, embedder: EmbedderLike, ocr: OcrEngine | None = None, formulas: object | None = None) -> IndexResult:
+    doc, sections = ingest_file(path, ocr, formulas)
     if ws.has_document(doc.id):
         return IndexResult(doc.id, doc.title, 0, 0, skipped=True)
     chunks = [chunk for section in sections for chunk in chunk_section(section)]

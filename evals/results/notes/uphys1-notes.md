@@ -1,35 +1,31 @@
 # 3.4 Motion with Constant Acceleration
 
-*   **Simplifications in Notation:**
-    *   Initial time is set to zero.
-    *   Subscript **0** denotes initial values (e.g., $x_0$, $v_0$).
-    *   No subscript denotes final values (e.g., $x$, $v$).
-    *   Elapsed time is $t$.
-    *   Displacement is $x$.
-    *   Change in velocity is $v - v_0$.
-*   **Constant Acceleration Assumption:**
-    *   When acceleration ($\mathbf{a}$) is constant, the average acceleration equals the instantaneous acceleration.
-    *   This allows the use of the symbol $\mathbf{a}$ for acceleration at all times, avoiding calculus.
-    *   This assumption is valid for many situations or can be applied to separate parts of motion where acceleration changes drastically.
+*   **Notation Simplifications (Initial time $t_0 = 0$):**
+    *   Elapsed time: $\Delta t = t$
+    *   Displacement: $\Delta x = x - x_0$
+    *   Change in velocity: $\Delta v = v - v_0$
+    *   Subscript '0' denotes initial values; no subscript denotes final values.
+*   **Constant Acceleration Assumption:** When acceleration ($a$) is constant, the average acceleration equals the instantaneous acceleration.
 *   **Displacement and Position from Velocity:**
-    *   Average velocity ($\bar{v}$) when acceleration is constant is the simple average of initial and final velocities: $\bar{v} = \frac{v_0 + v}{2}$.
-    *   The equation relating displacement, initial velocity, time, and acceleration is: $x = x_0 + v_0 t + \frac{1}{2} a t^2$.
+    *   Average velocity ($\overline{v}$): $\overline{v} = \frac{v_0 + v}{2}$
+    *   Position equation: $x = x_0 + \overline{v}t$
 *   **Solving for Final Velocity from Acceleration and Time:**
-    *   The equation derived from the definition of acceleration is: $v = v_0 + at$.
-    *   **Significance:**
-        *   Final velocity depends on the magnitude of acceleration and time.
-        *   If $\mathbf{a} = 0$, then $v = v_0$ (constant velocity).
-        *   If $\mathbf{a}$ is negative, the final velocity is less than the initial velocity.
+    *   Acceleration definition: $a = \frac{\Delta v}{\Delta t}$
+    *   Final velocity equation: $v = v_0 + at$
 
 **Key Terms:**
-*   **Constant Acceleration**
-*   **Initial Velocity** ($v_0$)
-*   **Final Velocity** ($v$)
-*   **Displacement** ($x$)
+*   **Constant Acceleration:** Acceleration that does not change over time.
+*   **Single-body motion:** Motion of one object.
+*   **Two-body pursuit problems:** Motion involving two objects.
+*   **Average Velocity ($\overline{v}$):** The average of the initial and final velocities when acceleration is constant.
 
 **Equations:**
-*   $\bar{v} = \frac{v_0 + v}{2}$
-*   $x = x_0 + v_0 t + \frac{1}{2} a t^2$
+*   $\Delta t = t$
+*   $\Delta x = x - x_0$
+*   $\Delta v = v - v_0$
+*   $\overline{v} = \frac{v_0 + v}{2}$
+*   $x = x_0 + \overline{v}t$
+*   $a = \frac{v - v_0}{t}$
 *   $v = v_0 + at$
 
 ```mermaid
@@ -39,24 +35,25 @@ mindmap
       n2["Identify which equations of motion are to be used to solve for unknowns."]
       n3["Use appropriate equations of motion to solve a two-body pursuit problem."]
     n4["Notation Simplifications (Initial time = 0)"]
-      n5["Initial values: $x_0$ (initial position), $v_0$ (initial velocity)"]
-      n6["Final values: $x$ (final position), $v$ (final velocity), $t$ (final time)"]
-      n7["Elapsed time: $t = rac(x - x_0)(v - v_0)$ (Implied simplification)"]
-      n8["Displacement: $\Delta x = x - x_0$"]
-      n9["Change in velocity: $\Delta v = v - v_0$"]
+      n5["$Δt = t$"]
+      n6["$Δx = x - x_0$"]
+      n7["$Δv = v - v_0$"]
+      n8["Subscript 0: Initial values (position, velocity)."]
+      n9["No subscript: Final values (time, position, velocity)."]
     n10["Key Assumption"]
       n11["Acceleration ($a$) is constant."]
-      n12["Implication: Average acceleration = Instantaneous acceleration = $a$."]
-    n13["Derivations & Equations"]
-      n14["Displacement and Position from Velocity"]
-      n15["Average Velocity: $\bar(v) = \frac(v_0 + v)(2)$ (when acceleration is constant)"]
-      n16["Position Equation (Implied): $x = x_0 + \bar(v)t$ (or related forms)"]
-      n17["Solving for Final Velocity from Acceleration and Time"]
-      n18["Velocity Equation: $v = v_0 + at$"]
-    n19["Conceptual Notes"]
-      n20["Constant acceleration is applicable in many situations or can be approximated by average acceleration."]
-      n21["Motion with changing acceleration can be broken into separate parts with constant acceleration."]
-      n22["Checking equations against intuition (e.g., $a=0 \implies v=v_0$; $a<0 \implies v < v_0$)."]
+      n12["Average acceleration = Instantaneous acceleration."]
+    n13["Displacement and Position from Velocity"]
+      n14["Average Velocity ($Δv$): $\overline(v) = \frac(v_0 + v)(2)$ (when acceleration is constant)."]
+      n15["Position Equation: $x = x_0 + \overline(v)t$"]
+      n16["Concept: $\overline(v)$ is the simple average of initial and final velocities."]
+    n17["Solving for Final Velocity from Acceleration and Time"]
+      n18["Definition of Acceleration: $a = \frac(Δv)(Δt)$"]
+      n19["Derived Equation: $v = v_0 + at$"]
+      n20["Example 3.7: Airplane landing calculation."]
+    n21["Types of Motion Studied"]
+      n22["Single-body motion"]
+      n23["Two-body pursuit problems"]
 ```
 
 ---
@@ -70,21 +67,9 @@ mindmap
 *   An **external force** acts on an object or system and originates outside of it.
 *   An **internal force** acts between elements of the system.
 *   Only **external forces** affect the motion of a system.
-*   The relationship between acceleration and net external force is proportional: $a \propto F_{\text{net}}$.
-*   The relationship between acceleration and mass is inversely proportional: $a \propto 1/m$.
-*   Combining these proportionalities yields the equation for Newton's second law: $F_{\text{net}} = ma$.
-
-**Key Terms:**
-*   **External force**
-*   **Internal force**
-*   **Net external force** ($F_{\text{net}}$)
-*   **Acceleration** ($a$)
-*   **Mass** ($m$)
-
-**Equations:**
-*   $a \propto F_{\text{net}}$
-*   $a \propto 1/m$
-*   $F_{\text{net}} = ma$
+*   The relationship between acceleration ($\vec{a}$) and **net external force** ($\vec{F}_{\text{net}}$) is proportional: $\vec{a} \propto \vec{F}_{\text{net}}$.
+*   The relationship between acceleration ($a$) and **mass** ($m$) is inversely proportional: $a \propto \frac{1}{m}$.
+*   Experiments confirm that acceleration is exactly inversely proportional to mass and directly proportional to net external force.
 
 ```mermaid
 mindmap
@@ -94,19 +79,23 @@ mindmap
       n3["Describe Newton's second law of motion"]
       n4["Explain the dependence of acceleration on net force and mass"]
     n5["Key Concepts"]
-      n6["Change in Motion = Change in Velocity = Acceleration"]
-      n7["Net External Force causes nonzero acceleration (from Newton's First Law)"]
-      n8["External Force: Acts outside the object or system"]
-      n9["Internal Force: Acts between elements of the system"]
-      n10["Only external forces affect the motion of a system"]
-    n11["Relationship between Force, Mass, and Acceleration"]
-      n12["Acceleration is directly proportional to Net External Force (F_net)"]
-      n13["Acceleration is inversely proportional to Mass (m)"]
-      n14["Mathematical relationship (implied by proportionality): F_net ∝ a and a ∝ 1/m"]
-    n15["Application/Analysis"]
-      n16["System Definition: Must define boundaries to identify external forces"]
-      n17["Free-Body Diagram: Shows all external forces acting on the system"]
-      n18["Simplification: Internal forces can be disregarded"]
+      n6["Change in Motion $\iff$ Change in Velocity $\iff$ Acceleration"]
+      n7["External Force"]
+      n8["Internal Force"]
+      n9["System of Interest"]
+      n10["Net External Force ($\\vec(F)_(net)$)"]
+    n11["Force Types"]
+      n12["External Force: Acts on an object/system originating outside of it."]
+      n13["Internal Force: Acts between elements of the system."]
+      n14["Note: Only external forces affect the motion of a system."]
+    n15["Relationships (Proportionalities)"]
+      n16["Acceleration and Net External Force"]
+      n17["$\vec(a) \propto \vec(F)_(net)$ (Acceleration is directly proportional to net external force)"]
+      n18["Acceleration and Mass"]
+      n19["$\text(a) \propto \frac(1)(m)$ (Acceleration is inversely proportional to mass)"]
+    n20["Application"]
+      n21["Quantitative law used to calculate situations involving a force."]
+      n22["Requires defining system boundaries to identify external forces."]
 ```
 
 ---
@@ -115,32 +104,34 @@ mindmap
 
 *   **Friction** is a force that opposes relative motion between systems in contact.
 *   Friction is a common yet complex force.
-*   **Static friction** acts between objects that are stationary relative to one another.
-*   **Kinetic friction** acts between objects that are moving relative to one another.
+*   Friction arises in part due to the **roughness** of the surfaces in contact.
+*   Part of the friction is due to **adhesive forces** between the surface molecules of the two objects.
+
+### Types of Friction
+
+*   **Static friction:** Acts between two systems that are in contact and **stationary** relative to one another.
+*   **Kinetic friction:** Acts between two systems that are in contact and **moving** relative to one another.
 *   Static friction is usually greater than kinetic friction.
-*   Static friction responds to applied force, increasing to be equal and opposite to the push up to a maximum limit.
-*   Once the applied force exceeds the maximum static friction, the object moves, and kinetic friction takes over.
-*   Friction arises partly due to the roughness of surfaces and partly due to **adhesive forces** between surface molecules.
-*   At small but nonzero speeds, friction is nearly independent of speed.
+*   Once an object is moving, it is easier to keep it moving than it was to get it started, meaning the kinetic frictional force is less than the static frictional force.
 
-**Key Terms:**
-*   **Friction**: A force that opposes relative motion between systems in contact.
-*   **Static friction**: Friction acting between stationary relative systems.
-*   **Kinetic friction**: Friction acting between moving relative systems.
-*   **Normal force** ($N$): The force exerted by a surface perpendicular to the object resting on it.
-*   **Coefficient of static friction** ($\mu_s$): A measure related to the maximum static friction.
-*   **Coefficient of kinetic friction** ($\mu_k$): A measure related to the kinetic friction.
+### Magnitude of Friction
 
-**Equations:**
-*   Maximum static friction: $f_{s, \text{max}} = \mu_s N$
-*   Kinetic friction: $f_k = \mu_k N$
+*   **Static friction** is a responsive force that increases to be equal and opposite to whatever force is exerted, up to its maximum limit.
+*   The maximum magnitude of static friction is given by:
+    $$f_{\mathrm{s}}(\mathrm{max})=\mu_{\mathrm{s}}\,N$$
+    where $\mu_{\mathrm{s}}$ is the **coefficient of static friction** and $N$ is the magnitude of the **normal force**.
+*   The general condition for static friction is:
+    $$f_{\mathrm{s}}\leq\mu_{\mathrm{s}}N$$
+*   The magnitude of kinetic friction is given by:
+    $$f_{\mathrm{k}}=\mu_{\mathrm{k}}N$$
+    where $\mu_{\mathrm{k}}$ is the **coefficient of kinetic friction**.
 
 **Comparison of Static and Kinetic Friction**
 
-| Type of Friction | Definition | When it Occurs | Relationship to Motion | Key Characteristic |
-|---|---|---|---|---|
-| Static Friction | Friction between two systems in contact and stationary relative to one another. | When objects are stationary. | Responds to applied force; increases to be equal and in the opposite direction of the push up to a maximum limit. | Usually greater than kinetic friction. |
-| Kinetic Friction | Friction between two systems in contact and moving relative to one another. | When objects are moving relative to each other. | Once in motion, it is easier to keep it in motion than it was to get it started. | Less than static friction. |
+| Type of Friction | Condition | Description/Behavior | Governing Equation (Magnitude) |
+|---|---|---|---|
+| Static Friction | Objects are stationary relative to one another | Responds to applied force; increases to be equal and opposite to the push up to a maximum limit. | f_s(max) = μ_s N |
+| Kinetic Friction | Objects are moving relative to one another | Opposes motion; once motion starts, it is generally easier to keep it moving than to start it. | f_k = μ_k N |
 
 ---
 
@@ -148,24 +139,23 @@ mindmap
 
 *   **Torque** is the rotational counterpart to force, related to changing the rotational motion of an object about an axis.
 *   Torque has both **magnitude** and **direction**.
-*   In a plane, torque is either **clockwise** or **counterclockwise** relative to the chosen pivot point.
-*   The magnitude of torque depends on the magnitude of the **lever arm** and the angle the force vector makes with the lever arm.
+*   In rotation in a plane, torque can be either **clockwise** or **counterclockwise** relative to the chosen pivot point.
+*   The magnitude of torque depends on the **lever arm** and the angle the force vector makes with the lever arm.
 *   The **SI unit** of torque is **newtons times meters** ($\text{N}\cdot\text{m}$).
-*   The **lever arm** is the perpendicular distance from the origin ($\text{O}$) to the line determined by the position vector ($\vec{r}$).
-*   The magnitude of torque is given by the magnitude of the cross product: $|\vec{\tau}| = |\vec{r} \times \vec{F}| = r F \sin\theta$.
-*   The torque is perpendicular to the plane defined by $\vec{r}$ and $\vec{F}$, and its direction is determined by the **right-hand rule**.
-*   If the angle ($\theta$) between the position vector ($\vec{r}$) and the force vector ($\vec{F}$) is $0^\circ$ or $180^\circ$, the torque is zero.
-*   The **net torque** about a fixed axis is the sum of the individual torques, using appropriate signs (positive or negative).
+*   The **lever arm** is the perpendicular distance from the pivot point to the line determined by the force vector.
+
+**Formulas:**
+
+*   Torque vector: $\vec{\mathbf{\tau}}=\vec{\mathbf{r}}\times\vec{\mathbf{F}}$
+*   Magnitude of torque: $\left|{\vec{\tau}}\right|=\left|{\vec{\bf r}}\,\times\,{\vec{\bf F}}\right|=rF{\sin\theta}$
+*   Magnitude of torque using lever arm: $|\vec{\tau}|=r_{\perp}F$
+*   Net torque: $\vec{\tau}_{\mathrm{net}}=\sum_{i}\vec{\tau}_{i}$
 
 **Key Terms:**
-*   **Torque**
-*   **Lever arm**
-*   **Net torque**
-*   **Right-hand rule**
 
-**Equations:**
-*   $|\vec{\tau}| = |\vec{r} \times \vec{F}|$
-*   $|\vec{\tau}| = r F \sin\theta$
+*   **Torque**: The turning or twisting effectiveness of a force.
+*   **Lever arm**: The perpendicular distance from the pivot point to the line determined by the force vector.
+*   **Right-hand rule**: Used to determine the sign (direction) of a torque.
 
 ```mermaid
 mindmap
@@ -174,31 +164,30 @@ mindmap
       n2["Rotational counterpart to force"]
       n3["Related to changing rotational motion about an axis"]
       n4["Intuitive examples:"]
-      n5["Door rotation (push far from hinges, push perpendicular)"]
-      n6["Car accelerator (engine torque on drive train)"]
+      n5["Door rotation (hinges)"]
+      n6["Car accelerator"]
       n7["Body movement"]
     n8["Characteristics"]
       n9["Has magnitude and direction"]
-      n10["Direction is either clockwise or counterclockwise relative to pivot point"]
-      n11["In 3D, torque is perpendicular to the plane defined by lever arm and force vector"]
-      n12["Direction determined by the right-hand rule"]
-    n13["Calculation (Magnitude)"]
-      n14["General formula (Cross Product): $\tau = \vec(r) \times \vec(F)$"]
-      n15["Magnitude using angle: $| au| = r F \sin\theta$"]
-      n16["Lever arm definition: Perpendicular distance from O to the line determined by $\vec(F)$"]
-      n17["Magnitude in terms of lever arm: $| au| = r_(\perp) F$"]
-    n18["Calculation (Sign)"]
-      n19["Cross product determines the sign"]
-      n20["Convention: Cross product along positive z-axis is positive torque"]
-      n21["Cross product along negative z-axis is negative torque"]
-    n22["Net Torque"]
-      n23["Sum of individual torques about a common axis"]
-      n24["Requires assigning appropriate sign (+/-) to individual torques"]
-      n25["Problem-Solving Strategy:"]
-      n26["1. Choose coordinate system with pivot/axis as origin"]
-      n27["2. Determine angle between lever arm and force vector"]
-      n28["3. Take cross product to determine sign"]
-      n29["4. Evaluate magnitude"]
+      n10["Direction:"]
+      n11["Clockwise or counterclockwise relative to pivot point"]
+      n12["Magnitude depends on:"]
+      n13["Lever arm (distance from pivot)"]
+      n14["Angle between force vector and lever arm"]
+    n15["Mathematical Description"]
+      n16["Vector form (around O):"]
+      n17["$\vec(\tau) = \vec(r) \times \vec(F)$"]
+      n18["Magnitude form:"]
+      n19["$\left|\vec(\tau)\right| = rF\sin\theta$"]
+      n20["Lever arm form:"]
+      n21["$|−\vec(\tau)| = r_(\perp)F$"]
+      n22["SI Unit: newtons times meters (N\cdot m)"]
+      n23["Sign determination:"]
+      n24["Right-hand rule (cross product direction)"]
+    n25["Net Torque"]
+      n26["Sum of individual torques about a common axis"]
+      n27["$\vec(\tau)_(net) = \sum_(i)\vec(\tau)_(i)$"]
+      n28["Requires assigning appropriate signs (positive/negative)"]
 ```
 
 ---
@@ -207,58 +196,51 @@ mindmap
 
 *   The acceleration of a free-falling object near Earth's surface is approximately $g$.
 *   The force causing this acceleration is the **weight** of the object, with a value of $mg$.
-*   This weight is the gravitational force between the object and Earth.
 *   Substituting $mg$ for the magnitude of the gravitational force in Newton's law of universal gravitation yields the scalar equation:
-    $$\frac{F}{m} = G \frac{M}{r^2}$$
-*   For objects near Earth's surface, the mass $m$ of the object cancels, leaving:
-    $$g = G \frac{M}{r^2}$$
-*   The average radius of Earth is about $6370 \text{ km}$.
-*   For objects within a few kilometers of Earth's surface, the distance between centers of mass can be taken as the radius of Earth, $r$.
-*   The gravitational field ($\vec{g}$) is a **vector field** representing the gravitational acceleration caused by a mass $M$.
-*   The vector form of the acceleration is:
-    $$\vec{g} = -G \frac{M}{r^2} \hat{r}$$
-*   The direction of $\vec{g}$ is parallel to the **field lines** at any point.
-*   The strength of $\vec{g}$ is inversely proportional to the line spacing.
+    $$mg=G\,\frac{mM_{\mathrm{E}}}{r^{2}}$$
+*   The mass $m$ of the object cancels, resulting in:
+    $$g=G\frac{M_{\mathrm{E}}}{r^{2}}$$
+*   For objects near Earth's surface, the distance $r$ can be taken as the **radius of Earth** ($R_{\mathrm{E}}$).
+*   The gravitational acceleration $g$ can be determined by knowing the mass of the astronomical body ($M$) and the distance ($r$) from its center.
+*   The mass of the Moon ($M_{\mathrm{M}}$) can be estimated by assuming it has the same average density as Earth, using the ratio of volumes:
+    $$\frac{M_{\mathrm{M}}}{M_{\mathrm{E}}}=\frac{R_{\mathrm{M}}^{3}}{R_{\mathrm{E}}^{3}}$$
+*   The gravitational acceleration $g$ at a distance $r$ above Earth's surface can be calculated using the formula:
+    $$g=G\frac{M_{\mathrm{E}}}{r^{2}}$$
+*   Astronaut weightlessness in space stations is due to being in **free fall**, not the absence of gravity.
+*   The vector form of the gravitational acceleration is:
+    $${\bf\vec{g}}=G{\frac{M}{r^{2}}}{\bf\hat{r}}$$
 
 **Key Terms:**
 *   **Weight**
-*   **Gravitational force**
-*   **Gravitational field** ($\vec{g}$)
-*   **Field lines**
+*   **Free fall**
+*   **Radius of Earth**
+*   **Gravitational acceleration**
+*   **Vector field**
 
 **Equations:**
-*   $$g = G \frac{M}{r^2}$$
-*   $$\vec{g} = -G \frac{M}{r^2} \hat{r}$$
+$$mg=G\,\frac{mM_{\mathrm{E}}}{r^{2}}$$
+$$g=G\frac{M_{\mathrm{E}}}{r^{2}}$$
+$${\bf\vec{g}}=G{\frac{M}{r^{2}}}{\bf\hat{r}}$$
 
 ```mermaid
-mindmap
-  n0["Gravitation Near Earth's Surface"]
-    n1["Learning Objectives"]
-      n2["Explain the connection between the constants"]
-      n3["Determine the mass of an astronomical body from free-fall acceleration at its surface"]
-      n4["Describe how the value of g varies due to location and Earth’s rotation"]
-    n5["Weight and Gravitational Force"]
-      n6["Acceleration of free-falling object near Earth's surface is approximately g"]
-      n7["Force causing this acceleration is called weight, value is mg"]
-      n8["Weight is the gravitational force between the object and Earth"]
-      n9["Scalar equation for gravitational force: F = G * (m1 * m2) / r^2"]
-      n10["Substituting mg for F and m for m1 yields: mg = G * (m * M) / r^2"]
-      n11["Mass m of the object cancels, leaving: g = G * M / r^2"]
-      n12["For objects near Earth's surface, r can be taken as Earth's radius (R_earth)"]
-    n13["Determining Mass (Examples)"]
-      n14["Example 13.3: Masses of Earth and Moon"]
-      n15["Use g and R_earth to find Earth's mass (M_earth)"]
-      n16["Estimate Moon's g by assuming equal average density to Earth"]
-      n17["Significance: Cavendish determined G in 1798, allowing Earth's mass calculation"]
-      n18["Example 13.4: Gravity above Earth's Surface"]
-      n19["Calculate g at 400 km above Earth's surface using g = G * M / r^2"]
-      n20["Astronaut weightlessness is due to free fall, not lack of gravity"]
-    n21["Gravitational Field"]
-      n22["Gravitational Field Equation (Vector Form): a = -G * M * r / r^3 * r_hat"]
-      n23["Gravitational field (g) is a vector field"]
-      n24["Field lines are directed radially inward and symmetrically distributed about the mass"]
-      n25["Direction of g is parallel to the field lines"]
-      n26["Strength of g is inversely proportional to line spacing (density of lines)"]
+flowchart TD
+    n0["Start: Observe free-falling object near Earth's surface"]
+    n1["Identify acceleration of free-falling object as g (approx. 9.8 m/s²)"]
+    n2["Relate weight (mg) to gravitational force using Newton's Law of Universal Gravitation: mg = G(mM_E)/r²"]
+    n3["Cancel mass (m) to find the gravitational acceleration equation: g = G(M_E)/r²"]
+    n4["Determine distance r (for surface objects, r ≈ Earth's radius)"]
+    n5["Calculate Earth's mass (M_E) using known g, G, and r"]
+    n6["To find mass of another body (e.g., Moon), use density assumption and volume ratio: M_M/M_E = (R_M/R_E)³"]
+    n7["Calculate g at a different location (e.g., 400 km above Earth's surface) using the modified distance r = R_E + altitude"]
+    n8["End: Gravitational acceleration is a scalar function of distance from the center of mass"]
+    n0 --> n1
+    n1 --> n2
+    n2 --> n3
+    n3 --> n4
+    n4 --> n5
+    n5 --> n6
+    n6 --> n7
+    n7 --> n8
 ```
 
 ---
@@ -266,41 +248,24 @@ mindmap
 # 14.5 Fluid Dynamics
 
 *   **Fluid Dynamics** is the study of **fluids in motion**, contrasting with **fluid statics** (study of fluids at rest).
-*   An **ideal fluid** has negligible **viscosity** (internal friction).
-*   An **incompressible fluid** has a constant density throughout, requiring a large force to change its volume.
-*   **Velocity vectors** represent fluid motion by indicating speed and direction at any point.
-*   A **streamline** represents the path of a small volume of fluid; the velocity is always tangential to it.
+*   **Ideal fluid** is a fluid with negligible **viscosity** (internal friction).
+*   For an **incompressible fluid**, the **density** is constant throughout, requiring a very large force to change its volume.
+*   **Velocity vectors** represent fluid motion by indicating the speed and direction of the fluid at any point.
+*   A **streamline** represents the path of a small volume of fluid, and the velocity is always tangential to it.
 *   **Laminar flow** is characterized by smooth, parallel streamlines (sometimes called steady flow).
-*   **Turbulent flow** is characterized by irregular streamlines, mixing, and swirling, often occurring when fluid speed reaches a critical value.
-*   **Flow rate ($Q$)**, or **volume flow rate**, is the volume of fluid passing a location through an area over a period of time.
-    *   $Q = \frac{V}{t}$
-*   The relationship between flow rate ($Q$) and average speed ($v$) is:
-    *   $Q = A v$
-    *   Flow rate is directly proportional to both the average speed and the cross-sectional area.
-*   For an **incompressible fluid** with no sources or sinks, the mass flowing into a section must equal the mass flowing out.
-*   The **equation of continuity** states that for any incompressible fluid:
-    *   $A_1 v_1 = A_2 v_2$
-    *   This implies that if the cross-sectional area ($A$) decreases, the velocity ($v$) must increase.
-
-**Key Terms:**
-*   **Fluid Dynamics**
-*   **Viscosity**
-*   **Incompressible fluid**
-*   **Velocity vectors**
-*   **Streamline**
-*   **Laminar flow**
-*   **Turbulent flow**
-*   **Flow rate ($Q$)**
-*   **Equation of continuity**
-
-**Equations:**
-*   $Q = \frac{V}{t}$
-*   $Q = A v$
-*   $A_1 v_1 = A_2 v_2$
+*   **No slip boundary conditions** are a special case of laminar flow where friction between the pipe and fluid is high, causing velocity to be greatest in the center and decrease near the walls.
+*   **Turbulent flow** is characterized by irregular streamlines, mixing, and swirling, often occurring when fluid speed reaches a critical speed.
+*   **Flow rate ($Q$)**, or **volume flow rate**, is the volume of fluid passing a given location through an area over a period of time.
+*   The definition of flow rate is: $$Q=\frac{dV}{dt}$$
+*   For a cylinder of cross-sectional area $A$ moving a distance $x$ in time $t$, the flow rate is: $$Q=\frac{dV}{dt}=\frac{d}{dt}(Ax)=A\frac{dx}{dt}=Av$$
+*   The precise relationship between flow rate ($Q$) and average speed ($v$) is: $$Q=Av$$
+*   Flow rate is directly proportional to both the average speed of the fluid and the cross-sectional area of the conduit.
+*   The **equation of continuity** states that for any **incompressible fluid** (constant density) with no sources or sinks, the flow rate must be the same at all points along the pipe: $$Q_{1}=Q_{2}$$
+*   This leads to the relationship: $$A_{1}\upsilon_{1}=A_{2}\upsilon_{2}$$
 
 ```mermaid
 mindmap
-  n0["Fluid Dynamics (Fluids in Motion)"]
+  n0["Fluid Dynamics (Study of fluids in motion)"]
     n1["Fluid Types"]
       n2["Ideal Fluid"]
       n3["Incompressible Fluid"]

@@ -5,6 +5,11 @@ this, in meaning if not in words — and returns exactly one true or false per
 point, enforced by the JSON schema. The mark is then computed in code from those
 judgements. The model never chooses the number, so the same judgements always
 give the same mark, and every mark can be explained by the points it counted.
+
+A marking point that is only a formula ("States $M = gR^2/G$") is also met in
+code when the answer holds an equivalent formula (``maths.py``): a small model
+does not reliably see that g = GM/R² is the same relation. Code can add a point
+the model missed; it never takes one away.
 """
 
 from __future__ import annotations
@@ -12,6 +17,8 @@ from __future__ import annotations
 import json
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
+
+from margin.practice.maths import points_met_by_formula
 
 if TYPE_CHECKING:  # the agent executor imports this module
     from margin.agent.loop import ClientLike
@@ -31,6 +38,7 @@ class Grade:
     points_met: tuple[bool, ...]
     missing: tuple[str, ...]
     feedback: str
+    points_by_formula: tuple[bool, ...] = ()  # points credited by an equivalent formula
 
 
 def marks_for(points_met: tuple[bool, ...], max_marks: int) -> int:
@@ -61,6 +69,7 @@ def grade_answer(client: ClientLike, question: str, marking_points: tuple[str, .
         feedback = str(data.get("feedback", "")).strip()
     except (json.JSONDecodeError, AttributeError):
         met, feedback = (), "The answer could not be marked automatically."
-    met = (met + (False,) * len(marking_points))[: len(marking_points)]
+    by_formula = points_met_by_formula(marking_points, student_answer)
+    met = tuple(model or code for model, code in zip((met + (False,) * len(marking_points))[: len(marking_points)], by_formula))
     missing = tuple(p for p, ok in zip(marking_points, met) if not ok)
-    return Grade(marks_for(met, max_marks), max_marks, met, missing, feedback)
+    return Grade(marks_for(met, max_marks), max_marks, met, missing, feedback, by_formula)

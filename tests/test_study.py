@@ -59,6 +59,35 @@ def test_blueprint_reads_a_text_paper_and_refuses_an_empty_one(tmp_path):
         study.read_papers([tmp_path / "missing.txt"])
 
 
+def test_the_blueprint_is_saved_with_the_library(tmp_path):
+    study, _ = _study(tmp_path)
+    paper = tmp_path / "2024.txt"
+    paper.write_text("EXAMINATION 2024\nQ1. State Kirchhoff's voltage law for a closed loop. [4 marks]\nQ2. What poles do magnets have? [2 marks]\n", encoding="utf-8")
+    saved = study.read_papers([paper])
+    next_session = Study(tmp_path / "ws.db", tmp_path / "out", lambda: None, FakeEmbedder())
+    assert next_session.blueprint == saved and saved.sections
+
+
+def test_marked_answers_are_remembered_and_mistakes_come_back_for_retry(tmp_path):
+    from datetime import datetime, timedelta, timezone
+
+    now = [datetime.now(timezone.utc)]
+    script = [reply(json.dumps(QUESTIONS)), reply(json.dumps({"points_met": [True, False], "feedback": "Say they sum to zero."})),
+              reply(json.dumps({"points_met": [True, True], "feedback": "Complete."}))]
+    study, _ = _study(tmp_path, script, clock=lambda: now[0])
+    study.generate_questions("4.1", count=1, marks=2)
+    assert study.mark(0, "It is about a closed loop.").marks_awarded == 1
+    assert study.load_retries() == [] and [t.sid for t in study.weak_topics()] == ["4.1"]  # not due in the same sitting
+
+    now[0] += timedelta(days=2)
+    [mistake] = study.mistakes()
+    assert study.set_cause(mistake.id, "keyword") and study.mistakes()[0].cause == "keyword"
+    assert [q.question for q in study.load_retries()] == [QUESTIONS["questions"][0]["question"]] == [q.question for q in study.questions]
+    assert study.mark(0, "Around a closed loop the voltages sum to zero.").marks_awarded == 2
+    now[0] += timedelta(days=400)
+    assert study.load_retries() == [] and study.weak_topics() == []
+
+
 def test_questions_marking_and_ask_keep_their_state(tmp_path):
     script = [reply(json.dumps(QUESTIONS)), reply(json.dumps({"points_met": [True, True], "feedback": "Complete."})), reply("It is in section 4.1.")]
     study, client = _study(tmp_path, script)

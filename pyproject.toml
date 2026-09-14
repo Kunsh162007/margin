@@ -35,7 +35,9 @@ dependencies = [
   "python-pptx>=1.0",
   "rapidocr>=3",
   "rich>=13",
+  "sympy>=1.13",
   "textual>=1",
+  "tokenizers>=0.15",
 ]
 
 [project.urls]

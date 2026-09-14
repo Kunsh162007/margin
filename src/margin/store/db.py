@@ -26,7 +26,7 @@ import numpy as np
 
 from margin.ingest.types import Document, Section
 
-SCHEMA_VERSION = "2"
+SCHEMA_VERSION = "3"
 _TOKEN = re.compile(r"[A-Za-z0-9]+")
 
 SCHEMA = """
@@ -53,6 +53,12 @@ CREATE TABLE IF NOT EXISTS notes(
     doc_id TEXT NOT NULL REFERENCES documents(id) ON DELETE CASCADE, sid TEXT NOT NULL, markdown TEXT NOT NULL,
     visuals_json TEXT NOT NULL, kept INTEGER NOT NULL, dropped INTEGER NOT NULL, seconds REAL NOT NULL, updated_at TEXT NOT NULL,
     PRIMARY KEY (doc_id, sid));
+CREATE TABLE IF NOT EXISTS attempts(
+    id INTEGER PRIMARY KEY, sid TEXT NOT NULL, question TEXT NOT NULL, question_json TEXT NOT NULL,
+    marks_awarded INTEGER NOT NULL, max_marks INTEGER NOT NULL, missing_json TEXT NOT NULL, cause TEXT,
+    schedule_json TEXT NOT NULL, due_at TEXT NOT NULL, answered_at TEXT NOT NULL);
+CREATE INDEX IF NOT EXISTS attempts_by_question ON attempts(question, id);
+CREATE TABLE IF NOT EXISTS blueprint(id INTEGER PRIMARY KEY CHECK (id = 1), blueprint_json TEXT NOT NULL, saved_at TEXT NOT NULL);
 """
 
 
@@ -210,6 +216,38 @@ class Workspace:
     def load_notes(self, doc_id: str, sid: str) -> dict[str, Any] | None:
         row = self._conn.execute("SELECT markdown, visuals_json, kept, dropped, seconds FROM notes WHERE doc_id = ? AND sid = ?", (doc_id, sid)).fetchone()
         return dict(row) if row else None
+
+    # blueprint ------------------------------------------------------------------------
+
+    def save_blueprint_json(self, text: str) -> None:
+        with self._conn:
+            self._conn.execute("INSERT OR REPLACE INTO blueprint VALUES (1, ?, ?)", (text, _now()))
+
+    def load_blueprint_json(self) -> str | None:
+        row = self._conn.execute("SELECT blueprint_json FROM blueprint WHERE id = 1").fetchone()
+        return row[0] if row else None
+
+    # practice attempts ----------------------------------------------------------------
+
+    def add_attempt(self, row: dict[str, Any]) -> int:
+        with self._conn:
+            cur = self._conn.execute(
+                "INSERT INTO attempts (sid, question, question_json, marks_awarded, max_marks, missing_json, cause, schedule_json, due_at, answered_at) "
+                "VALUES (:sid, :question, :question_json, :marks_awarded, :max_marks, :missing_json, :cause, :schedule_json, :due_at, :answered_at)",
+                row,
+            )
+        return int(cur.lastrowid)
+
+    def attempts(self) -> list[dict[str, Any]]:
+        return [dict(r) for r in self._conn.execute("SELECT * FROM attempts ORDER BY id")]
+
+    def latest_attempt(self, question: str) -> dict[str, Any] | None:
+        row = self._conn.execute("SELECT * FROM attempts WHERE question = ? ORDER BY id DESC LIMIT 1", (question,)).fetchone()
+        return dict(row) if row else None
+
+    def set_attempt_cause(self, attempt_id: int, cause: str) -> bool:
+        with self._conn:
+            return self._conn.execute("UPDATE attempts SET cause = ? WHERE id = ?", (cause, attempt_id)).rowcount > 0
 
     def clear_notes(self, sids: list[str] | None = None) -> int:
         with self._conn:

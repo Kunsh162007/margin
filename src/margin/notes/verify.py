@@ -2,15 +2,19 @@
 
 A sentence is supported when at least half of its content words (stemmed to
 six letters, stopwords removed) occur in the section. Sentences with fewer than
-three content words — headings, "Key points:", a formula — are kept. This is a
-*lexical* check: it catches invented material written in new words, not a
-wrong claim made with the passage's own words, and it is reported as lexical.
+three content words — headings, "Key points:", a formula — are kept. Formula
+spans (``$...$``) are not words: ``\\frac`` or ``\\sqrt`` never count against a
+sentence. This is a *lexical* check: it catches invented material written in new
+words, not a wrong claim made with the passage's own words, and it is reported
+as lexical.
 """
 
 from __future__ import annotations
 
 import re
 from dataclasses import dataclass
+
+from margin.practice.maths import relations, relations_consistent, strip_maths
 
 SUPPORT_THRESHOLD = 0.5
 MIN_CONTENT_WORDS = 3
@@ -34,7 +38,7 @@ class Verified:
 
 
 def content_stems(text: str) -> set[str]:
-    return {w[:STEM_LEN] for w in _WORD.findall(text.lower()) if w not in STOPWORDS}
+    return {w[:STEM_LEN] for w in _WORD.findall(strip_maths(text).lower()) if w not in STOPWORDS}
 
 
 def is_supported(sentence: str, source_stems: set[str]) -> bool:
@@ -44,6 +48,7 @@ def is_supported(sentence: str, source_stems: set[str]) -> bool:
 
 def verify_notes(markdown: str, source: str) -> Verified:
     source_stems = content_stems(source)
+    source_relations = relations(source)  # empty for books read before displayed equations were recovered
     lines: list[str] = []
     kept = dropped = 0
     removed: list[str] = []
@@ -58,7 +63,7 @@ def verify_notes(markdown: str, source: str) -> Verified:
         prefix = prefix_match.group(1) if prefix_match else ""
         body = line[len(prefix):]
         sentences = [s for s in _SENTENCE.split(body) if s.strip()]
-        good = [s for s in sentences if is_supported(s, source_stems)]
+        good = [s for s in sentences if is_supported(s, source_stems) and relations_consistent(s, source_relations)]
         kept += len(good)
         dropped += len(sentences) - len(good)
         removed += [s for s in sentences if s not in good]
